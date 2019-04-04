@@ -3,7 +3,20 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
+var url = 'https://next.json-generator.com/api/json/get/EyBSiFo_L';
+
+
 void main() => runApp(ProfilePageContainer());
+
+
+Future<User> getUserFromResponse(url) async {
+  http.Response resp = await http.get(url);
+  var userJson = json.decode(resp.body);
+  var user = User.fromJson(userJson[0]);
+  return user;
+}
+
+
 
 class ProfilePageContainer extends StatelessWidget {
   @override
@@ -13,12 +26,54 @@ class ProfilePageContainer extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-//      home: InformationList(),
+      home: null
     );
   }
 }
 
+class DisplayColumn extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _DisplayColumnState();
+}
 
+class _DisplayColumnState extends State<DisplayColumn> {
+  @override
+  Widget build(BuildContext context) {
+    Future<User> user = getUserFromResponse(url);
+    return FutureBuilder(
+      future: user,
+      builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return Text('Starting connection...');
+          case ConnectionState.active:
+          case ConnectionState.waiting:
+            return Text('Loading...');
+          case ConnectionState.done:
+            if (snapshot.hasError){
+              return Text('Error: ${snapshot.error}');
+            }
+            return Column(
+              children: [
+                Image.network(snapshot.data.picture),
+                ListView.builder(
+                  padding: const EdgeInsets.all(16.0),
+                  itemBuilder: (context, i) {
+                    if (i.isOdd) return Divider();
+                    // TODO: where does 'i' come from????
+                  }
+
+                )
+              ],
+            );
+        }
+      });
+  }
+
+  Widget _buildListTile(String header, String content) {
+
+  }
+}
 
 class User {
   int id;
