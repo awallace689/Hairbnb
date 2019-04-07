@@ -47,7 +47,7 @@ class SignUp extends State<SignUpPage>{
                   }
                   else{
                     //Create new user and go to whatever page we want.
-                    CreateNewUser();
+                    CreateNewUser(context);
                   }
                 });
               },
@@ -175,7 +175,7 @@ class SignUp extends State<SignUpPage>{
     });
   }
 
-  Future<void> CreateNewUser() async
+  Future CreateNewUser(BuildContext context) async
   {
     final NewUser = new User(EmailCont.text,
                              PasswordCont.text,
@@ -185,8 +185,16 @@ class SignUp extends State<SignUpPage>{
                              _image.toString(),
                              [],
                              false);
-    String user = '{"key":"value"}';
-    print((await HTTP.post("https://api.myjson.com/bins", body: {'name': 'doodle', 'color': 'blue'})).body);
-    print(user);
+    //String user = jsonEncode(NewUser.toJson());
+    //print((await HTTP.post("https://api.myjson.com/bins", body: user)).body);
+    //print(user);
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(jsonEncode(NewUser.toJson())),
+        );
+      },
+    );
   }
 }

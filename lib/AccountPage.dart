@@ -59,7 +59,7 @@ class AccountPageState extends State<AccountPage> {
   }
 
   Future<User> InitialLoad() async {
-    await Future.delayed(Duration(seconds: 1));
+    //await Future.delayed(Duration(seconds: 2));
     return widget.storage.HTTPToUser(
         "http://www.json-generator.com/api/json/get/ceJipFMTkO?indent=2");
   }

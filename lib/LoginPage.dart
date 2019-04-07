@@ -90,7 +90,7 @@ class Login extends State<LoginPage>{
   {
     String email = EmailCont.text;
     String password = PasswordCont.text;
-    print(widget.storage);
+
     User user = await UserExists(email, password);
     if(user != null)
     {
@@ -108,7 +108,7 @@ class Login extends State<LoginPage>{
         context: context,
         builder: (context) {
           return AlertDialog(
-            content: Text("Email and password do not match."),
+            content: Text("Email or password is incorrect."),
           );
         },
       );
