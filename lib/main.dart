@@ -6,7 +6,7 @@ import 'dart:async';
 var url = 'https://next.json-generator.com/api/json/get/EyBSiFo_L';
 
 
-void main() => runApp(ProfilePageContainer());
+void main() => runApp(MyApp());
 
 
 Future<User> getUserFromResponse(url) async {
@@ -18,7 +18,7 @@ Future<User> getUserFromResponse(url) async {
 
 
 
-class ProfilePageContainer extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,7 +26,7 @@ class ProfilePageContainer extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: null
+      home: DisplayColumn()
     );
   }
 }
@@ -44,35 +44,48 @@ class _DisplayColumnState extends State<DisplayColumn> {
       future: user,
       builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
         switch (snapshot.connectionState) {
-          case ConnectionState.none:
-            return Text('Starting connection...');
+          case ConnectionState.none: 
+            return Container(
+                child: Text('Starting connection...')
+              );
           case ConnectionState.active:
           case ConnectionState.waiting:
-            return Text('Loading...');
+            return Container(
+                child: Text('Loading...')
+            ); 
           case ConnectionState.done:
+            // Check for valid snapshot state
             if (snapshot.hasError){
               return Text('Error: ${snapshot.error}');
             }
-            return Column(
-              children: [
-                Image.network(snapshot.data.picture),
-                ListView.builder(
-                  padding: const EdgeInsets.all(16.0),
-                  itemBuilder: (context, i) {
-                    if (i.isOdd) return Divider();
-                    // TODO: where does 'i' come from????
-                  }
+            else if (snapshot.data == null) {
+              return Text('Loading...');
+            }
+            else {
+              // Use snapshot data to populate user profile display
+              return Container( 
+                child: Column(
+                  children: [
+                    Image.network(snapshot.data.picture),
+                    // ListView.builder(
+                    //   padding: const EdgeInsets.all(16.0),
+                    //   itemBuilder: (context, i) {
+                    //     if (i.isOdd) return Divider();
+                    //     // TODO: where does 'i' come from????
+                    //   }
 
-                )
-              ],
+                    // )
+                  ],
+              )
             );
+          }
         }
       });
   }
 
-  Widget _buildListTile(String header, String content) {
+//   Widget _buildListTile(String header, String content) {
 
-  }
+//   }
 }
 
 class User {
@@ -81,13 +94,13 @@ class User {
   String lName;
   String picture;
   String birthday;
-  List<String> uploads;
-  List<Map> visits;
+  List<dynamic> uploads;
+  List<dynamic> visits;
 
   User(this.id, this.fName, this.lName, this.picture, this.birthday,
       this.uploads, this.visits);
 
-  User.fromJson(Map<String, dynamic> json)
+  User.fromJson(Map json)
     : id = json['id'],
       fName = json['name']['first'],
       lName = json['name']['last'],
@@ -96,14 +109,14 @@ class User {
       uploads = json['uploads'],
       visits = json['visits'];
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'picture': picture,
-        'birthday': birthday,
-        'uploads': uploads,
-        'name': {'fname': fName, 'lname': lName},
-        'visits': visits
-      };
+  Map toJson() => {
+    'id': id,
+    'picture': picture,
+    'birthday': birthday,
+    'uploads': uploads,
+    'name': {'fname': fName, 'lname': lName},
+    'visits': visits
+  };
 
   String get name => fName + ' ' + lName;
 }
