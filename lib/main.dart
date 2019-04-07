@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
-
+import 'package:flutter/rendering.dart';
 
 var url = 'https://next.json-generator.com/api/json/get/EyBSiFo_L';
 
 
-void main() => runApp(MyApp());
-
+void main() {
+  debugPaintSizeEnabled=true;
+  runApp(MyApp());
+}
 
 Future<User> getUserFromResponse(url) async {
   http.Response resp = await http.get(url);
@@ -44,8 +46,14 @@ class BuildFromUserFuture extends StatefulWidget {
 
 
 class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
+  final _leadingStyle = const TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 18
+  );
+
   @override
   Widget build(BuildContext context) {
+    // TODO: Move async call outside of State.build
     Future<User> user = getUserFromResponse(url);
     return FutureBuilder(
       future: user,
@@ -72,12 +80,18 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
               // Use snapshot data to populate user profile display
               return Container(
                 alignment: Alignment.center,
+                padding: EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                 child: Column( 
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Image.network(
                       snapshot.data.picture,
                     ),
+                    Expanded(
+                      child: ListView(
+                        children: _buildUserTileList(snapshot.data),
+                      ),
+                    )
                   ],
                 )
               );
@@ -85,6 +99,34 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
           }
       }
     );
+  }
+
+  List<Widget> _buildUserTileList(User user) {
+    List<Widget> tileList = [];
+    return tileList
+      ..add(
+        ListTile(
+          contentPadding: const EdgeInsets.all(8.0),
+          leading: Text('Name', style: _leadingStyle),
+          title: Text(user.name),
+         )
+      )
+      ..add(Divider(color: Colors.grey,))
+      ..add(
+        ListTile(
+          contentPadding: const EdgeInsets.all(8.0),
+          leading: Text('ID', style: _leadingStyle),
+          title: Text(user.id.toString()),
+         )
+      )
+      ..add(Divider(color: Colors.grey,))
+      ..add(
+        ListTile(
+          contentPadding: const EdgeInsets.all(8.0),
+          leading: Text('Visits', style: _leadingStyle),
+          title: Text(user.visits.length.toString()),
+         )
+      );
   }
 }
 
@@ -105,7 +147,8 @@ class User {
     : id = json['id'],
       fName = json['name']['first'],
       lName = json['name']['last'],
-      picture = json['picture'],
+      // picture = json['picture'],
+      picture = 'https://randomuser.me/api/portraits/men/60.jpg',
       birthday = json['birthday'],
       uploads = json['uploads'],
       visits = json['visits'];
