@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
+
 var url = 'https://next.json-generator.com/api/json/get/EyBSiFo_L';
 
 
@@ -15,7 +16,6 @@ Future<User> getUserFromResponse(url) async {
   var user = User.fromJson(userJson[0]);
   return user;
 }
-
 
 
 class MyApp extends StatelessWidget {
@@ -36,10 +36,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
 class DisplayColumn extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _DisplayColumnState();
 }
+
 
 class _DisplayColumnState extends State<DisplayColumn> {
   @override
@@ -72,26 +74,16 @@ class _DisplayColumnState extends State<DisplayColumn> {
                 child: Column(
                   children: [
                     Image.network(snapshot.data.picture),
-                    // ListView.builder(
-                    //   padding: const EdgeInsets.all(16.0),
-                    //   itemBuilder: (context, i) {
-                    //     if (i.isOdd) return Divider();
-                    //     // TODO: where does 'i' come from????
-                    //   }
-
-                    // )
                   ],
-              )
-            );
+                )
+              );
+            }
           }
-        }
-      });
+      }
+    );
   }
-
-//   Widget _buildListTile(String header, String content) {
-
-//   }
 }
+
 
 class User {
   int id;
