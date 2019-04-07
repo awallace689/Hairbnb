@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'Storage.dart';
+import 'User.dart';
 
 class LoginPage extends StatefulWidget {
+  final Storage storage;
+
+  LoginPage({Key key, @required this.storage}) : super(key: key);
+
   Login createState() => Login();
 }
 
 class Login extends State<LoginPage>{
   final EmailCont = TextEditingController();
   final PasswordCont = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -75,20 +86,21 @@ class Login extends State<LoginPage>{
     );
   }
 
-  Future TryLogin()
-  {///Need to change this to check against list of users.
+  Future TryLogin() async
+  {
     String email = EmailCont.text;
     String password = PasswordCont.text;
-
-    if(UserExists(email, password))
+    print(widget.storage);
+    User user = await UserExists(email, password);
+    if(user != null)
     {
-      SaveLogin(email);
-      if(IsUser(email))
+      SaveLogin(email, password);
+      if(user.isAdmin)
       {
-        Navigator.pushReplacementNamed(context, '/User');
+        Navigator.pushReplacementNamed(context, '/Admin');
       }
       else{
-        Navigator.pushReplacementNamed(context, '/Admin');
+        Navigator.pushReplacementNamed(context, '/User');
       }
     }
     else {
@@ -103,9 +115,16 @@ class Login extends State<LoginPage>{
     }
   }
 
-  bool UserExists(String email, String password)
+  Future<User> UserExists(String email, String password) async
   {
-    return true;
+    List<User> UserList = await widget.storage.HTTPToUserList(
+        "http://www.json-generator.com/api/json/get/cffVCtGfaW?indent=2");
+    for(User user in UserList){
+      if(user.email == email && user.password == password){
+        return user;
+      }
+    }
+    return null;
   }
 
   bool IsUser(String email)
@@ -113,8 +132,9 @@ class Login extends State<LoginPage>{
     return false;
   }
 
-  Future<bool> SaveLogin(String email) async {
+  Future<bool> SaveLogin(String email, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString("EmailLogin", email);
+    prefs.setString("EmailLogin", email);
+    prefs.setString("PasswordLogin", password);
   }
 }

@@ -6,6 +6,7 @@ import 'User.dart';
 import 'dart:convert';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as HTTP;
 
 class SignUpPage extends StatefulWidget {
   SignUp createState() => SignUp();
@@ -184,6 +185,8 @@ class SignUp extends State<SignUpPage>{
                              _image.toString(),
                              [],
                              false);
-    print(NewUser.toJson());
+    String user = '{"key":"value"}';
+    print((await HTTP.post("https://api.myjson.com/bins", body: {'name': 'doodle', 'color': 'blue'})).body);
+    print(user);
   }
 }

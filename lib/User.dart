@@ -39,17 +39,29 @@ class User
         'pastVisits': pastVisits,
       };
 
-  static User fromJson(Map<String, dynamic> parsedJson) =>
-      new User(
-      parsedJson['email'],
-      parsedJson['password'],
-      parsedJson['firstName'],
-      parsedJson['lastName'],
-      parsedJson['phone'],
-      parsedJson['image'],
-      parsedJson['pastVisits'],
-      parsedJson['isAdmin']
+  Map<String, String> toJsonForPost() =>
+      {
+        'email': email,
+        'password': password,
+        'firstName': firstName,
+        'lastName': lastName,
+        'phone': phone,
+        'image': image,
+      };
+
+  factory User.fromJson(Map<String, dynamic> parsedJson){
+    return User(
+        parsedJson['email'],
+        parsedJson['password'],
+        parsedJson['firstName'],
+        parsedJson['lastName'],
+        parsedJson['phone'],
+        parsedJson['image'],
+        parsedJson['pastVisits'],
+        parsedJson['isAdmin']
     );
+  }
+
 
   void printUser() {
     print(this.email);

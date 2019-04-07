@@ -6,6 +6,8 @@ import 'package:project4/AdminPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Storage.dart';
 import 'User.dart';
+import 'SplashPage.dart';
+import 'LoginScreen.dart';
 
 
 class AccountPage extends StatefulWidget {
@@ -29,12 +31,21 @@ class AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder(
-        future: InitialLoad(),
+        future: Future.wait([InitialLoad(), GetEmailLogin()]),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data != null) {
-              print(snapshot.data);
-              return AdminPage();
+              if(snapshot.data[1] == ""){
+                return LoginScreen(storage: widget.storage,);
+              }
+              else{
+                if(snapshot.data[0].isAdmin) {
+                  return AdminPage();
+                }
+                else{
+                  return UserPage();
+                }
+              }
             } else {
               return new CircularProgressIndicator();
             }
@@ -45,20 +56,6 @@ class AccountPageState extends State<AccountPage> {
         },
       ),
     );
-//    if(Login == "")
-//    {
-//      return LoginScreen();
-//    }
-//    else{
-//      //User loadedUser = widget.storage.HTTPToUser("http://www.json-generator.com/api/json/get/ceJipFMTkO?indent=2");
-//      loadedUser.printUser();
-//      if(loadedUser.isAdmin){
-//        return AdminPage();
-//      }
-//      else {
-//        return UserPage();
-//      }
-//    }
   }
 
   Future<User> InitialLoad() async {
@@ -79,40 +76,5 @@ class AccountPageState extends State<AccountPage> {
     setState(() {
       this.Login = loadedLogin;
     });
-  }
-
-  Widget LoginScreen()
-  {
-    return MaterialApp(
-      home: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-              resizeToAvoidBottomPadding: false,
-              appBar: AppBar(
-                title: TabBar(
-                    labelColor: Colors.white,
-                    tabs: <Widget>[
-                      new Tab(
-                        text: "Log In",
-                      ),
-                      new Tab(
-                        text: "Sign Up",
-                      )
-                    ]
-                ),
-              ),
-              body: TabBarView(
-                children: <Widget>[
-                  new LoginPage(),
-                  new SignUpPage(),
-                ],
-              )
-          )
-      ),
-      routes: {
-        '/User': (context) => UserPage(),
-        '/Admin': (context) => AdminPage(),
-      },
-    );
   }
 }

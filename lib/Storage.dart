@@ -63,23 +63,31 @@ class Storage {
     return NewUser;
   }
 
-  Future<List<User>> _HTTPToUserList(String http) async {
-
+  Future<List<User>> HTTPToUserList(String http) async {
+    List<User> userList = new List();
+    HTTP.Response data = await HTTP.get(http);
+    String text = data.body;
+    //print(jsonDecode(text));
+    //Map<String, dynamic> JSON = jsonDecode(text);
+    for(int i = 0; i < jsonDecode(text).length; i++){
+      userList.add(User.fromJson(jsonDecode(text)[i]));
+    }
+    return userList;
   }
 
-  List<User> HTTPToUserList(String http){
-    List<User> UserList;
-    _HTTPToUserList(http).then((result) {
-      UserList = result;
-    });
-    return UserList;
-  }
+//  List<User> HTTPToUserList(String http){
+//    List<User> UserList;
+//    _HTTPToUserList(http).then((result) {
+//      UserList = result;
+//    });
+//    return UserList;
+//  }
 
   Future<User> HTTPToUser(String http) async {
     User user = User("", "", "", "", "", "", [], false);
     HTTP.Response data = await HTTP.get(http);
     String JSON = data.body;
-    //user = User.fromJson(jsonDecode(JSON));
+    user = User.fromJson(jsonDecode(JSON));
     return user;
   }
 
