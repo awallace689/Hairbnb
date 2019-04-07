@@ -8,7 +8,7 @@ var url = 'https://next.json-generator.com/api/json/get/EyBSiFo_L';
 
 
 void main() {
-  // debugPaintSizeEnabled=true;
+  debugPaintSizeEnabled=true;
   runApp(MyApp());
 }
 
@@ -87,13 +87,11 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
                 child: Column( 
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Image.network(
-                      snapshot.data.picture,
-                    ),
-                    Expanded(
+                    Flexible(
+                      fit: FlexFit.loose,
                       child: ListView(
                         children: _buildUserTileList(snapshot.data),
-                      ),
+                      )
                     )
                   ],
                 )
@@ -107,6 +105,15 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
   List<Widget> _buildUserTileList(User user) {
     List<Widget> tileList = [];
     return tileList
+      ..add(
+        SizedBox(
+          height: 128,
+          width: 128,
+          child: Image.network(
+            user.picture,
+          )
+        )
+      )
       ..add(
         ListTile(
           contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
