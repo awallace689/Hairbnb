@@ -8,7 +8,7 @@ var url = 'https://next.json-generator.com/api/json/get/EyBSiFo_L';
 
 
 void main() {
-  debugPaintSizeEnabled=true;
+  // debugPaintSizeEnabled=true;
   runApp(MyApp());
 }
 
@@ -31,6 +31,9 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text('Your Profile'),
+          actions: <Widget>[
+            Icon(Icons.edit)
+          ],
         ),
         body: BuildFromUserFuture(),
       )
@@ -106,7 +109,7 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
     return tileList
       ..add(
         ListTile(
-          contentPadding: const EdgeInsets.all(8.0),
+          contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
           leading: Text('Name', style: _leadingStyle),
           title: Text(user.name),
          )
@@ -114,7 +117,7 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
       ..add(Divider(color: Colors.grey,))
       ..add(
         ListTile(
-          contentPadding: const EdgeInsets.all(8.0),
+          contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
           leading: Text('ID', style: _leadingStyle),
           title: Text(user.id.toString()),
          )
@@ -122,7 +125,7 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
       ..add(Divider(color: Colors.grey,))
       ..add(
         ListTile(
-          contentPadding: const EdgeInsets.all(8.0),
+          contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
           leading: Text('Visits', style: _leadingStyle),
           title: Text(user.visits.length.toString()),
          )
