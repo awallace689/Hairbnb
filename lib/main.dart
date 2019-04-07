@@ -70,10 +70,14 @@ class _DisplayColumnState extends State<DisplayColumn> {
             }
             else {
               // Use snapshot data to populate user profile display
-              return Container( 
-                child: Column(
+              return Container(
+                alignment: Alignment.center,
+                child: Column( 
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Image.network(snapshot.data.picture),
+                    Image.network(
+                      snapshot.data.picture,
+                    ),
                   ],
                 )
               );
