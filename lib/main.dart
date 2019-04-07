@@ -22,11 +22,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'User Profile',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: DisplayColumn()
+      title: 'User Profile Container',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Your Profile'),
+        ),
+        body: DisplayColumn(),
+      )
     );
   }
 }
