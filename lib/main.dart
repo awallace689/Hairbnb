@@ -8,7 +8,7 @@ var url = 'https://next.json-generator.com/api/json/get/EyBSiFo_L';
 
 
 void main() {
-  debugPaintSizeEnabled=true;
+  // debugPaintSizeEnabled=true;
   runApp(MyApp());
 }
 
@@ -76,22 +76,30 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
             if (snapshot.hasError){
               return Text('Error: ${snapshot.error}');
             }
-            else if (snapshot.data == null) {
-              return Text('Loading...');
-            }
             else {
               // Use snapshot data to populate user profile display
               return Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                 child: Column( 
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Flexible(
                       fit: FlexFit.loose,
-                      child: ListView(
-                        children: _buildUserTileList(snapshot.data),
-                      )
+                      child: Container(
+                        margin: EdgeInsets.all(16.0),
+                        child: ListView(
+                          children: [
+                            SizedBox(
+                              height: 128,
+                              width: 128,
+                              child: Image.network(
+                                snapshot.data.picture,
+                              )
+                            ),
+                            _buildUserInfoCard(snapshot.data)
+                          ]
+                        )
+                      ) 
                     )
                   ],
                 )
@@ -102,41 +110,33 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
     );
   }
 
-  List<Widget> _buildUserTileList(User user) {
-    List<Widget> tileList = [];
-    return tileList
-      ..add(
-        SizedBox(
-          height: 128,
-          width: 128,
-          child: Image.network(
-            user.picture,
-          )
+  Widget _buildUserInfoCard(User user) {
+    return Card(
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+        child: Column(
+          children: [
+            ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+              leading: Text('Name', style: _leadingStyle),
+              title: Text(user.name),
+            ),
+            Divider(color: Colors.grey,),
+            ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+              leading: Text('ID', style: _leadingStyle),
+              title: Text(user.id.toString()),
+            ),
+            Divider(color: Colors.grey,),
+            ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+              leading: Text('Visits', style: _leadingStyle),
+              title: Text(user.visits.length.toString()),
+            ),
+          ]
         )
       )
-      ..add(
-        ListTile(
-          contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-          leading: Text('Name', style: _leadingStyle),
-          title: Text(user.name),
-         )
-      )
-      ..add(Divider(color: Colors.grey,))
-      ..add(
-        ListTile(
-          contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-          leading: Text('ID', style: _leadingStyle),
-          title: Text(user.id.toString()),
-         )
-      )
-      ..add(Divider(color: Colors.grey,))
-      ..add(
-        ListTile(
-          contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-          leading: Text('Visits', style: _leadingStyle),
-          title: Text(user.visits.length.toString()),
-         )
-      );
+    );
   }
 }
 
