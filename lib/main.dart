@@ -30,20 +30,20 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('Your Profile'),
         ),
-        body: DisplayColumn(),
+        body: BuildFromUserFuture(),
       )
     );
   }
 }
 
 
-class DisplayColumn extends StatefulWidget {
+class BuildFromUserFuture extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _DisplayColumnState();
+  State<StatefulWidget> createState() => _BuildFromUserFutureState();
 }
 
 
-class _DisplayColumnState extends State<DisplayColumn> {
+class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
   @override
   Widget build(BuildContext context) {
     Future<User> user = getUserFromResponse(url);
