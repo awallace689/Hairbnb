@@ -4,6 +4,8 @@ import 'LoginPage.dart';
 import 'SignUpPage.dart';
 import 'UserPage.dart';
 import 'AdminPage.dart';
+import 'AllenAdminPage.dart';
+import 'AllenUserPage.dart';
 
 class LoginScreen extends StatefulWidget {
   final Storage storage;
@@ -48,8 +50,8 @@ class LoginScreenState extends State<LoginScreen> {
           )
       ),
       routes: {
-        '/User': (context) => UserPage(),
-        '/Admin': (context) => AdminPage(),
+        '/User': (context) => AllenUserPage(),
+        '/Admin': (context) => AllenAdminPage(),
       },
     );
   }

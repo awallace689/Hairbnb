@@ -37,6 +37,7 @@ class CheckInPageState extends State<CheckInPage> {
               }
             }
             else {
+              print("No data");
               return new CircularProgressIndicator();
             }
           }
@@ -45,12 +46,12 @@ class CheckInPageState extends State<CheckInPage> {
   }
 
   Future<bool> IsUserCheckedIn() async{
-    List<CheckIn> CheckInList = await widget.storage.HTTPToCheckInList("http://www.json-generator.com/api/json/get/ceqqYtrZfm?indent=2");
-    for(CheckIn checkIn in CheckInList){
-      if(checkIn.email == await GetPrefEmail()){
-        return true;
-      }
-    }
+    //List<CheckIn> CheckInList = await widget.storage.HTTPToCheckInList("http://www.json-generator.com/api/json/get/ceqqYtrZfm?indent=2");
+//    for(CheckIn checkIn in CheckInList){
+//      if(checkIn.email == await GetPrefEmail()){
+//        return true;
+//      }
+//    }
     return false;
   }
 

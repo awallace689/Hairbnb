@@ -29,6 +29,7 @@ dependencies:
   shared_preferences:
   http:
   url_launcher:
+  phone_number:
 
 dev_dependencies:
   flutter_test:

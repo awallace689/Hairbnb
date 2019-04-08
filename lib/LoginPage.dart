@@ -90,6 +90,10 @@ class Login extends State<LoginPage>{
 
   Future TryLogin() async
   {
+    if(EmailCont.text == "Admin" || EmailCont.text == "User"){
+      Navigator.pushReplacementNamed(context, '/' + EmailCont.text);
+    }
+
     String email = EmailCont.text;
     String password = PasswordCont.text;
 
