@@ -87,16 +87,10 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
                     Flexible(
                       fit: FlexFit.loose,
                       child: Container(
-                        margin: EdgeInsets.all(16.0),
+                        // margin: EdgeInsets.only(top: 8.0),
                         child: ListView(
                           children: [
-                            SizedBox(
-                              height: 128,
-                              width: 128,
-                              child: Image.network(
-                                snapshot.data.picture,
-                              )
-                            ),
+                            _buildProfileImageStack(snapshot.data, context),                      
                             _buildUserInfoCard(snapshot.data)
                           ]
                         )
@@ -127,6 +121,12 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
               contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
               leading: Text('ID', style: _leadingStyle),
               title: Text(user.id.toString()),
+            ),
+            Divider(color: Colors.grey,),
+            ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+              leading: Text('Phone', style: _leadingStyle),
+              title: Text(user.phoneNumber),
             ),
             Divider(color: Colors.grey,),
             ExpansionTile(
@@ -172,6 +172,74 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
     }
     return rowList;
   }
+
+  Widget _buildProfileImageStack(User user, BuildContext context) {
+    return Container(
+      color: Colors.blue[100],
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          Positioned(
+            child: Row(
+              children: <Widget>[
+                Container( //profile img and box containing it
+                  margin: EdgeInsets.all(12.0),
+                  width: 150.0,
+                  height: 150.0,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        user.picture
+                      ),
+                      fit: BoxFit.cover
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                    boxShadow: [
+                      BoxShadow(blurRadius: 7.0, color: Colors.black)
+                    ]
+                  )
+                ),
+                Flexible(
+                  child: Wrap(  
+                    children: <Widget>[
+                      Text( //profile name
+                        user.name,
+                        style: TextStyle(
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ]
+                  ),
+                ),
+              ]
+            )
+          )
+        ]
+      )
+    );
+  }
+}
+
+class GetClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = new Path();
+
+    //sets the top background color behind profile img/name
+    path.lineTo(0.0, size.height / 3.5);
+    path.lineTo(size.width, size.height/3.5);
+    path.lineTo(size.width,0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    // TODO: implement shouldReclip
+    return true;
+  }
 }
 
 
@@ -179,6 +247,7 @@ class User {
   int id;
   String fName;
   String lName;
+  String phoneNumber;
   String picture;
   String birthday;
   List<dynamic> uploads;
@@ -191,6 +260,7 @@ class User {
     : id = json['id'],
       fName = json['name']['first'],
       lName = json['name']['last'],
+      phoneNumber = json['telephone'],
       // picture = json['picture'],
       picture = 'https://randomuser.me/api/portraits/men/60.jpg',
       birthday = json['birthday'],
