@@ -65,6 +65,7 @@ class SignUp extends State<SignUpPage>{
             TextFormField(
               controller: EmailCont,
               obscureText: false,
+              keyboardType: TextInputType.emailAddress,
               style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -116,6 +117,7 @@ class SignUp extends State<SignUpPage>{
             TextFormField(
               controller: PhoneCont,
               obscureText: false,
+              keyboardType: TextInputType.phone,
               style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -132,11 +134,11 @@ class SignUp extends State<SignUpPage>{
         content: Column(
           children: <Widget>[
             _image == null ? Text("No image selected.") : Image.file(_image),
-            RaisedButton(
+            _image == null ? Container() : RaisedButton(
               child: Text("Choose from gallery"),
               onPressed: getImageFromGallery,
             ),
-            RaisedButton(
+            _image == null ? Container() : RaisedButton(
               child: Text("Choose from camera"),
               onPressed: getImageFromCamera,
             ),

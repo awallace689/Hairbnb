@@ -45,6 +45,8 @@ class Login extends State<LoginPage>{
                   TextFormField(
                     controller: EmailCont,
                     obscureText: false,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
                     style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),

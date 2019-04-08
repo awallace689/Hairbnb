@@ -3,6 +3,8 @@ import 'dart:io';
 import 'User.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'CheckIn.dart';
+import 'Barber.dart';
 import 'package:http/http.dart' as HTTP;
 
 
@@ -75,6 +77,16 @@ class Storage {
     return userList;
   }
 
+  Future<List<CheckIn>> HTTPToCheckInList(String http) async{
+    List<CheckIn> checkInList = new List();
+    HTTP.Response data = await HTTP.get(http);
+    String text = data.body;
+    for(int i = 0; i < jsonDecode(text).length; i++){
+      checkInList.add(CheckIn.fromJson(jsonDecode(text)[i]));
+    }
+    return checkInList;
+  }
+
 //  List<User> HTTPToUserList(String http){
 //    List<User> UserList;
 //    _HTTPToUserList(http).then((result) {
@@ -89,6 +101,15 @@ class Storage {
     String JSON = data.body;
     user = User.fromJson(jsonDecode(JSON));
     return user;
+  }
+
+  Future<Barber> HTTPToBarber(String http) async {
+    Barber barber = Barber("", "", "", "", "", "", "");
+    HTTP.Response data = await HTTP.get(http);
+    String JSON = data.body;
+    print(JSON);
+    barber = Barber.fromJson(jsonDecode(JSON));
+    return barber;
   }
 
 //  User HTTPToUser(String http){
