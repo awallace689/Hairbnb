@@ -222,26 +222,6 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
   }
 }
 
-class GetClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = new Path();
-
-    //sets the top background color behind profile img/name
-    path.lineTo(0.0, size.height / 3.5);
-    path.lineTo(size.width, size.height/3.5);
-    path.lineTo(size.width,0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    // TODO: implement shouldReclip
-    return true;
-  }
-}
-
 
 class User {
   int id;
