@@ -87,9 +87,10 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
                     Flexible(
                       fit: FlexFit.loose,
                       child: Container(
-                        margin: EdgeInsets.all(16.0),
+                        // margin: EdgeInsets.only(top: 8.0),
                         child: ListView(
-                          children: [                           
+                          children: [
+                            _buildProfileImageStack(snapshot.data, context),                      
                             _buildUserInfoCard(snapshot.data)
                           ]
                         )
@@ -172,47 +173,51 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
     return rowList;
   }
 
-  Widget _buildProfileImageStack() {
-    return Stack(
-      children: <Widget>[
-        ClipPath(
-          child: Container(color: Colors.blue[800].withOpacity(0.8)),
-          clipper: GetClipper(),
-        ),
-        Positioned(
-          width: MediaQuery.of(context).size.width-10,
-          top: MediaQuery.of(context).size.height / 20,
-          child: Row(
-          children: <Widget>[
-            SizedBox(width: 15),
-              Container( //profile img and box containing it
-                width: 150.0,
-                height: 150.0,
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      'https://pixel.nymag.com/imgs/daily/vulture/2017/06/14/14-tom-cruise.w700.h700.jpg'),
-                      fit: BoxFit.cover),
-                      borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                      boxShadow: [
-                        BoxShadow(blurRadius: 7.0, color: Colors.black)
-                      ]
-                    )
-                  ),
-              SizedBox(width:15),
-              Text( //profile name
-                'Tom Cruise',
-                style: TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat'
+  Widget _buildProfileImageStack(User user, BuildContext context) {
+    return Container(
+      color: Colors.blue[100],
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          Positioned(
+            child: Row(
+              children: <Widget>[
+                Container( //profile img and box containing it
+                  margin: EdgeInsets.all(12.0),
+                  width: 150.0,
+                  height: 150.0,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        user.picture
+                      ),
+                      fit: BoxFit.cover
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                    boxShadow: [
+                      BoxShadow(blurRadius: 7.0, color: Colors.black)
+                    ]
+                  )
                 ),
-              ),
-            ]
+                Flexible(
+                  child: Wrap(  
+                    children: <Widget>[
+                      Text( //profile name
+                        user.name,
+                        style: TextStyle(
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ]
+                  ),
+                ),
+              ]
+            )
           )
-        )
-      ]
+        ]
+      )
     );
   }
 }
