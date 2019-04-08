@@ -12,6 +12,7 @@ void main() {
   runApp(MyApp());
 }
 
+
 Future<User> getUserFromResponse(url) async {
   http.Response resp = await http.get(url);
   var userJson = json.decode(resp.body);
