@@ -128,15 +128,48 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
               title: Text(user.id.toString()),
             ),
             Divider(color: Colors.grey,),
-            ListTile(
-              contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+            ExpansionTile(
+              key: PageStorageKey<String>('_Visits'),
               leading: Text('Visits', style: _leadingStyle),
               title: Text(user.visits.length.toString()),
+              children: _buildExpansionList(user),
             ),
           ]
         )
       )
     );
+  }
+
+  List<Widget> _buildExpansionList(User user) {
+    List<Widget> rowList = [];
+    for(int i = 0; i < user.visits.length; i++){
+      rowList.add(
+        Row(
+          children: <Widget>[
+            Flexible(
+              child: Container(
+                padding: EdgeInsets.all(4.0),  
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Row(children: <Widget>[
+                      Text(user.visits[i]['timestamp'], style:_leadingStyle)
+                    ],),
+                    Wrap(children: <Widget>[
+                      Text(user.visits[i]['notes'])
+                    ],)
+                  ],
+                )
+              )
+            )
+          ],
+        )
+      );
+      if(i + 1 != user.visits.length){
+        rowList.add(Divider(color: Colors.grey,));
+      }
+    }
+    return rowList;
   }
 }
 
