@@ -89,14 +89,7 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
                       child: Container(
                         margin: EdgeInsets.all(16.0),
                         child: ListView(
-                          children: [
-                            SizedBox(
-                              height: 128,
-                              width: 128,
-                              child: Image.network(
-                                snapshot.data.picture,
-                              )
-                            ),
+                          children: [                           
                             _buildUserInfoCard(snapshot.data)
                           ]
                         )
@@ -127,6 +120,12 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
               contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
               leading: Text('ID', style: _leadingStyle),
               title: Text(user.id.toString()),
+            ),
+            Divider(color: Colors.grey,),
+            ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+              leading: Text('Phone', style: _leadingStyle),
+              title: Text(user.phoneNumber),
             ),
             Divider(color: Colors.grey,),
             ExpansionTile(
@@ -172,6 +171,70 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
     }
     return rowList;
   }
+
+  Widget _buildProfileImageStack() {
+    return Stack(
+      children: <Widget>[
+        ClipPath(
+          child: Container(color: Colors.blue[800].withOpacity(0.8)),
+          clipper: GetClipper(),
+        ),
+        Positioned(
+          width: MediaQuery.of(context).size.width-10,
+          top: MediaQuery.of(context).size.height / 20,
+          child: Row(
+          children: <Widget>[
+            SizedBox(width: 15),
+              Container( //profile img and box containing it
+                width: 150.0,
+                height: 150.0,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      'https://pixel.nymag.com/imgs/daily/vulture/2017/06/14/14-tom-cruise.w700.h700.jpg'),
+                      fit: BoxFit.cover),
+                      borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                      boxShadow: [
+                        BoxShadow(blurRadius: 7.0, color: Colors.black)
+                      ]
+                    )
+                  ),
+              SizedBox(width:15),
+              Text( //profile name
+                'Tom Cruise',
+                style: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Montserrat'
+                ),
+              ),
+            ]
+          )
+        )
+      ]
+    );
+  }
+}
+
+class GetClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = new Path();
+
+    //sets the top background color behind profile img/name
+    path.lineTo(0.0, size.height / 3.5);
+    path.lineTo(size.width, size.height/3.5);
+    path.lineTo(size.width,0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    // TODO: implement shouldReclip
+    return true;
+  }
 }
 
 
@@ -179,6 +242,7 @@ class User {
   int id;
   String fName;
   String lName;
+  String phoneNumber;
   String picture;
   String birthday;
   List<dynamic> uploads;
@@ -191,6 +255,7 @@ class User {
     : id = json['id'],
       fName = json['name']['first'],
       lName = json['name']['last'],
+      phoneNumber = json['telephone'],
       // picture = json['picture'],
       picture = 'https://randomuser.me/api/portraits/men/60.jpg',
       birthday = json['birthday'],
