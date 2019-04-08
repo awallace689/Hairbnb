@@ -187,7 +187,7 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
                   width: 150.0,
                   height: 150.0,
                   decoration: BoxDecoration(
-                    color: Colors.red,
+                    color: Colors.blue[100],
                     image: DecorationImage(
                       image: NetworkImage(
                         user.picture
