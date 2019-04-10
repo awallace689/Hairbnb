@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-
+///Intialize a stateful widget
 class ContactsPage extends StatefulWidget
 {
+  ///Constructor that will assist in creating state.
   ContactsPage({Key key, this.title}) : super(key: key);
   final String title;
   @override
@@ -13,7 +14,7 @@ class ContactsPage extends StatefulWidget
 
 
 ///creates class that will retrieve details from json and in return 
-//fill a list of customer object with their pertaining values. 
+///fill a list of customer object with their pertaining values.
 class _ContactsPageState extends State<ContactsPage>
 {
   ///create list of customer objects that will 
