@@ -105,30 +105,34 @@
 (<wbr><span class="parameter" id="CreateNewUser-param-context"><span class="type-annotation">BuildContext</span> <span class="parameter-name">context</span></span>)
       
     </section>
+    <section class="desc markdown">
+      <p>Creates a new user from form data.</p>
+<p>Takes all the data from the form inputs and creates a new user.
+This will eventually upload the data to a database, but for now,
+it shows the information to be uploaded in a dialog box.</p>
+    </section>
     
     <section class="summary source-code" id="source">
       <h2><span>Implementation</span></h2>
-      <pre class="language-dart"><code class="language-dart">maxWidth: 512,
-maxHeight: 512,
-    );
-    setState(() {
-_image = croppedFile;
-    });
-  }
-
-  Future CreateNewUser(BuildContext context) async
-  {
-    final NewUser = new User(EmailCont.text,
-                       PasswordCont.text,
-                       FNameCont.text,
-                       LNameCont.text,
-                       PhoneCont.text,
-                       _image.toString(),
-                       [],
-                       false);
-    return showDialog(
-context: context,
-builder: (context) {</code></pre>
+      <pre class="language-dart"><code class="language-dart">Future CreateNewUser(BuildContext context) async
+{
+  final NewUser = new User(EmailCont.text,
+                           PasswordCont.text,
+                           FNameCont.text,
+                           LNameCont.text,
+                           PhoneCont.text,
+                           _image.toString(),
+                           [],
+                           false);
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        content: Text(jsonEncode(NewUser.toJson())),
+      );
+    },
+  );
+}</code></pre>
     </section>
 
   </div> <!-- /.main-content -->

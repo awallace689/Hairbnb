@@ -106,9 +106,9 @@
     <section class="desc markdown">
       <p>Called when this object is removed from the tree permanently.</p>
 <p>The framework calls this method when this <code>State</code> object will never
-build again. After the framework calls <a href="UserPage(delete)/UserPageState/dispose.html">dispose</a>, the <code>State</code> object is
-considered unmounted and the <a href="UserPage(delete)/UserPageState/mounted.html">mounted</a> property is false. It is an error
-to call <a href="UserPage(delete)/UserPageState/setState.html">setState</a> at this point. This stage of the lifecycle is terminal:
+build again. After the framework calls <a href="SignUpPage/SignUp/dispose.html">dispose</a>, the <code>State</code> object is
+considered unmounted and the <a href="SignUpPage/SignUp/mounted.html">mounted</a> property is false. It is an error
+to call <a href="SignUpPage/SignUp/setState.html">setState</a> at this point. This stage of the lifecycle is terminal:
 there is no way to remount a <code>State</code> object that has been disposed.</p>
 <p>Subclasses should override this method to release any resources retained
 by this object (e.g., stop any active animations).</p>
@@ -116,12 +116,12 @@ by this object (e.g., stop any active animations).</p>
 change state, for example a <code>ChangeNotifier</code> or <a href="dart-async/Stream-class.html">Stream</a>, or some
 other object to which one can subscribe to receive notifications, then
 be sure to subscribe and unsubscribe properly in <a href="LoginScreen/LoginScreenState/initState.html">initState</a>,
-<a href="UserPage(delete)/UserPageState/didUpdateWidget.html">didUpdateWidget</a>, and <a href="UserPage(delete)/UserPageState/dispose.html">dispose</a>:</p><ul><li>In <a href="LoginScreen/LoginScreenState/initState.html">initState</a>, subscribe to the object.</li><li>In <a href="UserPage(delete)/UserPageState/didUpdateWidget.html">didUpdateWidget</a> unsubscribe from the old object and subscribe
+<a href="SignUpPage/SignUp/didUpdateWidget.html">didUpdateWidget</a>, and <a href="SignUpPage/SignUp/dispose.html">dispose</a>:</p><ul><li>In <a href="LoginScreen/LoginScreenState/initState.html">initState</a>, subscribe to the object.</li><li>In <a href="SignUpPage/SignUp/didUpdateWidget.html">didUpdateWidget</a> unsubscribe from the old object and subscribe
 to the new one if the updated widget configuration requires
-replacing the object.</li><li>In <a href="UserPage(delete)/UserPageState/dispose.html">dispose</a>, unsubscribe from the object.</li></ul>
+replacing the object.</li><li>In <a href="SignUpPage/SignUp/dispose.html">dispose</a>, unsubscribe from the object.</li></ul>
 <p>If you override this, make sure to end your method with a call to
 super.dispose().</p>
-<p>See also <a href="UserPage(delete)/UserPageState/deactivate.html">deactivate</a>, which is called prior to <a href="UserPage(delete)/UserPageState/dispose.html">dispose</a>.</p>
+<p>See also <a href="SignUpPage/SignUp/deactivate.html">deactivate</a>, which is called prior to <a href="SignUpPage/SignUp/dispose.html">dispose</a>.</p>
     </section>
     
     <section class="summary source-code" id="source">

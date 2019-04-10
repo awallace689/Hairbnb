@@ -105,20 +105,18 @@
 (<wbr>)
       
     </section>
+    <section class="desc markdown">
+      <p>Opens the device camera and prompts user to take a picture.</p>
+<p>Once the user takes a photo, the user is prompted to crop the image.</p>
+    </section>
     
     <section class="summary source-code" id="source">
       <h2><span>Implementation</span></h2>
-      <pre class="language-dart"><code class="language-dart">],
-        ),
-        isActive: _currentStep &gt;= 2,
-      ),
-    ];
-    return _steps;
-  }
+      <pre class="language-dart"><code class="language-dart">Future getImageFromCamera() async {
+  var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
-  File _image;
-
-  Future getImageFromCa</code></pre>
+  _cropImage(image);
+}</code></pre>
     </section>
 
   </div> <!-- /.main-content -->

@@ -116,17 +116,17 @@
 <p>The framework will call this method exactly once for each <code>State</code> object
 it creates.</p>
 <p>Override this method to perform initialization that depends on the
-location at which this object was inserted into the tree (i.e., <a href="UserPage(delete)/UserPageState/context.html">context</a>)
-or on the widget used to configure this object (i.e., <a href="UserPage(delete)/UserPageState/widget.html">widget</a>).</p>
+location at which this object was inserted into the tree (i.e., <a href="SignUpPage/SignUp/context.html">context</a>)
+or on the widget used to configure this object (i.e., <a href="SignUpPage/SignUp/widget.html">widget</a>).</p>
 <p>If a <code>State</code>'s <a href="CheckInPage/CheckInPageState/build.html">build</a> method depends on an object that can itself
 change state, for example a <code>ChangeNotifier</code> or <a href="dart-async/Stream-class.html">Stream</a>, or some
 other object to which one can subscribe to receive notifications, then
-be sure to subscribe and unsubscribe properly in <a href="UserBarberPage(delete)/UserBarberPageState/initState.html">initState</a>,
-<a href="UserPage(delete)/UserPageState/didUpdateWidget.html">didUpdateWidget</a>, and <a href="UserPage(delete)/UserPageState/dispose.html">dispose</a>:</p><ul><li>In <a href="UserBarberPage(delete)/UserBarberPageState/initState.html">initState</a>, subscribe to the object.</li><li>In <a href="UserPage(delete)/UserPageState/didUpdateWidget.html">didUpdateWidget</a> unsubscribe from the old object and subscribe
+be sure to subscribe and unsubscribe properly in <a href="SignUpPage/SignUp/initState.html">initState</a>,
+<a href="SignUpPage/SignUp/didUpdateWidget.html">didUpdateWidget</a>, and <a href="SignUpPage/SignUp/dispose.html">dispose</a>:</p><ul><li>In <a href="SignUpPage/SignUp/initState.html">initState</a>, subscribe to the object.</li><li>In <a href="SignUpPage/SignUp/didUpdateWidget.html">didUpdateWidget</a> unsubscribe from the old object and subscribe
 to the new one if the updated widget configuration requires
-replacing the object.</li><li>In <a href="UserPage(delete)/UserPageState/dispose.html">dispose</a>, unsubscribe from the object.</li></ul>
+replacing the object.</li><li>In <a href="SignUpPage/SignUp/dispose.html">dispose</a>, unsubscribe from the object.</li></ul>
 <p>You cannot use <code>BuildContext.inheritFromWidgetOfExactType</code> from this
-method. However, <a href="UserPage(delete)/UserPageState/didChangeDependencies.html">didChangeDependencies</a> will be called immediately
+method. However, <a href="SignUpPage/SignUp/didChangeDependencies.html">didChangeDependencies</a> will be called immediately
 following this method, and <code>BuildContext.inheritFromWidgetOfExactType</code> can
 be used there.</p>
 <p>If you override this, make sure your method starts with a call to

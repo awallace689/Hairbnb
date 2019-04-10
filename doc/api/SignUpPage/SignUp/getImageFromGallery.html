@@ -105,16 +105,18 @@
 (<wbr>)
       
     </section>
+    <section class="desc markdown">
+      <p>Opens the device gallery and promps the user to choose a picture.</p>
+<p>Once the user chooses a photo, the user is prompted to crop the image.</p>
+    </section>
     
     <section class="summary source-code" id="source">
       <h2><span>Implementation</span></h2>
-      <pre class="language-dart"><code class="language-dart">Future getImageFromCamera() async {
-  var image = await ImagePicker.pickImage(source: ImageSource.camera);
+      <pre class="language-dart"><code class="language-dart">Future getImageFromGallery() async {
+  var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
   _cropImage(image);
-}
-
-Future getImageFromGall</code></pre>
+}</code></pre>
     </section>
 
   </div> <!-- /.main-content -->

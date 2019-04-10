@@ -118,13 +118,13 @@ that happens, the framework will ensure that it calls <a href="AccountPage/Accou
 the framework does reinsert this subtree, it will do so before the end of
 the animation frame in which the subtree was removed from the tree. For
 this reason, <code>State</code> objects can defer releasing most resources until the
-framework calls their <a href="UserPage(delete)/UserPageState/dispose.html">dispose</a> method.</p>
+framework calls their <a href="SignUpPage/SignUp/dispose.html">dispose</a> method.</p>
 <p>Subclasses should override this method to clean up any links between
 this object and other elements in the tree (e.g. if you have provided an
 ancestor with a pointer to a descendant's <code>RenderObject</code>).</p>
 <p>If you override this, make sure to end your method with a call to
 super.deactivate().</p>
-<p>See also <a href="UserPage(delete)/UserPageState/dispose.html">dispose</a>, which is called after <a href="UserPage(delete)/UserPageState/deactivate.html">deactivate</a> if the widget is
+<p>See also <a href="SignUpPage/SignUp/dispose.html">dispose</a>, which is called after <a href="SignUpPage/SignUp/deactivate.html">deactivate</a> if the widget is
 removed from the tree permanently.</p>
     </section>
     

@@ -71,7 +71,6 @@
       <li><a href="LoginPage/Login/build.html">build</a></li>
       <li><a href="LoginPage/Login/dispose.html">dispose</a></li>
       <li><a href="LoginPage/Login/initState.html">initState</a></li>
-      <li><a href="LoginPage/Login/IsUser.html">IsUser</a></li>
       <li><a href="LoginPage/Login/SaveLogin.html">SaveLogin</a></li>
       <li><a href="LoginPage/Login/TryLogin.html">TryLogin</a></li>
       <li><a href="LoginPage/Login/UserExists.html">UserExists</a></li>
@@ -111,17 +110,17 @@
     <section class="desc markdown">
       <p>Notify the framework that the internal state of this object has changed.</p>
 <p>Whenever you change the internal state of a <code>State</code> object, make the
-change in a function that you pass to <a href="UserPage(delete)/UserPageState/setState.html">setState</a>:</p>
+change in a function that you pass to <a href="SignUpPage/SignUp/setState.html">setState</a>:</p>
 <pre class="language-dart"><code class="language-dart">setState(() { _myState = newValue });
 </code></pre>
 <p>The provided callback is immediately called synchronously. It must not
 return a future (the callback cannot be <code>async</code>), since then it would be
 unclear when the state was actually being set.</p>
-<p>Calling <a href="UserPage(delete)/UserPageState/setState.html">setState</a> notifies the framework that the internal state of this
+<p>Calling <a href="SignUpPage/SignUp/setState.html">setState</a> notifies the framework that the internal state of this
 object has changed in a way that might impact the user interface in this
 subtree, which causes the framework to schedule a <a href="LoginPage/Login/build.html">build</a> for this <code>State</code>
 object.</p>
-<p>If you just change the state directly without calling <a href="UserPage(delete)/UserPageState/setState.html">setState</a>, the
+<p>If you just change the state directly without calling <a href="SignUpPage/SignUp/setState.html">setState</a>, the
 framework might not schedule a <a href="LoginPage/Login/build.html">build</a> and the user interface for this
 subtree might not be updated to reflect the new state.</p>
 <p>Generally it is recommended that the <code>setState</code> method only be used to
@@ -140,7 +139,7 @@ the increment is wrapped in the <code>setState</code>:</p>
 </code></pre>
 <p>It is an error to call this method after the framework calls <a href="LoginPage/Login/dispose.html">dispose</a>.
 You can determine whether it is legal to call this method by checking
-whether the <a href="UserPage(delete)/UserPageState/mounted.html">mounted</a> property is true.</p>
+whether the <a href="SignUpPage/SignUp/mounted.html">mounted</a> property is true.</p>
     </section>
     
     <section class="summary source-code" id="source">

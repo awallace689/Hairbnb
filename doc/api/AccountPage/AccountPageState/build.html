@@ -107,79 +107,11 @@
       
     </section>
     <section class="desc markdown">
-      <p>Describes the part of the user interface represented by this widget.</p>
-<p>The framework calls this method in a number of different situations:</p><ul><li>After calling <a href="AccountPage/AccountPageState/initState.html">initState</a>.</li><li>After calling <a href="UserPage(delete)/UserPageState/didUpdateWidget.html">didUpdateWidget</a>.</li><li>After receiving a call to <a href="UserPage(delete)/UserPageState/setState.html">setState</a>.</li><li>After a dependency of this <code>State</code> object changes (e.g., an
-<code>InheritedWidget</code> referenced by the previous <a href="AccountPage/AccountPageState/build.html">build</a> changes).</li><li>After calling <a href="UserPage(delete)/UserPageState/deactivate.html">deactivate</a> and then reinserting the <code>State</code> object into
-the tree at another location.</li></ul>
-<p>The framework replaces the subtree below this widget with the widget
-returned by this method, either by updating the existing subtree or by
-removing the subtree and inflating a new subtree, depending on whether the
-widget returned by this method can update the root of the existing
-subtree, as determined by calling <code>Widget.canUpdate</code>.</p>
-<p>Typically implementations return a newly created constellation of widgets
-that are configured with information from this widget's constructor, the
-given <code>BuildContext</code>, and the internal state of this <code>State</code> object.</p>
-<p>The given <code>BuildContext</code> contains information about the location in the
-tree at which this widget is being built. For example, the context
-provides the set of inherited widgets for this location in the tree. The
-<code>BuildContext</code> argument is always the same as the <code>context</code> property of
-this <code>State</code> object and will remain the same for the lifetime of this
-object. The <code>BuildContext</code> argument is provided redundantly here so that
-this method matches the signature for a <code>WidgetBuilder</code>.</p>
-<h2 id="design-discussion">Design discussion</h2>
-<h3 id="why-is-the-build-method-on-state-and-not-statefulwidget">Why is the <a href="AccountPage/AccountPageState/build.html">build</a> method on <code>State</code>, and not <code>StatefulWidget</code>?</h3>
-<p>Putting a <code>Widget build(BuildContext context)</code> method on <code>State</code> rather
-putting a <code>Widget build(BuildContext context, State state)</code> method on
-<code>StatefulWidget</code> gives developers more flexibility when subclassing
-<code>StatefulWidget</code>.</p>
-<p>For example, <code>AnimatedWidget</code> is a subclass of <code>StatefulWidget</code> that
-introduces an abstract <code>Widget build(BuildContext context)</code> method for its
-subclasses to implement. If <code>StatefulWidget</code> already had a <a href="AccountPage/AccountPageState/build.html">build</a> method
-that took a <code>State</code> argument, <code>AnimatedWidget</code> would be forced to provide
-its <code>State</code> object to subclasses even though its <code>State</code> object is an
-internal implementation detail of <code>AnimatedWidget</code>.</p>
-<p>Conceptually, <code>StatelessWidget</code> could also be implemented as a subclass of
-<code>StatefulWidget</code> in a similar manner. If the <a href="AccountPage/AccountPageState/build.html">build</a> method were on
-<code>StatefulWidget</code> rather than <code>State</code>, that would not be possible anymore.</p>
-<p>Putting the <a href="AccountPage/AccountPageState/build.html">build</a> function on <code>State</code> rather than <code>StatefulWidget</code> also
-helps avoid a category of bugs related to closures implicitly capturing
-<code>this</code>. If you defined a closure in a <a href="AccountPage/AccountPageState/build.html">build</a> function on a
-<code>StatefulWidget</code>, that closure would implicitly capture <code>this</code>, which is
-the current widget instance, and would have the (immutable) fields of that
-instance in scope:</p>
-<pre class="language-dart"><code class="language-dart">class MyButton extends StatefulWidget {
-  ...
-  final Color color;
-
-  @override
-  Widget build(BuildContext context, MyButtonState state) {
-    ... () { print("color: $color"); } ...
-  }
-}
-</code></pre>
-<p>For example, suppose the parent builds <code>MyButton</code> with <code>color</code> being blue,
-the <code>$color</code> in the print function refers to blue, as expected. Now,
-suppose the parent rebuilds <code>MyButton</code> with green. The closure created by
-the first build still implicitly refers to the original widget and the
-<code>$color</code> still prints blue even through the widget has been updated to
-green.</p>
-<p>In contrast, with the <a href="AccountPage/AccountPageState/build.html">build</a> function on the <code>State</code> object, closures
-created during <a href="AccountPage/AccountPageState/build.html">build</a> implicitly capture the <code>State</code> instance instead of
-the widget instance:</p>
-<pre class="language-dart"><code class="language-dart">class MyButtonState extends State&lt;MyButton&gt; {
-  ...
-  @override
-  Widget build(BuildContext context) {
-    ... () { print("color: ${widget.color}"); } ...
-  }
-}
-</code></pre>
-<p>Now when the parent rebuilds <code>MyButton</code> with green, the closure created by
-the first build still refers to <code>State</code> object, which is preserved across
-rebuilds, but the framework has updated that <code>State</code> object's <a href="UserPage(delete)/UserPageState/widget.html">widget</a>
-property to refer to the new <code>MyButton</code> instance and <code>${widget.color}</code>
-prints green, as expected.</p>
-<p>See also:</p><ul><li><code>StatefulWidget</code>, which contains the discussion on performance considerations.</li></ul>
+      <p>Directs the application to the correct page upon opening.</p>
+<p>If there is no user preferences stored, then load the login screen.
+If there a user preference stored, then load either the user page,
+or the admin page depending on their status. While the data
+is being fetched, a loading circle will show.</p>
     </section>
     
     <section class="summary source-code" id="source">
