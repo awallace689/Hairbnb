@@ -16,7 +16,9 @@ This is a barber shop management application. It allows a barber shop owner to s
 ## How to view Documentation
 
 1. Generated HTML Code Documentation
+	
 	a. Go to Documentation\doc\api\
+	
 	b. Open index.html
 
 2. Write-up, Class Diagram, Product Backlog, Sprint Backlog, State Diagram,
