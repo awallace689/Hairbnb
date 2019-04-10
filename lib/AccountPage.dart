@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:project4/LoginPage.dart';
-import 'package:project4/SignUpPage.dart';
-import 'package:project4/UserPage.dart';
-import 'package:project4/AdminPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Storage.dart';
 import 'User.dart';
 import 'SplashPage.dart';
 import 'LoginScreen.dart';
+import 'AllenUserPage.dart';
+import 'AllenAdminPage.dart';
 
-
+///Directs the application to the correct page.
 class AccountPage extends StatefulWidget {
   final Storage storage;
 
@@ -18,15 +16,25 @@ class AccountPage extends StatefulWidget {
   AccountPageState createState() => AccountPageState();
 }
 
+///Implementation of the AccountPage class.
+///
+///Loads the correct widget when the application is opened.
 class AccountPageState extends State<AccountPage> {
   String Login = "";
 
+  ///Initializes the state of the AccountPage.
   @override
   void initState() {
     GetEmailLogin().then(UpdateLogin);
     super.initState();
   }
 
+  ///Directs the application to the correct page upon opening.
+  ///
+  /// If there is no user preferences stored, then load the login screen.
+  /// If there a user preference stored, then load either the user page,
+  /// or the admin page depending on their status. While the data
+  /// is being fetched, a loading circle will show.
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,10 +48,10 @@ class AccountPageState extends State<AccountPage> {
               }
               else{
                 if(snapshot.data[0].isAdmin) {
-                  return AdminPage();
+                  return AllenAdminPage();
                 }
                 else{
-                  return UserPage();
+                  return AllenUserPage();
                 }
               }
             } else {
@@ -58,19 +66,24 @@ class AccountPageState extends State<AccountPage> {
     );
   }
 
+  ///Loads the saved user if one.
+  ///
+  /// Requests the user from storage if there is one. After a 2 second
+  /// delay to show the splash screen.
   Future<User> InitialLoad() async {
     await Future.delayed(Duration(seconds: 2));
     return widget.storage.HTTPToUser(
         "http://www.json-generator.com/api/json/get/ceJipFMTkO?indent=2");
   }
 
-
+  ///Retrieves the email from application preferences.
   Future<String> GetEmailLogin() async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString("EmailLogin") ?? "";
   }
 
+  ///Updates the Login of this class to [loadedLogin].
   void UpdateLogin(String loadedLogin)
   {
     setState(() {

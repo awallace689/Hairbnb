@@ -1,3 +1,4 @@
+///Used to store data of the customer.
 class User
 {
   String email;
@@ -9,6 +10,9 @@ class User
   List<dynamic> pastVisits;
   bool isAdmin;
 
+  ///User constructor to initialize a user.
+  ///
+  ///Places given values in the correct variables.
   User(String email,
        String password,
        String firstName,
@@ -28,6 +32,9 @@ class User
     this.isAdmin = isAdmin;
   }
 
+  ///Converts a User to a JSON object.
+  ///
+  ///Returns a JSON object with all the User values.
   Map<String, dynamic> toJson() =>
       {
         'email': email,
@@ -39,16 +46,10 @@ class User
         'pastVisits': pastVisits,
       };
 
-  Map<String, String> toJsonForPost() =>
-      {
-        'email': email,
-        'password': password,
-        'firstName': firstName,
-        'lastName': lastName,
-        'phone': phone,
-        'image': image,
-      };
-
+  ///Converts a JSON object to a User.
+  ///
+  ///Takes the [parsedJson] and calls the User
+  ///constructor. Returns a new User.
   factory User.fromJson(Map<String, dynamic> parsedJson){
     return User(
         parsedJson['email'],
@@ -60,17 +61,5 @@ class User
         parsedJson['pastVisits'],
         parsedJson['isAdmin']
     );
-  }
-
-
-  void printUser() {
-    print(this.email);
-    print(this.password);
-    print(this.firstName);
-    print(this.lastName);
-    print(this.phone);
-    print(this.image);
-    print(this.pastVisits[0]);
-    print(this.isAdmin);
   }
 }

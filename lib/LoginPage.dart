@@ -3,6 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Storage.dart';
 import 'User.dart';
 
+///Creates a page for the User to log in.
+///
+///This class is a stateful widget, so it can be changed at runtime.
 class LoginPage extends StatefulWidget {
   final Storage storage;
 
@@ -11,23 +14,31 @@ class LoginPage extends StatefulWidget {
   Login createState() => Login();
 }
 
+///Implementation of the LoginPage class.
+///
+///Shows a log in form for the user to sign in to an existing account.
 class Login extends State<LoginPage>{
   final EmailCont = TextEditingController();
   final PasswordCont = TextEditingController();
 
+  ///Initializes the state of the log in screen.
   @override
   void initState() {
     super.initState();
   }
 
+  ///Disposes of the classes attributes when the object is destroyed.
   @override
   void dispose() {
-    // Clean up the controller when the Widget is disposed
     EmailCont.dispose();
     PasswordCont.dispose();
     super.dispose();
   }
 
+  ///Builds the UI objects on the screen.
+  ///
+  ///This function is called anytime something on the screen
+  ///affects these UI objects. Returns the UI objects to be displayed.
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -88,6 +99,11 @@ class Login extends State<LoginPage>{
     );
   }
 
+  ///Tries the users inputs to continue in the application.
+  ///
+  /// If the user enters correct credentials then it will direct them
+  /// to the correct post login screen. Otherwise the user will be
+  /// shown a popup saying their credentials are incorrect.
   Future TryLogin() async
   {
     if(EmailCont.text == "Admin" || EmailCont.text == "User"){
@@ -121,6 +137,11 @@ class Login extends State<LoginPage>{
     }
   }
 
+  ///Checks if the user exists.
+  ///
+  /// Requests the list of users from the url and checks if the
+  /// [email] and [password] matches one of the users'. Returns
+  /// the user if the user exists, otherwise returns null.
   Future<User> UserExists(String email, String password) async
   {
     List<User> UserList = await widget.storage.HTTPToUserList(
@@ -133,11 +154,10 @@ class Login extends State<LoginPage>{
     return null;
   }
 
-  bool IsUser(String email)
-  {
-    return false;
-  }
-
+  ///Saves the user's email and password on successful login.
+  ///
+  /// Puts the user's [email] and [password] in the app's user preferences,
+  /// so the user does not have to log in every time.
   Future<bool> SaveLogin(String email, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("EmailLogin", email);

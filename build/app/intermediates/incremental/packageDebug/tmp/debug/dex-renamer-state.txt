@@ -1,0 +1,4 @@
+#Tue Apr 09 15:40:21 CDT 2019
+base.0=C\:\\Users\\wtmn8\\Documents\\College\\2019Spring\\448-Software Engineering\\Project3\\project4\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
+path.0=classes.dex
+renamed.0=classes.dex

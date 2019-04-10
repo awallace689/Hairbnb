@@ -4,58 +4,67 @@ import 'dart:io';
 import 'package:image_cropper/image_cropper.dart';
 import 'User.dart';
 import 'dart:convert';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as HTTP;
 
+///Creates a page for the User to sign up.
+///
+///This class is a stateful widget, so it can be changed at runtime.
 class SignUpPage extends StatefulWidget {
   SignUp createState() => SignUp();
 }
 
+///Implementation of the SignUpPage class.
+///
+///Shows a sign up form for the user to fill out to create an account.
 class SignUp extends State<SignUpPage>{
   int _currentStep = 0;
+  File _image;
   final EmailCont = TextEditingController();
   final PasswordCont = TextEditingController();
   final FNameCont = TextEditingController();
   final LNameCont = TextEditingController();
   final PhoneCont = TextEditingController();
 
+  ///Builds the UI objects on the screen.
+  ///
+  ///This function is called anytime something on the screen
+  ///affects these UI objects. Returns the UI objects to be displayed.
   @override
   Widget build(BuildContext context) {
     return new Container(
-          //child: Padding(
-            //padding: const EdgeInsets.all(30.0),
-            child: Stepper(
-              steps: _FormSteps(),
-              currentStep: this._currentStep,
-              onStepTapped: (step){
-                  setState((){
-                      this._currentStep = step;
-                  });
-              },
-              onStepCancel: (){
-                  setState((){
-                    if(this._currentStep > 0){
-                      this._currentStep -= 1;
-                    }
-                  });
-              },
-              onStepContinue: (){
-                setState(() {
-                  if(this._currentStep < this._FormSteps().length - 1){
-                    this._currentStep += 1;
-                  }
-                  else{
-                    //Create new user and go to whatever page we want.
-                    CreateNewUser(context);
-                  }
-                });
-              },
-            )
-        //)
+      child: Stepper(
+        steps: _FormSteps(),
+        currentStep: this._currentStep,
+        onStepTapped: (step){
+            setState((){
+                this._currentStep = step;
+            });
+        },
+        onStepCancel: (){
+            setState((){
+              if(this._currentStep > 0){
+                this._currentStep -= 1;
+              }
+            });
+        },
+        onStepContinue: (){
+          setState(() {
+            if(this._currentStep < this._FormSteps().length - 1){
+              this._currentStep += 1;
+            }
+            else{
+              CreateNewUser(context);
+            }
+          });
+        },
+      )
     );
   }
 
+  ///Creates a list of steps to be used as the sign up form.
+  ///
+  ///Steps allow for some information to be hidden until the user
+  ///is ready to see this information. Each of these steps contain
+  ///a different part of the sign up form. Returns the list of steps.
   List<Step> _FormSteps(){
     List<Step> _steps = [
       Step(
@@ -150,20 +159,28 @@ class SignUp extends State<SignUpPage>{
     return _steps;
   }
 
-  File _image;
-
+  ///Opens the device camera and prompts user to take a picture.
+  ///
+  ///Once the user takes a photo, the user is prompted to crop the image.
   Future getImageFromCamera() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     _cropImage(image);
   }
 
+  ///Opens the device gallery and promps the user to choose a picture.
+  ///
+  ///Once the user chooses a photo, the user is prompted to crop the image.
   Future getImageFromGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     _cropImage(image);
   }
 
+  ///Opens a page that allows the user to crop the image.
+  ///
+  ///The user must crop the image into a square. Once the user
+  ///crops the image, the image is saved to this class.
   Future<Null> _cropImage(File imageFile) async {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: imageFile.path,
@@ -177,6 +194,11 @@ class SignUp extends State<SignUpPage>{
     });
   }
 
+  ///Creates a new user from form data.
+  ///
+  ///Takes all the data from the form inputs and creates a new user.
+  ///This will eventually upload the data to a database, but for now,
+  ///it shows the information to be uploaded in a dialog box.
   Future CreateNewUser(BuildContext context) async
   {
     final NewUser = new User(EmailCont.text,
@@ -187,9 +209,6 @@ class SignUp extends State<SignUpPage>{
                              _image.toString(),
                              [],
                              false);
-    //String user = jsonEncode(NewUser.toJson());
-    //print((await HTTP.post("https://api.myjson.com/bins", body: user)).body);
-    //print(user);
     return showDialog(
       context: context,
       builder: (context) {
