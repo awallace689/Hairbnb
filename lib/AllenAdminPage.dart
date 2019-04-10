@@ -10,6 +10,8 @@ class AllenAdminPage extends StatefulWidget {
   AllenAdminPage({Key key, this.title}) : super(key: key);
 
 
+  final String title; 
+
   @override
 
   /// Create a stateful obejct that will be mounted in the element tree.
