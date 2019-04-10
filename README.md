@@ -20,4 +20,5 @@ This is a barber shop management application. It allows a barber shop owner to s
 	b. Open index.html
 
 2. Write-up, Class Diagram, Product Backlog, Sprint Backlog, State Diagram,
-	and Use Case Diagram image can be found within the Documentation folder.
+	Gantt Chart, and Use Case Diagram image can be found within the 
+	Documentation folder.
