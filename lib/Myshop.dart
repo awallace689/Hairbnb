@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:url_launcher/url_launcher.dart';
 class Myshop extends StatelessWidget {
+  /// Creates a stateful widget and a stateful element,
+  /// and the stateful element will be mounted to the element tree.
 
+  /// Default constructor that takes no parameter.
   Myshop();
 
+  /// Launches an phone call to the barbershop on the user's smart phone.
   _launchcaller()
   {
       var url = 'tel:+1 785 749 4517';
@@ -13,6 +17,8 @@ class Myshop extends StatelessWidget {
 
   }
 
+  /// Launches the default web browswer to visit the barbershop's
+  /// facebook page on the user's smart phone.
   _lanuchfacebook()
   {
     var url = 'https://www.facebook.com/amyxnorth/';
@@ -21,6 +27,8 @@ class Myshop extends StatelessWidget {
 
   }
 
+  /// Launches the default web browswer to visit the barbershop's
+  /// instagram page on the user's smart phone.
   _lanuchinstagram()
   {
     var url = 'https://www.instagram.com/amyxbarbershopnorth/?hl=en';
@@ -29,6 +37,10 @@ class Myshop extends StatelessWidget {
 
   }
 
+  /// Return a dialog widget with the barbershop's phone number in
+  /// the dialog and two buttons that give the user option that
+  /// wheteher to cancel or to dial the phone number.
+  /// When the Call button is tapped, _launchcaller will be called.
   Widget _dialogbuilder(BuildContext context)
   {
     return SimpleDialog(children: <Widget>[SizedBox(height: 13.0),
@@ -40,6 +52,13 @@ class Myshop extends StatelessWidget {
       contentPadding: EdgeInsets.all(0.0));
   }
 
+
+  /// Automatically triggered by the stateful obeject when is
+  /// being mounted to the element tree.
+  /// Returns an Container widget that takes an ListView widget as child, and
+  /// the ListView widget takes list of widgets as children, those widgets
+  /// are mainly Text widgets.
+  /// GestureDectector widget makes the phone number which is text tappable.
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -63,6 +82,8 @@ class Myshop extends StatelessWidget {
         Text('                 Lawrence, KS', style: Theme.of(context).textTheme.headline),
         Text('                 66044', style: Theme.of(context).textTheme.headline),
         SizedBox(height: 16.0),
+
+        ///Displays facebook and instagram icons images in a row.
         Row(children: <Widget>[GestureDetector(onTap: _lanuchfacebook,
                                                child: CircleAvatar(backgroundImage: NetworkImage('https://thebottomline.as.ucsb.edu/wp-content/uploads/2016/03/Facebook_wikimediaWEB-696x696.jpg'), radius: 40.0,)),
                                SizedBox(width: 13.0),
