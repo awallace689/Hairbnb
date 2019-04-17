@@ -5,6 +5,7 @@ INJECTED from C:\Users\asdff01\eecs448\448_p3\android\app\src\main\AndroidManife
 INJECTED from C:\Users\asdff01\eecs448\448_p3\android\app\src\main\AndroidManifest.xml:1:1-33:12
 INJECTED from C:\Users\asdff01\eecs448\448_p3\android\app\src\main\AndroidManifest.xml:1:1-33:12
 MERGED from C:\Users\asdff01\eecs448\448_p3\android\app\src\main\AndroidManifest.xml:1:1-33:12
+MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\asdff01\.gradle\caches\transforms-1\files-1.1\multidex-2.0.0.aar\3c1e7429b9abd9617fc62f2f7d3190bd\AndroidManifest.xml:17:1-22:12
 MERGED from [:image_cropper] C:\Users\asdff01\eecs448\448_p3\build\image_cropper\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:2:1-7:12
 MERGED from [:shared_preferences] C:\Users\asdff01\eecs448\448_p3\build\shared_preferences\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:2:1-7:12
 MERGED from [:phone_number] C:\Users\asdff01\eecs448\448_p3\build\phone_number\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:2:1-7:12
@@ -170,6 +171,8 @@ uses-sdk
 INJECTED from C:\Users\asdff01\eecs448\448_p3\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\asdff01\eecs448\448_p3\android\app\src\main\AndroidManifest.xml
 INJECTED from C:\Users\asdff01\eecs448\448_p3\android\app\src\main\AndroidManifest.xml
+MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\asdff01\.gradle\caches\transforms-1\files-1.1\multidex-2.0.0.aar\3c1e7429b9abd9617fc62f2f7d3190bd\AndroidManifest.xml:20:5-43
+MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\asdff01\.gradle\caches\transforms-1\files-1.1\multidex-2.0.0.aar\3c1e7429b9abd9617fc62f2f7d3190bd\AndroidManifest.xml:20:5-43
 MERGED from [:image_cropper] C:\Users\asdff01\eecs448\448_p3\build\image_cropper\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:5:5-44
 MERGED from [:image_cropper] C:\Users\asdff01\eecs448\448_p3\build\image_cropper\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences] C:\Users\asdff01\eecs448\448_p3\build\shared_preferences\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:5:5-44

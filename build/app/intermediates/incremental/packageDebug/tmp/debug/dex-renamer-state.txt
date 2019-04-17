@@ -1,4 +1,10 @@
-#Tue Apr 09 21:01:54 CDT 2019
-base.0=C\:\\Users\\wtmn8\\Documents\\College\\2019Spring\\448-Software Engineering\\Project3\\project4\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
+#Wed Apr 17 11:36:31 CDT 2019
+path.2=classes3.dex
+path.1=classes2.dex
 path.0=classes.dex
+renamed.2=classes3.dex
+renamed.1=classes2.dex
 renamed.0=classes.dex
+base.2=C\:\\Users\\asdff01\\eecs448\\448_p3\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
+base.1=C\:\\Users\\asdff01\\eecs448\\448_p3\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
+base.0=C\:\\Users\\asdff01\\eecs448\\448_p3\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
