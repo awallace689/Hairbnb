@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\wtmn8\\Documents\\College\\2019Spring\\448-Software Engineering\\Project3\\project4\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
+            "outputFile": "C:\\Users\\asdff01\\eecs448\\448_p3\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\wtmn8\\.gradle\\caches\\transforms-1\\files-1.1\\jetified-ucrop-2.2.2.aar\\d26e162c97d8df8ae72d8ff12593b6ae\\res\\values-zh\\values-zh.xml",
+                    "source": "C:\\Users\\asdff01\\.gradle\\caches\\transforms-1\\files-1.1\\jetified-ucrop-2.2.2.aar\\31f605f10b26748861d9a59308e31801\\res\\values-zh\\values-zh.xml",
                     "from": {
                         "startLines": "2,3,4",
                         "startColumns": "4,4,4",

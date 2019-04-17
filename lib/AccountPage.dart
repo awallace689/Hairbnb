@@ -25,7 +25,7 @@ class AccountPageState extends State<AccountPage> {
   ///Initializes the state of the AccountPage.
   @override
   void initState() {
-    GetEmailLogin().then(UpdateLogin);
+    getEmailLogin().then(updateLogin);
     super.initState();
   }
 
@@ -39,7 +39,7 @@ class AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder(
-        future: Future.wait([InitialLoad(), GetEmailLogin()]),
+        future: Future.wait([initialLoad(), getEmailLogin()]),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data != null) {
@@ -70,21 +70,21 @@ class AccountPageState extends State<AccountPage> {
   ///
   /// Requests the user from storage if there is one. After a 2 second
   /// delay to show the splash screen.
-  Future<User> InitialLoad() async {
+  Future<User> initialLoad() async {
     await Future.delayed(Duration(seconds: 2));
     return widget.storage.HTTPToUser(
         "http://www.json-generator.com/api/json/get/ceJipFMTkO?indent=2");
   }
 
   ///Retrieves the email from application preferences.
-  Future<String> GetEmailLogin() async
+  Future<String> getEmailLogin() async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString("EmailLogin") ?? "";
   }
 
   ///Updates the Login of this class to [loadedLogin].
-  void UpdateLogin(String loadedLogin)
+  void updateLogin(String loadedLogin)
   {
     setState(() {
       this.Login = loadedLogin;

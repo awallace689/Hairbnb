@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "399778648902",
+    "firebase_url": "https://hairbnb-91070.firebaseio.com",
+    "project_id": "hairbnb-91070",
+    "storage_bucket": "hairbnb-91070.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399778648902:android:f2e0e75863f5fdfd",
+        "android_client_info": {
+          "package_name": "eecs448project4.project4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "399778648902-9f53l5ptuu5nsj9jjp3nrdtdv9uq1cjd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGt5IpeRRRGZ8raaMVpgZpP1fKQbiuNGk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "399778648902-9f53l5ptuu5nsj9jjp3nrdtdv9uq1cjd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
