@@ -273,6 +273,7 @@ class User {
     'picture': picture,
     'birthday': birthday,
     'uploads': uploads,
+    
     'name': {'fname': fName, 'lname': lName},
     'visits': visits
   };

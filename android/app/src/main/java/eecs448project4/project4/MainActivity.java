@@ -1,4 +1,4 @@
-package eecs448project4.project4;
+package hairbnb.project4;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
