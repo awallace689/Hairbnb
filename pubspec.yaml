@@ -31,6 +31,8 @@ dependencies:
   http:
   url_launcher:
   phone_number:
+  firebase_auth:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
