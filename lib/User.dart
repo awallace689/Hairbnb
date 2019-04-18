@@ -63,3 +63,42 @@ class User
     );
   }
 }
+//////////////////////////////////////////////////////////////////////////
+//                         BEGIN NEW USER CODE
+//////////////////////////////////////////////////////////////////////////
+class FBUser {
+  String email;
+  String password;
+  Map<String, String> name;
+  String phoneNumber;
+  String birthday;
+  List<Map<String, String>> pastVisits;
+  List<dynamic> uploads;
+  String userid;
+
+  /// Create FBUser by passing parameter for each field.
+  FBUser(this.email, this.password, this.name, this.phoneNumber,
+       this.birthday, this.pastVisits, this.uploads, this.userid);
+
+  /// Create FBUser from a Map [Firebase]. Member variables follow DB
+  /// naming scheme.
+  /// 
+  /// This is done using an initializer list (:), which executes after
+  /// the constructor runs to access member variable declarations. 
+  /// example: 
+  ///         FBUser user = 
+  ///              FBUser.fromFB(Firebase.reference().query('get user'));
+  /// 
+  FBUser.fromFB(Map data) 
+    : email = data['email'],
+      password = data['password'],
+      name = data['name'],
+      phoneNumber = data['phoneNumber'],
+      birthday = data['birthday'],
+      pastVisits = data['pastVisits'],
+      uploads = data['uploads'],
+      userid = data['userid'];
+
+  // TODO: In future define a method for writing properties to database
+  // using 'set' functions to keep track of changed values?
+}
