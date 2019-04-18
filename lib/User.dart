@@ -83,14 +83,13 @@ class FBUser {  // 'User' was already taken
   /// Create FBUser from a Map [Firebase]. Member variables follow DB
   /// naming scheme.
   /// 
-  /// This is done using an initializer list (:), which executes after
-  /// the constructor runs to access member variable declarations. 
-  /// example: 
+  /// This is done using an initializer list (:), which executes before
+  /// the constructor runs so you don't have to write 'this'.
   ///         FBUser user = 
   ///              FBUser.fromFB(Firebase.reference().query('get user'));
   /// 
-  FBUser.fromFB(Map data)          // TODO: data may have type Map<String, dynamic>,
-    : email = data['email'],      //        don't know for sure.
+  FBUser.fromFB(Map data)          // 'data' may have type Map<String, dynamic>,
+    : email = data['email'],       // don't know for sure.
       password = data['password'],
       name = data['name'],
       phoneNumber = data['phoneNumber'],
