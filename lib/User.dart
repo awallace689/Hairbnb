@@ -66,7 +66,7 @@ class User
 //////////////////////////////////////////////////////////////////////////
 //                         BEGIN NEW USER CODE
 //////////////////////////////////////////////////////////////////////////
-class FBUser {
+class FBUser {  // 'User' was already taken
   String email;
   String password;
   Map<String, String> name;
@@ -89,8 +89,8 @@ class FBUser {
   ///         FBUser user = 
   ///              FBUser.fromFB(Firebase.reference().query('get user'));
   /// 
-  FBUser.fromFB(Map data) 
-    : email = data['email'],
+  FBUser.fromFB(Map data)          // TODO: data may have type Map<String, dynamic>,
+    : email = data['email'],      //        don't know for sure.
       password = data['password'],
       name = data['name'],
       phoneNumber = data['phoneNumber'],
