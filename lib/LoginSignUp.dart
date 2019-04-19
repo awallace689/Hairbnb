@@ -253,14 +253,14 @@ class LoginSignUpState extends State<LoginSignUp> {
         margin: EdgeInsets.fromLTRB(left, top, right, bottom),
         child: ListView(
           children: <Widget>[
-            // Container(
-            //   margin: EdgeInsets.fromLTRB(0, 32, 0, 32),
-            //   child: Image.asset(
-            //     'assets/HairbnbLogo.png',
-            //     width: 225,
-            //     height: 225,
-            //   ),
-            // ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 32, 0, 32),
+              child: Image.asset(
+                'assets/HairbnbLogo.png',
+                width: 225,
+                height: 225,
+              ),
+            ),
             Card(
               child: Container(
                 padding: EdgeInsets.all(12.0),
