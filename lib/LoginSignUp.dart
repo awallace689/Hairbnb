@@ -85,7 +85,7 @@ class LoginSignUpState extends State<LoginSignUp> {
             ),
             Card( 
               child: Container(
-                padding: EdgeInsets.all(12.0),
+                padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 12.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.all(Radius.elliptical(3,3)),
@@ -95,8 +95,8 @@ class LoginSignUpState extends State<LoginSignUp> {
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
-                      _ShowEmailInput(),
-                      _ShowPasswordInput(),
+                      _ShowEmailInput(withIcon: false),
+                      _ShowPasswordInput(withIcon: false),
                       _ShowSubmitButton(),
                       _ShowSwitchButton(),
                       _ShowErrorMessage(),
@@ -122,7 +122,7 @@ class LoginSignUpState extends State<LoginSignUp> {
     }
   }
 
-  Widget _ShowEmailInput()
+  Widget _ShowEmailInput({withIcon: true})
   {
     return TextFormField(
       maxLines: 1,
@@ -130,10 +130,12 @@ class LoginSignUpState extends State<LoginSignUp> {
       autofocus: false,
       decoration: new InputDecoration(
           hintText: 'Email',
-          icon: new Icon(
+          icon: withIcon 
+          ? new Icon(
             Icons.mail,
             color: Colors.grey,
           )
+          : null
       ),
       validator: (value) => _isValidEmail(value) ? null : "Please enter a valid email.",
       onSaved: (value) => _email = value,
@@ -146,7 +148,7 @@ class LoginSignUpState extends State<LoginSignUp> {
     return regex.hasMatch(input);
   }
 
-  Widget _ShowPasswordInput()
+  Widget _ShowPasswordInput({withIcon: true})
   {
     return TextFormField(
       maxLines: 1,
@@ -154,10 +156,12 @@ class LoginSignUpState extends State<LoginSignUp> {
       obscureText: true,
       decoration: new InputDecoration(
           hintText: 'Password',
-          icon: new Icon(
+          icon: withIcon 
+          ? new Icon(
             Icons.lock,
             color: Colors.grey,
           )
+          : null
       ),
       validator: (value) => _isValidPassword(value) ? null : "Please enter a valid password.",
       onSaved: (value) => _password = value,
@@ -263,17 +267,24 @@ class LoginSignUpState extends State<LoginSignUp> {
             ),
             Card(
               child: Container(
-                padding: EdgeInsets.all(12.0),
+                padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
-                      _ShowNameInput(),
-                      _ShowEmailInput(),
-                      _ShowPasswordInput(),
-                      _ShowPhoneInput(),
-                      _ShowBirthdayInput(),
-                      //_ShowImageInput(),
+                      Container(
+                       padding: EdgeInsets.only(right: 36),
+                        child: Column(
+                          children: <Widget>[
+                            _ShowNameInput(),
+                            _ShowEmailInput(),
+                            _ShowPasswordInput(),
+                            _ShowPhoneInput(),
+                            _ShowBirthdayInput(),
+                            //_ShowImageInput(),
+                          ]
+                        ),
+                      ),
                       _ShowSubmitButton(),
                       _ShowSwitchButton(),
                       _ShowErrorMessage(),
