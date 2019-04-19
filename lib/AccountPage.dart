@@ -4,6 +4,7 @@ import 'Storage.dart';
 import 'User.dart';
 import 'SplashPage.dart';
 import 'LoginScreen.dart';
+import 'LoginSignUp.dart';
 import 'AllenUserPage.dart';
 import 'AllenAdminPage.dart';
 
@@ -44,7 +45,8 @@ class AccountPageState extends State<AccountPage> {
           if (snapshot.hasData) {
             if (snapshot.data != null) {
               if(snapshot.data[1] == ""){
-                return LoginScreen(storage: widget.storage,);
+                //return LoginScreen(storage: widget.storage,);
+                return LoginSignUp();
               }
               else{
                 if(snapshot.data[0].isAdmin) {

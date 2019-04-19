@@ -98,6 +98,18 @@ class FBUser {  // 'User' was already taken
       uploads = data['uploads'],
       userid = data['userid'];
 
+  dynamic toJson() =>
+      {
+        'email': email,
+        'password': password,
+        'name': name,
+        'phoneNumber': phoneNumber,
+        'birthday': birthday,
+        'pastVisits': pastVisits,
+        'uploads' : uploads,
+        'userid' : userid
+      };
+
   // TODO: In future define a method for writing properties to database
   // using 'set' functions to keep track of changed values?
 }
