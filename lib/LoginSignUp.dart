@@ -218,13 +218,6 @@ class LoginSignUpState extends State<LoginSignUp> {
     });
   }
 
-  Widget _buildRow(Widget content) {
-    return Container(
-      child: content,
-      margin: EdgeInsets.fromLTRB(8.0, 8.0, 0, 16.0)
-    );
-  }
-
   Widget _BuildSignUpPage()
   {
     // return Scaffold(
@@ -268,21 +261,24 @@ class LoginSignUpState extends State<LoginSignUp> {
             //     height: 225,
             //   ),
             // ),
-            Card( 
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    _buildRow(_ShowNameInput()),
-                    _buildRow(_ShowEmailInput()),
-                    _buildRow(_ShowPasswordInput()),
-                    _buildRow(_ShowPhoneInput()),
-                    _buildRow(_ShowBirthdayInput()),
-                    //_ShowImageInput(),
-                    _buildRow(_ShowSubmitButton()),
-                    _buildRow(_ShowSwitchButton()),
-                    _buildRow(_ShowErrorMessage()),
-                  ],
+            Card(
+              child: Container(
+                padding: EdgeInsets.all(12.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      _ShowNameInput(),
+                      _ShowEmailInput(),
+                      _ShowPasswordInput(),
+                      _ShowPhoneInput(),
+                      _ShowBirthdayInput(),
+                      //_ShowImageInput(),
+                      _ShowSubmitButton(),
+                      _ShowSwitchButton(),
+                      _ShowErrorMessage(),
+                    ],
+                  ),
                 ),
               ),
             ),
