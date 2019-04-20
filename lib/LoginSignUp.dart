@@ -20,6 +20,7 @@ class LoginSignUpState extends State<LoginSignUp> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase.instance.reference();
 
+  BuildContext Context;
   FormMode _formMode = FormMode.LOGIN;
   final _formKey = GlobalKey<FormState>();
   String _errorMessage = "";
@@ -45,6 +46,7 @@ class LoginSignUpState extends State<LoginSignUp> {
 
   @override
   Widget build(BuildContext context) {
+    Context = context;
     return MaterialApp(
       home: _formMode == FormMode.LOGIN ? _BuildLoginPage() : _BuildSignUpPage(),
       routes: {
@@ -165,6 +167,7 @@ class LoginSignUpState extends State<LoginSignUp> {
   void _ChangeFormToSignUp()
   {
     setState(() {
+      _errorMessage = "";
       _formMode = FormMode.SIGNUP;
     });
   }
@@ -172,6 +175,7 @@ class LoginSignUpState extends State<LoginSignUp> {
   void _ChangeFormToLogin()
   {
     setState(() {
+      _errorMessage = "";
       _formMode = FormMode.LOGIN;
     });
   }
@@ -357,7 +361,7 @@ class LoginSignUpState extends State<LoginSignUp> {
   _ValidateAndSubmit() async
   {
     setState(() {
-      _errorMessage = "";
+      //_errorMessage = "";
       //_isLoading = true;
     });
     if(_formMode == FormMode.SIGNUP){
@@ -458,17 +462,27 @@ class LoginSignUpState extends State<LoginSignUp> {
   _Login() async
   {
     String UserID = "";
+    setState(() {
+      _isLoading = true;
+    });
     try
     {
       UserID = (await _auth.signInWithEmailAndPassword(email: _email, password: _password)).uid;
+      if(UserID.length > 0){
+        //_SaveUserID(UserID);
+        print(UserID);
+        print("Login Successful");
+        Navigator.pushReplacementNamed(Context, '/User');
+      }
+      print(UserID);
       ///Need to go to User page if login credentials are correct.
       ///otherwise display error message.
-      print(UserID);
     }
     catch (error)
     {
       setState(() {
-        _errorMessage = error.details;
+        _isLoading = false;
+        _errorMessage = "Email and password do not match.";
       });
     }
   }
