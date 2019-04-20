@@ -21,12 +21,9 @@ class AccountPage extends StatefulWidget {
 ///
 ///Loads the correct widget when the application is opened.
 class AccountPageState extends State<AccountPage> {
-  String Login = "";
-
   ///Initializes the state of the AccountPage.
   @override
   void initState() {
-    getEmailLogin().then(updateLogin);
     super.initState();
   }
 
@@ -40,23 +37,20 @@ class AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder(
-        future: Future.wait([initialLoad(), getEmailLogin()]),
+        future: Future.wait([Splash(), getUserID()]),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data != null) {
+              print(snapshot.data[1]);
+              //If the user has not logged in before.
               if(snapshot.data[1] == ""){
-                //return LoginScreen(storage: widget.storage,);
                 return LoginSignUp();
               }
               else{
-                if(snapshot.data[0].isAdmin) {
-                  return AllenAdminPage();
-                }
-                else{
-                  return AllenUserPage();
-                }
+                return AllenUserPage();
               }
-            } else {
+            }
+            else {
               return new CircularProgressIndicator();
             }
           }
@@ -72,24 +66,14 @@ class AccountPageState extends State<AccountPage> {
   ///
   /// Requests the user from storage if there is one. After a 2 second
   /// delay to show the splash screen.
-  Future<User> initialLoad() async {
+  Future<User> Splash() async {
     await Future.delayed(Duration(seconds: 2));
-    return widget.storage.HTTPToUser(
-        "http://www.json-generator.com/api/json/get/ceJipFMTkO?indent=2");
   }
 
   ///Retrieves the email from application preferences.
-  Future<String> getEmailLogin() async
+  Future<String> getUserID() async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString("EmailLogin") ?? "";
-  }
-
-  ///Updates the Login of this class to [loadedLogin].
-  void updateLogin(String loadedLogin)
-  {
-    setState(() {
-      this.Login = loadedLogin;
-    });
+    return prefs.getString("UserID") ?? "";
   }
 }

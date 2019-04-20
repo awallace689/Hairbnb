@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'Storage.dart';
-import 'LoginPage.dart';
-import 'SignUpPage.dart';
 import 'AllenAdminPage.dart';
 import 'AllenUserPage.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +6,7 @@ import 'User.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum FormMode { LOGIN, SIGNUP}
 
@@ -43,11 +41,13 @@ class LoginSignUpState extends State<LoginSignUp> {
     super.initState();
   }
 
+  final navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     Context = context;
     return MaterialApp(
+      navigatorKey: navigatorKey,
       theme: ThemeData(
         primarySwatch: Colors.green,
         accentColor: Colors.blueAccent
@@ -81,8 +81,8 @@ class LoginSignUpState extends State<LoginSignUp> {
               margin: EdgeInsets.fromLTRB(0, 32, 0, 32),
               child: Image.asset(
                 'assets/HairbnbLogo.png',
-                width: 225,
-                height: 225,
+                width: 200,
+                height: 200,
               ),
             ),
             Card( 
@@ -265,8 +265,8 @@ class LoginSignUpState extends State<LoginSignUp> {
               margin: EdgeInsets.fromLTRB(0, 32, 0, 32),
               child: Image.asset(
                 'assets/HairbnbLogo.png',
-                width: 225,
-                height: 225,
+                width: 200,
+                height: 200,
               ),
             ),
             Card(
@@ -550,16 +550,25 @@ class LoginSignUpState extends State<LoginSignUp> {
 
   _CreateUser(FBUser newUser) async
   {
+    String UserID = "";
+    setState(() {
+      _isLoading = true;
+    });
     try{
-      _auth.createUserWithEmailAndPassword(email: newUser.email, password: newUser.password);
-      var UserID = (await _auth.currentUser()).uid;
+      await _auth.createUserWithEmailAndPassword(email: newUser.email, password: newUser.password);
+      UserID = (await _auth.currentUser()).uid;
       newUser.userid = UserID;
       Firestore.instance.collection("users").document(UserID).setData(newUser.toJson());
+      print(UserID);
       ///Need to save UserID to app preferences.
+      _SaveUserID(UserID);
       ///Need to go to User Page.
+      navigatorKey.currentState.pushReplacementNamed('/User');
     }
     catch(e){
+      print(e);
       setState(() {
+        _isLoading = false;
         _errorMessage = "Email is already in use.";
       });
     }
@@ -575,14 +584,10 @@ class LoginSignUpState extends State<LoginSignUp> {
     {
       UserID = (await _auth.signInWithEmailAndPassword(email: _email, password: _password)).uid;
       if(UserID.length > 0){
-        //_SaveUserID(UserID);
+        _SaveUserID(UserID);
         print(UserID);
-        print("Login Successful");
-        Navigator.pushReplacementNamed(Context, '/User');
+        navigatorKey.currentState.pushReplacementNamed('/User');
       }
-      print(UserID);
-      ///Need to go to User page if login credentials are correct.
-      ///otherwise display error message.
     }
     catch (error)
     {
@@ -591,5 +596,10 @@ class LoginSignUpState extends State<LoginSignUp> {
         _errorMessage = "Email and password do not match.";
       });
     }
+  }
+
+  Future<bool> _SaveUserID(String ID) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("UserID", ID);
   }
 }
