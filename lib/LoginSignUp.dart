@@ -48,7 +48,11 @@ class LoginSignUpState extends State<LoginSignUp> {
   Widget build(BuildContext context) {
     Context = context;
     return MaterialApp(
-      home: _formMode == FormMode.LOGIN ? _BuildLoginPage() : _BuildSignUpPage(),
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        accentColor: Colors.blueAccent
+        ),
+      home: _formMode == FormMode.LOGIN ? _BuildLoginPage(context) : _BuildSignUpPage(),
       routes: {
         '/User': (context) => AllenUserPage(),
         '/Admin': (context) => AllenAdminPage(),
@@ -56,19 +60,54 @@ class LoginSignUpState extends State<LoginSignUp> {
     );
   }
 
-  Widget _BuildLoginPage()
+  Widget _BuildLoginPage(BuildContext context)
   {
+    double left = 16.0;
+    double top = 0;
+    double right = 16.0;
+    double bottom = 0;
+
     return Scaffold(
-      body: Form(
-        key: _formKey,
+      // resizeToAvoidBottomPadding: false,
+      backgroundColor: Theme.of(context).primaryColor,
+      body: Container( 
+        decoration: BoxDecoration(
+          // color: Colors.green[400],
+        ),
+        margin: EdgeInsets.fromLTRB(left, top, right, bottom),
         child: ListView(
           children: <Widget>[
-            _ShowEmailInput(),
-            _ShowPasswordInput(),
-            _ShowSubmitButton(),
-            _ShowSwitchButton(),
-            _ShowErrorMessage(),
-            _ShowLoading()
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 32, 0, 32),
+              child: Image.asset(
+                'assets/HairbnbLogo.png',
+                width: 225,
+                height: 225,
+              ),
+            ),
+            Card( 
+              child: Container(
+                padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 12.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.all(Radius.elliptical(3,3)),
+                  color: Colors.white,
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      _ShowEmailInput(withIcon: false),
+                      _ShowPasswordInput(withIcon: false),
+                      _ShowSubmitButton(),
+                      _ShowSwitchButton(),
+                      _ShowErrorMessage(),
+                      _ShowLoading()
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -85,7 +124,7 @@ class LoginSignUpState extends State<LoginSignUp> {
     }
   }
 
-  Widget _ShowEmailInput()
+  Widget _ShowEmailInput({withIcon: true})
   {
     return TextFormField(
       maxLines: 1,
@@ -93,10 +132,12 @@ class LoginSignUpState extends State<LoginSignUp> {
       autofocus: false,
       decoration: new InputDecoration(
           hintText: 'Email',
-          icon: new Icon(
+          icon: withIcon 
+          ? new Icon(
             Icons.mail,
             color: Colors.grey,
           )
+          : null
       ),
       validator: (value) => _isValidEmail(value) ? null : "Please enter a valid email.",
       onSaved: (value) => _email = value,
@@ -109,7 +150,7 @@ class LoginSignUpState extends State<LoginSignUp> {
     return regex.hasMatch(input);
   }
 
-  Widget _ShowPasswordInput()
+  Widget _ShowPasswordInput({withIcon: true})
   {
     return TextFormField(
       maxLines: 1,
@@ -117,10 +158,12 @@ class LoginSignUpState extends State<LoginSignUp> {
       obscureText: true,
       decoration: new InputDecoration(
           hintText: 'Password',
-          icon: new Icon(
+          icon: withIcon 
+          ? new Icon(
             Icons.lock,
             color: Colors.grey,
           )
+          : null
       ),
       validator: (value) => _isValidPassword(value) ? null : "Please enter a valid password.",
       onSaved: (value) => _password = value,
@@ -135,17 +178,20 @@ class LoginSignUpState extends State<LoginSignUp> {
 
   Widget _ShowSubmitButton()
   {
-    return MaterialButton(
-      elevation: 5.0,
-      minWidth: 200.0,
-      height: 42.0,
-      color: Colors.blue,
-      child: _formMode == FormMode.LOGIN
-          ? new Text('Login',
-          style: new TextStyle(fontSize: 20.0, color: Colors.white))
-          : new Text('Create account',
-          style: new TextStyle(fontSize: 20.0, color: Colors.white)),
-      onPressed: _ValidateAndSubmit,
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
+      child: MaterialButton(
+        elevation: 5.0,
+        minWidth: 200.0,
+        height: 42.0,
+        color: Colors.blueAccent,
+        child: _formMode == FormMode.LOGIN
+            ? new Text('Login',
+            style: new TextStyle(fontSize: 20.0, color: Colors.white))
+            : new Text('Create account',
+            style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+        onPressed: _ValidateAndSubmit,
+      )
     );
   }
 
@@ -182,20 +228,75 @@ class LoginSignUpState extends State<LoginSignUp> {
 
   Widget _BuildSignUpPage()
   {
+    // return Scaffold(
+    //   body: Form(
+    //     key: _formKey,
+    //     child: ListView(
+    //       children: <Widget>[
+    //         _buildRow(_ShowEmailInput()),
+    //         _buildRow(_ShowPasswordInput()),
+    //         _buildRow(_ShowNameInput()),
+    //         _buildRow(_ShowPhoneInput()),
+    //         _buildRow(_ShowBirthdayInput()),
+    //         //_ShowImageInput(),
+    //         _buildRow(_ShowSubmitButton()),
+    //         _buildRow(_ShowSwitchButton()),
+    //         _buildRow(_ShowErrorMessage()),
+    //       ],
+    //     ),
+    //   ),
+    // );
+    double left = 16.0;
+    double top = 16.0;
+    double right = 16.0;
+    double bottom = 0;
+
     return Scaffold(
-      body: Form(
-        key: _formKey,
+      // resizeToAvoidBottomPadding: false,
+      backgroundColor: Theme.of(context).primaryColor,
+      body: Container( 
+        decoration: BoxDecoration(
+          // color: Colors.green[400],
+        ),
+        margin: EdgeInsets.fromLTRB(left, top, right, bottom),
         child: ListView(
           children: <Widget>[
-            _ShowEmailInput(),
-            _ShowPasswordInput(),
-            _ShowNameInput(),
-            _ShowPhoneInput(),
-            _ShowBirthdayInput(),
-            //_ShowImageInput(),
-            _ShowSubmitButton(),
-            _ShowSwitchButton(),
-            _ShowErrorMessage()
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 32, 0, 32),
+              child: Image.asset(
+                'assets/HairbnbLogo.png',
+                width: 225,
+                height: 225,
+              ),
+            ),
+            Card(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                       padding: EdgeInsets.only(right: 36),
+                        child: Column(
+                          children: <Widget>[
+                            _ShowNameInput(),
+                            _ShowEmailInput(),
+                            _ShowPasswordInput(),
+                            _ShowPhoneInput(),
+                            _ShowBirthdayInput(),
+                            //_ShowImageInput(),
+                          ]
+                        ),
+                      ),
+                      _ShowSubmitButton(),
+                      _ShowSwitchButton(),
+                      _ShowErrorMessage(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -206,18 +307,22 @@ class LoginSignUpState extends State<LoginSignUp> {
   {
     return Row(
       children: <Widget>[
-        Icon(
-          Icons.calendar_today,
-          color: Colors.grey,
+        Container(
+          margin: EdgeInsets.only(right: 16),
+          child: Icon(
+            Icons.perm_identity,
+            color: Colors.grey,
+          ),
         ),
         Expanded(
           child: Column(
             children: <Widget>[
-              Text("First Name"),
+              // Text("First Name"),
               TextFormField(
                 maxLines: 1,
                 autofocus: false,
                 decoration: InputDecoration(
+                  hintText: 'First'
                 ),
                 validator: (value) => value.length > 0 ? null : "Please enter a first name.",
                 onSaved: (value) => _fName = value,
@@ -228,11 +333,12 @@ class LoginSignUpState extends State<LoginSignUp> {
         Expanded(
           child: Column(
             children: <Widget>[
-              Text("Last Name"),
+              // Text("Last Name"),
               TextFormField(
                 maxLines: 1,
                 autofocus: false,
                 decoration: InputDecoration(
+                  hintText: 'Last'
                 ),
                 validator: (value) => value.length > 0 ? null : "Please enter a last name.",
                 onSaved: (value) => _lName = value,
@@ -272,14 +378,16 @@ class LoginSignUpState extends State<LoginSignUp> {
   {
     return Row(
       children: <Widget>[
-        Icon(
-          Icons.calendar_today,
-          color: Colors.grey,
+        Container(
+          margin: EdgeInsets.only(right: 16),
+          child: Icon(
+            Icons.calendar_today,
+            color: Colors.grey,
+          ),
         ),
         Expanded(
           child: Column(
             children: <Widget>[
-              Text("Month"),
               TextFormField(
                 maxLines: 1,
                 autofocus: false,
@@ -298,7 +406,6 @@ class LoginSignUpState extends State<LoginSignUp> {
         Expanded(
           child: Column(
             children: <Widget>[
-              Text("Day"),
               TextFormField(
                 maxLines: 1,
                 autofocus: false,
@@ -317,7 +424,6 @@ class LoginSignUpState extends State<LoginSignUp> {
         Expanded(
           child: Column(
             children: <Widget>[
-              Text("Year"),
               TextFormField(
                 maxLines: 1,
                 autofocus: false,
