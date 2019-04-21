@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Storage.dart';
 import 'User.dart';
 import 'SplashPage.dart';
-import 'LoginScreen.dart';
 import 'LoginSignUp.dart';
 import 'AllenUserPage.dart';
 import 'AllenAdminPage.dart';

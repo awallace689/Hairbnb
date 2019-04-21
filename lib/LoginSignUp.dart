@@ -7,6 +7,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 enum FormMode { LOGIN, SIGNUP}
 
@@ -23,6 +27,7 @@ class LoginSignUpState extends State<LoginSignUp> {
   final _formKey = GlobalKey<FormState>();
   String _errorMessage = "";
   bool _isLoading = false;
+  bool _SelectingImage = false;
 
   String _email = "";
   String _password = "";
@@ -33,6 +38,7 @@ class LoginSignUpState extends State<LoginSignUp> {
   String _day = "";
   String _year = "";
   String _DOB = "";
+  File _UserImage;
 
   TextEditingController _DOBControl = TextEditingController();
 
@@ -49,7 +55,7 @@ class LoginSignUpState extends State<LoginSignUp> {
     return MaterialApp(
       navigatorKey: navigatorKey,
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.lightGreen,
         accentColor: Colors.blueAccent
         ),
       home: _formMode == FormMode.LOGIN ? _BuildLoginPage(context) : _BuildSignUpPage(),
@@ -228,24 +234,6 @@ class LoginSignUpState extends State<LoginSignUp> {
 
   Widget _BuildSignUpPage()
   {
-    // return Scaffold(
-    //   body: Form(
-    //     key: _formKey,
-    //     child: ListView(
-    //       children: <Widget>[
-    //         _buildRow(_ShowEmailInput()),
-    //         _buildRow(_ShowPasswordInput()),
-    //         _buildRow(_ShowNameInput()),
-    //         _buildRow(_ShowPhoneInput()),
-    //         _buildRow(_ShowBirthdayInput()),
-    //         //_ShowImageInput(),
-    //         _buildRow(_ShowSubmitButton()),
-    //         _buildRow(_ShowSwitchButton()),
-    //         _buildRow(_ShowErrorMessage()),
-    //       ],
-    //     ),
-    //   ),
-    // );
     double left = 16.0;
     double top = 16.0;
     double right = 16.0;
@@ -262,11 +250,11 @@ class LoginSignUpState extends State<LoginSignUp> {
         child: ListView(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.fromLTRB(0, 32, 0, 32),
+              margin: EdgeInsets.fromLTRB(0, 16, 0, 16),
               child: Image.asset(
                 'assets/HairbnbLogo.png',
-                width: 200,
-                height: 200,
+                width: 150,
+                height: 150,
               ),
             ),
             Card(
@@ -280,18 +268,19 @@ class LoginSignUpState extends State<LoginSignUp> {
                        padding: EdgeInsets.only(right: 36),
                         child: Column(
                           children: <Widget>[
+                            _ShowImageInput(),
                             _ShowNameInput(),
                             _ShowEmailInput(),
                             _ShowPasswordInput(),
                             _ShowPhoneInput(),
                             _ShowBirthdayInput(),
-                            //_ShowImageInput(),
                           ]
                         ),
                       ),
                       _ShowSubmitButton(),
                       _ShowSwitchButton(),
                       _ShowErrorMessage(),
+                      _ShowLoading(),
                     ],
                   ),
                 ),
@@ -461,7 +450,105 @@ class LoginSignUpState extends State<LoginSignUp> {
 
   Widget _ShowImageInput()
   {
-    ///Need to add image inputs.
+    Widget PhotoIcon = new RawMaterialButton(
+      onPressed: () {
+        setState(() {
+          _SelectingImage = true;
+        });
+      },
+      child: (_UserImage == null) ?
+          Icon(
+            Icons.add_a_photo,
+            color: Colors.white,
+            size: 40.0,
+          ) :
+          Container(
+          width: 70.0,
+          height: 70.0,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: FileImage(_UserImage)
+              )
+            )
+          ),
+      shape: new CircleBorder(),
+      elevation: 5.0,
+      fillColor: Colors.green,
+      padding: (_UserImage == null) ? const EdgeInsets.all(15.0) : EdgeInsets.all(0)
+    );
+    Widget Buttons = Row(
+      children: <Widget>[
+        MaterialButton(
+          elevation: 5.0,
+          minWidth: 10.0,
+          height: 42.0,
+          color: Colors.green,
+          child: Text(
+              'From Gallery',
+              style: new TextStyle(fontSize: 20.0, color: Colors.white)
+          ),
+          onPressed: getImageFromGallery,
+        ),
+        Container(
+          width: 5.0,
+        ),
+        MaterialButton(
+          elevation: 5.0,
+          minWidth: 10.0,
+          height: 42.0,
+          color: Colors.green,
+          child: Text(
+              'From Camera',
+              style: new TextStyle(fontSize: 20.0, color: Colors.white)
+          ),
+          onPressed: getImageFromCamera,
+        )
+      ],
+    );
+    return Column(
+      children: <Widget>[
+        PhotoIcon,
+        _SelectingImage ? Buttons : Container(height: 0.0)
+      ],
+    );
+  }
+
+  ///Opens the device camera and prompts user to take a picture.
+  ///
+  ///Once the user takes a photo, the user is prompted to crop the image.
+  Future getImageFromCamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    _cropImage(image);
+  }
+
+  ///Opens the device gallery and promps the user to choose a picture.
+  ///
+  ///Once the user chooses a photo, the user is prompted to crop the image.
+  Future getImageFromGallery() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    _cropImage(image);
+  }
+
+  ///Opens a page that allows the user to crop the image.
+  ///
+  ///The user must crop the image into a square. Once the user
+  ///crops the image, the image is saved to this class.
+  Future<Null> _cropImage(File imageFile) async {
+    File croppedFile = await ImageCropper.cropImage(
+      sourcePath: imageFile.path,
+      ratioX: 1.0,
+      ratioY: 1.0,
+      maxWidth: 512,
+      maxHeight: 512,
+    );
+    setState(() {
+      _SelectingImage = false;
+      _UserImage = croppedFile;
+    });
   }
 
   _ValidateAndSubmit() async
@@ -555,14 +642,22 @@ class LoginSignUpState extends State<LoginSignUp> {
       _isLoading = true;
     });
     try{
+      //Create new user in database with email and password.
       await _auth.createUserWithEmailAndPassword(email: newUser.email, password: newUser.password);
       UserID = (await _auth.currentUser()).uid;
+
+      //Save User class to the firestore database with updated userID.
       newUser.userid = UserID;
       Firestore.instance.collection("users").document(UserID).setData(newUser.toJson());
-      print(UserID);
-      ///Need to save UserID to app preferences.
+
+      //Save userID to app preferences.
       _SaveUserID(UserID);
-      ///Need to go to User Page.
+
+      //Save user profile picture file to database with path: [UserID]/profilePicture.jpg
+      final StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child("$UserID/profilePicture.jpg");
+      firebaseStorageRef.putFile(_UserImage);
+
+      //Navigate to user page.
       navigatorKey.currentState.pushReplacementNamed('/User');
     }
     catch(e){
@@ -582,6 +677,9 @@ class LoginSignUpState extends State<LoginSignUp> {
     });
     try
     {
+      if(_email == "admin"){
+        navigatorKey.currentState.pushReplacementNamed('/Admin');
+      }
       UserID = (await _auth.signInWithEmailAndPassword(email: _email, password: _password)).uid;
       if(UserID.length > 0){
         _SaveUserID(UserID);

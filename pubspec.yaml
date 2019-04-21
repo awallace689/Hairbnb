@@ -33,6 +33,7 @@ dependencies:
   phone_number:
   firebase_auth:
   firebase_database:
+  firebase_storage:
   intl:
 
 dev_dependencies:
