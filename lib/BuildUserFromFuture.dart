@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'User.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 
 /// url {String}: static URL for loading json into User class
 var url = 'https://next.json-generator.com/api/json/get/EyBSiFo_L';
@@ -41,20 +46,19 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
   /// return: Widget (FutureBuilder)
   @override
   Widget build(BuildContext context) {
-    // TODO: Move async call outside of State.build
-    Future<User> user = getUserFromResponse(url);
-    return FutureBuilder(
+    Future<FBUser> user = getFBUserFromPreferences();
+      return FutureBuilder(
         future: user,
-        builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<FBUser> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
-              return Container(
-                  child: Text('Starting connection...')
+              return Center(
+                child: CircularProgressIndicator()
               );
             case ConnectionState.active:
             case ConnectionState.waiting:
-              return Container(
-                  child: Text('Loading...')
+              return Center(
+                child: CircularProgressIndicator()
               );
             case ConnectionState.done:
             // Check for valid snapshot state
@@ -94,7 +98,7 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
   /// 
   /// param user {User}: user to pull data from
   /// return: Widget (Card)
-  Widget _buildUserInfoCard(User user) {
+  Widget _buildUserInfoCard(FBUser user) {
     return Card(
         child: Container(
             margin: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
@@ -103,19 +107,31 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
                   ListTile(
                     contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                     leading: Text('Name', style: _leadingStyle),
-                    title: Text(user.name),
+                    title: Text(user.name['first'] + ' ' + user.name['last']),
                   ),
                   Divider(color: Colors.grey,),
                   ListTile(
                     contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                     leading: Text('ID', style: _leadingStyle),
-                    title: Text(user.id.toString()),
+                    title: Text(user.userid), //TODO: Remove after testing
+                  ),
+                  Divider(color: Colors.grey,),
+                  ListTile(
+                    contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                    leading: Text('Email', style: _leadingStyle),
+                    title: Text(user.email),
                   ),
                   Divider(color: Colors.grey,),
                   ListTile(
                     contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                     leading: Text('Phone', style: _leadingStyle),
                     title: Text(user.phoneNumber),
+                  ),
+                  Divider(color: Colors.grey,),
+                  ListTile(
+                    contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                    leading: Text('Birthday', style: _leadingStyle),
+                    title: Text(user.birthday),
                   ),
                   Divider(color: Colors.grey,),
                   ExpansionTile(
@@ -135,7 +151,7 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
   /// 
   /// param user {User}: User object to pull information from
   /// return: List<Widget>, a list of Rows
-  List<Widget> _buildExpansionList(User user) {
+  List<Widget> _buildExpansionList(FBUser user) {
     List<Widget> rowList = [];
     for(int i = 0; i < user.visits.length; i++){
       rowList.add(
@@ -173,10 +189,10 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
   /// param user {User}: User to pull information from
   /// param context {BuildContext}: BuildContext from MaterialApp
   /// return: Widget (Container)
-  Widget _buildProfileImageStack(User user, BuildContext context) {
+  Widget _buildProfileImageStack(FBUser user, BuildContext context) {
     return Container(
-        color: Colors.blue[100],
-        child: Stack(
+      color: Colors.blue[100],
+      child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           Positioned(
@@ -189,10 +205,10 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
                   decoration: BoxDecoration(
                     color: Colors.blue[100],
                     image: DecorationImage(
-                        image: NetworkImage(
-                            user.picture
-                        ),
-                        fit: BoxFit.cover
+                      image: NetworkImage(
+                        'https://firebasestorage.googleapis.com/v0/b/hairbnb-f0c2c.appspot.com/o/l8jj6JC66fgjQ1y3Q7abMxwiqxX2%2FprofilePicture.jpg?alt=media&token=c01dc283-e44b-4ae0-a5e8-4307bc6249b7'
+                      ),
+                      fit: BoxFit.cover
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(75.0)),
                     boxShadow: [
@@ -204,7 +220,7 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
                   child: Wrap(
                     children: <Widget>[
                       Text( //profile name
-                        user.name,
+                        user.name['first'] + ' ' + user.name['last'],
                         style: TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
@@ -288,9 +304,15 @@ class User {
 /// 
 /// param url {String}: url to make request to
 /// return: Future<User>
-Future<User> getUserFromResponse(url) async {
-  http.Response resp = await http.get(url);
-  var userJson = json.decode(resp.body);
-  var user = User.fromJson(userJson[0]);
+Future<FBUser> getFBUserFromPreferences() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  DocumentSnapshot document = await Firestore.instance
+                                .collection('users').document(prefs.get("UserID")).get();
+  FBUser user = FBUser.fromFB(document.data);
+  user.getProfilePicUrl.then(
+    (param) {
+        user.profilePicUrl = param;
+    }
+  );
   return user;
 }

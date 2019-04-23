@@ -1,4 +1,6 @@
 ///Used to store data of the customer.
+import 'package:firebase_storage/firebase_storage.dart';
+
 class User
 {
   String email;
@@ -72,13 +74,14 @@ class FBUser {  // 'User' was already taken
   Map<String, String> name;
   String phoneNumber;
   String birthday;
-  List<Map<String, String>> pastVisits;
+  List<Map<String, String>> _pastVisits;
   List<dynamic> uploads;
   String userid;
+  String profilePicUrl;
 
   /// Create FBUser by passing parameter for each field.
   FBUser(this.email, this.password, this.name, this.phoneNumber,
-       this.birthday, this.pastVisits, this.uploads, this.userid);
+       this.birthday, this._pastVisits, this.uploads, this.userid);
 
   /// Create FBUser from a Map [Firebase]. Member variables follow DB
   /// naming scheme.
@@ -88,28 +91,49 @@ class FBUser {  // 'User' was already taken
   ///         FBUser user = 
   ///              FBUser.fromFB(Firebase.reference().query('get user'));
   /// 
-  FBUser.fromFB(Map data)          // 'data' may have type Map<String, dynamic>,
-    : email = data['email'],       // don't know for sure.
+  FBUser.fromFB(Map data)
+    : email = data['email'],    
       password = data['password'],
-      name = data['name'],
+      name = {
+        'first': data['name']['first'],
+        'last': data['name']['last'] 
+      },
       phoneNumber = data['phoneNumber'],
       birthday = data['birthday'],
-      pastVisits = data['pastVisits'],
+      _pastVisits = data['pastVisits'],
       uploads = data['uploads'],
       userid = data['userid'];
 
   dynamic toJson() =>
-      {
-        'email': email,
-        'password': password,
-        'name': name,
-        'phoneNumber': phoneNumber,
-        'birthday': birthday,
-        'pastVisits': pastVisits,
-        'uploads' : uploads,
-        'userid' : userid
-      };
+    {
+      'email': email,
+      'password': password,
+      'name': name,
+      'phoneNumber': phoneNumber,
+      'birthday': birthday,
+      'pastVisits': _pastVisits,
+      'uploads' : uploads,
+      'userid' : userid
+    };
 
-  // TODO: In future define a method for writing properties to database
-  // using 'set' functions to keep track of changed values?
+  Future<String> get getProfilePicUrl async {
+    String userID = this.userid;
+    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref()
+                                          .child("/$userID/profilePicture.jpg");
+    this.profilePicUrl = await firebaseStorageRef.getDownloadURL();
+    return profilePicUrl;
+  }
+
+  List<Map<String, String>> get visits {
+    if (this._pastVisits != null){
+      return _pastVisits;
+    }
+    else {
+      return <Map<String, String>>[];
+    }
+  }
+
+  set visits (data) {
+    this._pastVisits = data;
+  }
 }
