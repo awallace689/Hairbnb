@@ -55,7 +55,7 @@ class LoginSignUpState extends State<LoginSignUp> {
     return MaterialApp(
       navigatorKey: navigatorKey,
       theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
+        primaryColor: Colors.lightGreen,
         accentColor: Colors.blueAccent
         ),
       home: _formMode == FormMode.LOGIN ? _BuildLoginPage(context) : _BuildSignUpPage(),

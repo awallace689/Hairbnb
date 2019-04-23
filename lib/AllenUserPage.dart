@@ -47,7 +47,11 @@ class _AllenUserPageState extends State<AllenUserPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return MaterialApp(
+      theme: ThemeData(
+        primaryColor: Colors.green[400],
+      ),
       home: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
         body: Center(child: _handleTap(_selectedIndex)),
         bottomNavigationBar : BottomNavigationBar(
           type:BottomNavigationBarType.fixed,

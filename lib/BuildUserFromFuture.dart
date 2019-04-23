@@ -190,49 +190,68 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
   /// param context {BuildContext}: BuildContext from MaterialApp
   /// return: Widget (Container)
   Widget _buildProfileImageStack(FBUser user, BuildContext context) {
-    return Container(
-      color: Colors.blue[100],
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Positioned(
-            child: Row(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.all(12.0),
-                  width: 150.0,
-                  height: 150.0,
-                  decoration: BoxDecoration(
-                    color: Colors.blue[100],
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        'https://firebasestorage.googleapis.com/v0/b/hairbnb-f0c2c.appspot.com/o/l8jj6JC66fgjQ1y3Q7abMxwiqxX2%2FprofilePicture.jpg?alt=media&token=c01dc283-e44b-4ae0-a5e8-4307bc6249b7'
-                      ),
-                      fit: BoxFit.cover
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                    boxShadow: [
-                      BoxShadow(blurRadius: 7.0, color: Colors.black)
-                    ]
-                  )
-                ),
-                Flexible(
-                  child: Wrap(
-                    children: <Widget>[
-                      Text( //profile name
-                        user.name['first'] + ' ' + user.name['last'],
-                        style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
+    return 
+    Card(
+      child: Container(
+        decoration: BoxDecoration(
+          // Box decoration takes a gradient
+          gradient: LinearGradient(
+            // Where the linear gradient begins and ends
+            begin: Alignment.topRight,
+            end: Alignment.bottomCenter,
+            // Add one stop for each color. Stops should increase from 0 to 1
+            stops: [ 0.2, 0.3, 0.4, 0.9],
+            colors: [
+              // Colors are easy thanks to Flutter's Colors class.
+              Colors.green[100],
+              Colors.green[100],
+              Colors.green[100],
+              Colors.green[100],
+            ],
+          ),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Positioned(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.all(12.0),
+                    width: 150.0,
+                    height: 150.0,
+                    decoration: BoxDecoration(
+                      color: Colors.green[400],
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          'https://firebasestorage.googleapis.com/v0/b/hairbnb-f0c2c.appspot.com/o/l8jj6JC66fgjQ1y3Q7abMxwiqxX2%2FprofilePicture.jpg?alt=media&token=c01dc283-e44b-4ae0-a5e8-4307bc6249b7'
                         ),
+                        fit: BoxFit.cover
                       ),
-                    ]
+                      borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                      boxShadow: [
+                        BoxShadow(blurRadius: 7.0, color: Colors.black)
+                      ]
+                    )
                   ),
-                ),
-              ]
+                  Flexible(
+                    child: Wrap(
+                      children: <Widget>[
+                        Text( //profile name
+                          user.name['first'] + ' ' + user.name['last'],
+                          style: TextStyle(
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ]
+                    ),
+                  ),
+                ]
+              )
             )
-          )
-        ]
+          ]
+        )
       )
     );
   }
