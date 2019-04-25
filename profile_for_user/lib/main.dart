@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 void main() {
-  //debugPaintSizeEnabled=true;
+  debugPaintSizeEnabled=true;
   runApp(MyApp());
 }
 
@@ -22,13 +22,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: new Stack(
+        body: new SingleChildScrollView(
           children: <Widget>[
             ClipPath(
-              child: Container(color: Colors.blue[600]), //TODO: implement random color picker for the user profile
+              child: Container(color: Colors.blueGrey[700]), //TODO: implement random color picker for the user profile
               clipper: getClipper(),
             ),
             Positioned(
@@ -62,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               fontFamily: 'Montserrat'),
                         ),
                         SizedBox(height:5),
-                        Text(
+                        Text( //affiliation/subtext
                             'Austin Powers Talent Agency',
                             style: TextStyle(
                               fontSize: 14,
@@ -74,8 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       ], //column children
                     ),
                   ], //row children
-                )),
-            Positioned(
+                )),  //this is the header for name, profile, etc
+            Positioned( //bottom half with user info
               width: MediaQuery.of(context).size.width-10,
               top:MediaQuery.of(context).size.height/3.1,
               left:15,
@@ -93,7 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               image: NetworkImage(
                                   'https://yakimaymca.org/wp-content/uploads/2017/08/Telephone-icon-orange-300x300.png'),
                             ),
-                          )),
+                          )
+                      ),
                       SizedBox(width:12),
                       Text(
                           'Telephone: ',
@@ -102,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           )
                       ),
                       Text(
-                          '(913) 253-2392',
+                          '(913) 253-2392', //makes this a link so user can click and call someone
                           style: TextStyle(
                             fontSize: 14,
 
@@ -136,7 +138,61 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ],
                   ),
-
+                  SizedBox(height:5),
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    width: MediaQuery.of(context).size.width*0.8,
+                    child: new Column (
+                      children: <Widget>[
+                        new Text ("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a", textAlign: TextAlign.left),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height:20),
+                  Row(
+                    children: [
+                      Text(
+                        'Gallery',
+                        style: TextStyle(
+                          fontSize: 14,
+                        )
+                      ),
+                    ] //children
+                  ),
+                  SizedBox(height:20),
+                  Row(
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                              width: 150,
+                              height: 150,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      'https://media.gq.com/photos/55958e822ca275951298731d/master/w_400,c_limit/tom-cruise-hair-08.jpg'),
+                                ),
+                              )
+                          ),
+                        ]
+                      ),
+                      SizedBox(width:20),
+                      Column(
+                        children: [
+                          Container(
+                              width: 150,
+                              height: 150,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      'https://qph.fs.quoracdn.net/main-qimg-6cdc39dfd08aa9fbfa58909a91f22b8e'),
+                                ),
+                              )
+                          ),
+                        ]
+                      ),
+                    ]
+                  )
                 ], //children for post
               ),
             )
@@ -144,6 +200,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ));
   }
 }
+
+
+
 
 class getClipper extends CustomClipper<Path> {
   @override
@@ -178,7 +237,7 @@ Widget myBox() {
   );
 }
 
-BoxDecoration myBoxDecoration() {
+BoxDecoration myBoxDecoration() { //line underneath the notes
   return BoxDecoration(
     border: Border(
       bottom: BorderSide( //                   <--- left side
@@ -188,3 +247,4 @@ BoxDecoration myBoxDecoration() {
     ),
   );
 }
+
