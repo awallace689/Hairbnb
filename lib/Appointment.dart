@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class appointment extends StatefulWidget {
   /// Creates a stateful widget and a stateful element,
@@ -20,15 +21,8 @@ class _appointmentState extends State<appointment> {
 
   /// Holds a list of customer_appointment objects that have dummy properties
   /// for this prototype.
-  List<customer_appointment> mycustomer=[customer_appointment("Allen Lu", "icemelon27@gamil.com", "14:30 pm", "Monday",), //"A"),
-                                         customer_appointment("Paul Kline", "pkline@ku.edu", "15:30 pm", "Monday",), //"P"),
-                                         customer_appointment("Teddy Kahwaji", "Teddykahwaji86@gmail.com", "16:30 pm", "Tuesday",), //"T"),
-                                         customer_appointment("Miller Bath", "Miller_bath@gmail.com", "16:50 pm", "Tuesday",), //"M"),
-                                         customer_appointment("Alex Wittman", "Alex_Wittman@gmail.com", "17:00 pm", "Tuesday",), //"A"),
-                                         customer_appointment("Adam Wallace", "Adam_Wallace@gmail.com", "17:30 pm", "Wednesday",), //"A"),
-                                         customer_appointment("Lebron James", "Lebron_James86@gmail.com", "17:40 pm", "Wednesday",),// "L"),
-                                         customer_appointment("John Gibbons", "jgibbons@ku.edu", "10:00 am", "Wednesday",),// "J"),
-                                         customer_appointment("Gary Minden", "Gminden@ku.edu", "11:30 am", "Wednesday", )];//"G")];
+  List<customer_appointment> mycustomer=[customer_appointment("Allen Lu", "icemelon27@gamil.com", "14:30 pm", "Monday")];
+
 
   /// Adds the cusomer_appointment objects as parameter to the list.
   /// Not used by this prototype.
@@ -46,15 +40,16 @@ class _appointmentState extends State<appointment> {
   }
 
   /// Retutrn a GestureDetector widget.
-  Widget _listItembuilder(BuildContext context, int index)
+  Widget _listItembuilder(BuildContext context, DocumentSnapshot document)
   {
     /// GestureDectector widget that takes a ListTile as child, which provide
     /// the functionality for the ListTile to be able to be tapped.
     /// When ListTile is tapped, a dialog will be rendered to the page.
-    return GestureDetector(onTap: () => showDialog(context:context, builder: (context) => _dialogbuilder(context, mycustomer[index])),
+    return GestureDetector(onTap: () => showDialog(context:context, builder: (context) => _dialogbuilder(context, mycustomer[0])),
         child: ListTile(//leading: CircleAvatar(child: Text(mycustomer[index].picURL)),
-                        title: Text(mycustomer[index].name),
-                        subtitle: Text(("Appoinment time: " + mycustomer[index].time) + " " + mycustomer[index].date))
+                        title: Text(document['name']),
+                        subtitle: Text("Appoinment time: ")
+                        )
             );
   }
 
@@ -76,7 +71,14 @@ class _appointmentState extends State<appointment> {
   /// in an organzied way based on the itemCount.
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemCount: mycustomer.length, itemBuilder: _listItembuilder);
+    return StreamBuilder(
+      stream: Firestore.instance.collection('Tests').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return Text("Loaidng...");
+        return ListView.builder(itemCount: snapshot.data.documents.length,
+                                itemBuilder: (context, index) =>_listItembuilder(context, snapshot.data.documents[index]));
+      }
+    );
   }
 }
 
