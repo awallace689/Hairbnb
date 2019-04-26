@@ -46,19 +46,25 @@ class _AllenUserPageState extends State<AllenUserPage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
-      body: Center(child: _handleTap(_selectedIndex)),
-      bottomNavigationBar : BottomNavigationBar(
-        type:BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
-          BottomNavigationBarItem(icon: Icon(Icons.info), title: Text('My shop')),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), title: Text('Appointment')),
-          BottomNavigationBarItem(icon: Icon(Icons.perm_contact_calendar), title: Text('Contacts')),
-        ],
-        currentIndex: _selectedIndex,
-        fixedColor: Colors.red,
-        onTap: _onItemTapped,
+    return MaterialApp(
+      theme: ThemeData(
+        primaryColor: Colors.green[400],
+      ),
+      home: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        body: Center(child: _handleTap(_selectedIndex)),
+        bottomNavigationBar : BottomNavigationBar(
+          type:BottomNavigationBarType.fixed,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
+            BottomNavigationBarItem(icon: Icon(Icons.info), title: Text('My shop')),
+            BottomNavigationBarItem(icon: Icon(Icons.calendar_today), title: Text('Appointment')),
+            BottomNavigationBarItem(icon: Icon(Icons.perm_contact_calendar), title: Text('Contacts')),
+          ],
+          currentIndex: _selectedIndex,
+          fixedColor: Colors.red,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }
