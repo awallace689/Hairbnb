@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'User.dart';
 import 'SplashPage.dart';
 import 'LoginSignUp.dart';
-import 'AllenUserPage.dart';
-import 'AllenAdminPage.dart';
+import 'package:project4/UserSide/UserPage.dart';
 
 ///Directs the application to the correct page.
-class AccountPage extends StatefulWidget {
+class LoadPage extends StatefulWidget {
 
-  AccountPageState createState() => AccountPageState();
+  LoadPageState createState() => LoadPageState();
 }
 
 ///Implementation of the AccountPage class.
 ///
 ///Loads the correct widget when the application is opened.
-class AccountPageState extends State<AccountPage> {
+class LoadPageState extends State<LoadPage> {
   ///Initializes the state of the AccountPage.
   @override
   void initState() {
@@ -42,7 +40,7 @@ class AccountPageState extends State<AccountPage> {
                 return LoginSignUp();
               }
               else{
-                return AllenUserPage();
+                return UserPage();
               }
             }
             else {

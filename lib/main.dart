@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:project4/AccountPage.dart';
+import 'package:project4/TopSide/LoadPage.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.green[400],
       ),
-      home: AccountPage(),
+      home: LoadPage(),
     );
   }
 }

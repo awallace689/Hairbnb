@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'Home.dart';
 import 'Myshop.dart';
-import 'Appointment.dart';
-import 'Contacts.dart';
-import 'BuildUserFromFuture.dart';
+import 'ProfilePage.dart';
 import 'CheckInPage.dart';
 
-class AllenUserPage extends StatefulWidget {
-  AllenUserPage({Key key, this.title}) : super(key: key);
+class UserPage extends StatefulWidget {
+  UserPage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -20,12 +18,12 @@ class AllenUserPage extends StatefulWidget {
   final String title;
 
   @override
-  _AllenUserPageState createState() => _AllenUserPageState();
+  _UserPageState createState() => _UserPageState();
 }
 
-class _AllenUserPageState extends State<AllenUserPage> {
+class _UserPageState extends State<UserPage> {
   int _selectedIndex = 0;
-  final _widgetOptions = [HomePage(), Myshop(), CheckInPage(), BuildFromUserFuture()];
+  final _widgetOptions = [HomePage(), Myshop(), CheckInPage(), ProfilePage()];
 
   _handleTap(int index) {
 

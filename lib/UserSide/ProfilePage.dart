@@ -12,11 +12,11 @@ var url = 'https://next.json-generator.com/api/json/get/EyBSiFo_L';
 
 /// BuildFromUserFuture {StatefulWidget}: StatefulWidget creates 
 /// state for User 'Your Profile' page.
-class BuildFromUserFuture extends StatefulWidget {
+class ProfilePage extends StatefulWidget {
   /// Returns State<StatefulWidget> from _BuildFromUserFutureState for
   /// displaying User 'Your Profile' page.
   @override
-  State<StatefulWidget> createState() => _BuildFromUserFutureState();
+  State<StatefulWidget> createState() => _ProfilePageState();
 }
 
 /// Build returns FutureBuilder which returns 'loading...' if async call to
@@ -31,7 +31,7 @@ class BuildFromUserFuture extends StatefulWidget {
 ///     *List<Widget> _buildExpansionList(User user)
 ///     *Widget _buildProfileImageStack(User user, BuildContext context)
 /// 
-class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
+class _ProfilePageState extends State<ProfilePage> {
   /// TextStyle object for formatting headers within 'Your Profile' page.
   final _leadingStyle = const TextStyle(
       fontWeight: FontWeight.bold,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'AllenAdminPage.dart';
-import 'AllenUserPage.dart';
+import 'package:project4/AdminSide/AdminPage.dart';
+import 'package:project4/UserSide/UserPage.dart';
 import 'package:intl/intl.dart';
-import 'User.dart';
+import 'package:project4/UserSide/User.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -60,8 +60,8 @@ class LoginSignUpState extends State<LoginSignUp> {
         ),
       home: _formMode == FormMode.LOGIN ? _BuildLoginPage(context) : _BuildSignUpPage(),
       routes: {
-        '/User': (context) => AllenUserPage(),
-        '/Admin': (context) => AllenAdminPage(),
+        '/User': (context) => UserPage(),
+        '/Admin': (context) => AdminPage(),
       },
     );
   }
