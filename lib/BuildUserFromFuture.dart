@@ -46,10 +46,10 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
   /// return: Widget (FutureBuilder)
   @override
   Widget build(BuildContext context) {
-    Future<FBUser> user = getFBUserFromPreferences();
+    Future<User> user = getUserFromPreferences();
       return FutureBuilder(
         future: user,
-        builder: (BuildContext context, AsyncSnapshot<FBUser> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
               return Center(
@@ -98,7 +98,7 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
   /// 
   /// param user {User}: user to pull data from
   /// return: Widget (Card)
-  Widget _buildUserInfoCard(FBUser user) {
+  Widget _buildUserInfoCard(User user) {
     return Card(
         child: Container(
             margin: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
@@ -151,7 +151,7 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
   /// 
   /// param user {User}: User object to pull information from
   /// return: List<Widget>, a list of Rows
-  List<Widget> _buildExpansionList(FBUser user) {
+  List<Widget> _buildExpansionList(User user) {
     List<Widget> rowList = [];
     for(int i = 0; i < user.visits.length; i++){
       rowList.add(
@@ -189,7 +189,7 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
   /// param user {User}: User to pull information from
   /// param context {BuildContext}: BuildContext from MaterialApp
   /// return: Widget (Container)
-  Widget _buildProfileImageStack(FBUser user, BuildContext context) {
+  Widget _buildProfileImageStack(User user, BuildContext context) {
     return 
     Card(
       child: Container(
@@ -257,77 +257,17 @@ class _BuildFromUserFutureState extends State<BuildFromUserFuture> {
   }
 }
 
-/// Given a compatible, decoded JSON, User.fromJson will create itself
-/// using the information contained within.
-/// 
-/// Methods:
-///   Public:
-///     *User(this.id, this.fName, this.lName, this.picture, this.birthday,
-///          this.uploads, this.visits)
-///     *User.fromJson(Map json)
-///     *Map toJson()
-///   
-/// Properties:
-///   int id: user id
-///   String fName: first name
-///   String lName: last name
-///   String name: full name
-///   String phoneNumber: phone number
-///   String birthday: [unused] user birth date
-///   List<dynamic> uploads: [unused] List of user-uploaded photos
-///   List<dynamic> visits: List of Maps holding user visit timestamp and notes
-class User {
-  int id;
-  String fName;
-  String lName;
-  String phoneNumber;
-  String picture;
-  String birthday;
-  List<dynamic> uploads;
-  List<dynamic> visits;
-
-  /// Default constructor for manually creating User class
-  User(this.id, this.fName, this.lName, this.picture, this.birthday,
-      this.uploads, this.visits);
-
-  /// Create User from json map provided by convert.json.decode
-  User.fromJson(Map json)
-    : id = json['id'],
-      fName = json['name']['first'],
-      lName = json['name']['last'],
-      phoneNumber = json['telephone'],
-      picture = 'https://randomuser.me/api/portraits/men/60.jpg',
-      birthday = json['birthday'],
-      uploads = json['uploads'],
-      visits = json['visits'];
-
-  /// [Incomplete]
-  /// Export User fields as Json
-  Map toJson() => {
-    'id': id,
-    'picture': picture,
-    'birthday': birthday,
-    'uploads': uploads,
-    
-    'name': {'fname': fName, 'lname': lName},
-    'visits': visits
-  };
-
-  /// Get full name from existing fields
-  String get name => fName + ' ' + lName;
-}
-
 /// [async]
 /// Return a Future<User> from http.get request for
 /// user with FutureBuilder
 /// 
 /// param url {String}: url to make request to
 /// return: Future<User>
-Future<FBUser> getFBUserFromPreferences() async {
+Future<User> getUserFromPreferences() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   DocumentSnapshot document = await Firestore.instance
                                 .collection('users').document(prefs.get("UserID")).get();
-  FBUser user = FBUser.fromFB(document.data);
+  User user = User.fromMap(document.data);
   user.getProfilePicUrl.then(
     (param) {
         user.profilePicUrl = param;

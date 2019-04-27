@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:project4/AccountPage.dart';
 import 'dart:async';
 import 'dart:io';
-import 'Storage.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.green[400],
       ),
-      home: AccountPage(storage: Storage()),
+      home: AccountPage(),
     );
   }
 }

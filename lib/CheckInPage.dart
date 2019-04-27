@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'Storage.dart';
 import 'CheckIn.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 ///Creates a page for the user to check in.
 class CheckInPage extends StatefulWidget {
-  final Storage storage;
-
-  CheckInPage({Key key, @required this.storage}) : super(key: key);
 
   CheckInPageState createState() => CheckInPageState();
 }

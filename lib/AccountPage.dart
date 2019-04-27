@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Storage.dart';
 import 'User.dart';
 import 'SplashPage.dart';
 import 'LoginSignUp.dart';
@@ -9,9 +8,6 @@ import 'AllenAdminPage.dart';
 
 ///Directs the application to the correct page.
 class AccountPage extends StatefulWidget {
-  final Storage storage;
-
-  AccountPage({Key key, @required this.storage}) : super(key: key);
 
   AccountPageState createState() => AccountPageState();
 }
@@ -65,7 +61,7 @@ class AccountPageState extends State<AccountPage> {
   ///
   /// Requests the user from storage if there is one. After a 2 second
   /// delay to show the splash screen.
-  Future<User> Splash() async {
+  Future Splash() async {
     await Future.delayed(Duration(seconds: 2));
   }
 
