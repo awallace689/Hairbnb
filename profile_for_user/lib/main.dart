@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 void main() {
-  debugPaintSizeEnabled=true;
+  //debugPaintSizeEnabled=true;
   runApp(MyApp());
 }
 
@@ -26,7 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: new SingleChildScrollView(
+        body: new Stack(
           children: <Widget>[
             ClipPath(
               child: Container(color: Colors.blueGrey[700]), //TODO: implement random color picker for the user profile
