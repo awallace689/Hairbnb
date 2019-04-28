@@ -1,5 +1,6 @@
 ///Used to store data of the customer.
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 //////////////////////////////////////////////////////////////////////////
 //                         BEGIN NEW USER CODE
@@ -35,6 +36,14 @@ class User {
       birthday = data['birthday'],
       _pastVisits = data['pastVisits'],
       userid = data['userid'];
+
+//  User fromID(String ID){
+//
+//  }
+//
+//  User.fromID(String ID) {
+//    final userMap = await Firestore.instance.collection('users').document(ID);
+//  }
 
   dynamic toJson() =>
     {
