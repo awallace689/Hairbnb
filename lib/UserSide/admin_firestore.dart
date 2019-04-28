@@ -15,10 +15,9 @@ class Appointment
   String user_id;
   String date;
   String time;
-  String image;
   String notes;
 
-  Appointment(this.user_id, this.date, this.time, this.image, this.notes);
+  Appointment(this.user_id, this.date, this.time, this.notes);
 
   String getUser_id()
   {
@@ -33,11 +32,6 @@ class Appointment
   String getTime()
   {
     return time;
-  }
-
-  String getImage()
-  {
-    return image;
   }
 
   String getNotes()

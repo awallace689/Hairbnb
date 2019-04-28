@@ -563,7 +563,7 @@ class LoginSignUpState extends State<LoginSignUp> {
           'first' : _fName,
           'last' : _lName
         };
-        User newUser = User(_email, name, _phone, _DOB, null, null);
+        User newUser = User(_email, name, _phone, _DOB, [], null);
         print(newUser.toJson());
 
         _CreateUser(newUser);

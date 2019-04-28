@@ -9,7 +9,7 @@ class User {
   Map<String, String> name; //Name as an object containing first and last name.
   String phoneNumber; //Phone as plaintext
   String birthday; //Birthday as MM/DD/YYYY
-  List<Map<String, String>> _pastVisits; //List of appointment IDs
+  List<Map<String, String>> _pastVisits = []; //List of appointment IDs
   String userid;  //Firestore generated ID.
   String profilePicUrl; //URL of profile picture uploaded to firestore.
 
