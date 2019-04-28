@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'AllenAdminPage.dart';
-import 'AllenUserPage.dart';
+import 'package:project4/AdminSide/AdminPage.dart';
+import 'package:project4/UserSide/UserPage.dart';
 import 'package:intl/intl.dart';
-import 'User.dart';
+import 'package:project4/UserSide/User.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -60,8 +60,8 @@ class LoginSignUpState extends State<LoginSignUp> {
         ),
       home: _formMode == FormMode.LOGIN ? _BuildLoginPage(context) : _BuildSignUpPage(),
       routes: {
-        '/User': (context) => AllenUserPage(),
-        '/Admin': (context) => AllenAdminPage(),
+        '/User': (context) => UserPage(),
+        '/Admin': (context) => AdminPage(),
       },
     );
   }
@@ -563,7 +563,7 @@ class LoginSignUpState extends State<LoginSignUp> {
           'first' : _fName,
           'last' : _lName
         };
-        FBUser newUser = FBUser(_email, _password, name, _phone, _DOB, null, null, null);
+        User newUser = User(_email, name, _phone, _DOB, null, null);
         print(newUser.toJson());
 
         _CreateUser(newUser);
@@ -635,7 +635,7 @@ class LoginSignUpState extends State<LoginSignUp> {
     }
   }
 
-  _CreateUser(FBUser newUser) async
+  _CreateUser(User newUser) async
   {
     String UserID = "";
     setState(() {
@@ -643,7 +643,7 @@ class LoginSignUpState extends State<LoginSignUp> {
     });
     try{
       //Create new user in database with email and password.
-      await _auth.createUserWithEmailAndPassword(email: newUser.email, password: newUser.password);
+      await _auth.createUserWithEmailAndPassword(email: newUser.email, password: _password);
       UserID = (await _auth.currentUser()).uid;
 
       //Save User class to the firestore database with updated userID.

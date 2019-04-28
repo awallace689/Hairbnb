@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'Home.dart';
-import 'Myshop.dart';
-import 'Appointment.dart';
+import 'package:project4/UserSide/Home.dart';
+import 'package:project4/UserSide/Myshop.dart';
+import 'package:project4/AdminSide/Appointment.dart';
 import 'Contacts.dart';
 
-class AllenAdminPage extends StatefulWidget {
+class AdminPage extends StatefulWidget {
   /// When user login page chooses to display admin page, this is the main stateful widget
   /// that is controlling all the activities in administration page.
-  AllenAdminPage({Key key, this.title}) : super(key: key);
+  AdminPage({Key key, this.title}) : super(key: key);
 
 
   final String title; 
@@ -15,10 +15,10 @@ class AllenAdminPage extends StatefulWidget {
   @override
 
   /// Create a stateful obejct that will be mounted in the element tree.
-  _AllenAdminPageState createState() => _AllenAdminPageState();
+  _AdminPageState createState() => _AdminPageState();
 }
 
-class _AllenAdminPageState extends State<AllenAdminPage> {
+class _AdminPageState extends State<AdminPage> {
 
   /// The current tap of the navigation bar.
   int _selectedIndex = 0;
