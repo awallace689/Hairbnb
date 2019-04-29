@@ -149,7 +149,7 @@ class _MyDialogContentState extends State<MyDialogContent> {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: NetworkImage(await getImageURL('profilePicture', UserID))
+                    image: NetworkImage(await getImageURL(appointmentID, UserID))
                 )
             )
         ),
@@ -165,7 +165,7 @@ class _MyDialogContentState extends State<MyDialogContent> {
     Map user = widget.data[0];
     dynamic appointment = widget.data[2];
     return FutureBuilder(
-      future: Future.wait([HaircutImage(user['userid'], appointment.documentID), getImageURL('profilePicture', user['userid'])]),
+      future: Future.wait([HaircutImage(user['userid'], appointment.documentID), getImageURL(appointment.documentID, user['userid'])]),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if(snapshot.data == null){
           return Container();
