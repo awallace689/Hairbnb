@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+//import 'package:http/http.dart' as http;
+//import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'User.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+//import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/rendering.dart';
 
 
 /// url {String}: static URL for loading json into User class
@@ -44,7 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
   /// 
   /// param context {BuildContext}: BuildContext received from MaterialApp
   /// return: Widget (FutureBuilder)
-  @override
+  @override //OG widget that calls the functions needed to make the page display stuff
   Widget build(BuildContext context) {
     Future<User> user = getUserFromPreferences();
       return FutureBuilder(
@@ -78,8 +79,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               // margin: EdgeInsets.only(top: 8.0),
                                 child: ListView(
                                     children: [
-                                      _buildProfileImageStack(snapshot.data, context),
-                                      _buildUserInfoCard(snapshot.data)
+                                      //_buildProfileImageStack(snapshot.data, context),
+                                      _buildUserInfoCard(snapshot.data, context)
+
                                     ]
                                 )
                             )
@@ -98,51 +100,171 @@ class _ProfilePageState extends State<ProfilePage> {
   /// 
   /// param user {User}: user to pull data from
   /// return: Widget (Card)
-  Widget _buildUserInfoCard(User user) {
-    return Card(
-        child: Container(
-            margin: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-            child: Column(
+  Widget _buildUserInfoCard(User user, BuildContext context) { //begin miller's profile.
+    return Container(
+        margin: EdgeInsets.only(top: 0),
+        child: Column(
+            children: [
+              Row(
                 children: [
-                  ListTile(
-                    contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                    leading: Text('Name', style: _leadingStyle),
-                    title: Text(user.name['first'] + ' ' + user.name['last']),
-                  ),
-                  Divider(color: Colors.grey,),
-                  ListTile(
-                    contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                    leading: Text('ID', style: _leadingStyle),
-                    title: Text(user.userid), //TODO: Remove after testing
-                  ),
-                  Divider(color: Colors.grey,),
-                  ListTile(
-                    contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                    leading: Text('Email', style: _leadingStyle),
-                    title: Text(user.email),
-                  ),
-                  Divider(color: Colors.grey,),
-                  ListTile(
-                    contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                    leading: Text('Phone', style: _leadingStyle),
-                    title: Text(user.phoneNumber),
-                  ),
-                  Divider(color: Colors.grey,),
-                  ListTile(
-                    contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                    leading: Text('Birthday', style: _leadingStyle),
-                    title: Text(user.birthday),
-                  ),
-                  Divider(color: Colors.grey,),
-                  ExpansionTile(
-                    key: PageStorageKey<String>('_Visits'),
-                    leading: Text('Visits', style: _leadingStyle),
-                    title: Text(user.visits.length.toString()),
-                    children: _buildExpansionList(user),
+                  SizedBox(width: 15),
+                  Container( //profile img and box containing it
+                      width: 150.0,
+                      height: 150.0,
+                      //left: 500,
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  'https://pixel.nymag.com/imgs/daily/vulture/2017/06/14/14-tom-cruise.w700.h700.jpg'),
+                              fit: BoxFit.cover),
+                          borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                          boxShadow: [
+                            BoxShadow(blurRadius: 7.0, color: Colors.black)
+                          ])),
+                  SizedBox(width: 25),
+                  Column(
+                    children: [
+                      Text( //profile name
+                        user.name['first'] + ' ' + user.name['last'],
+                        style: TextStyle(
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Montserrat'),
+                      ),
+                      SizedBox(height:5),
+                      Text( //affiliation/subtext
+                        'This is dummy text. Not live.',
+                        style: TextStyle(
+                          fontSize: 14,
+                          //fontStyle: FontStyle.italic,
+                          color: Colors.grey[900],
+
+                        ),
+                      ),
+                    ], //column children
                   ),
                 ]
-            )
-        )
+              ),
+              SizedBox(height: 25),
+              Container(
+                margin: EdgeInsets.only(left: 15),
+                child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      'https://yakimaymca.org/wp-content/uploads/2017/08/Telephone-icon-orange-300x300.png'),
+                                ),
+                              )
+                          ),
+                          SizedBox(width:12),
+                          Text(
+                              'Telephone: ',
+                              style: TextStyle(
+                                fontSize: 14,
+                              )
+                          ),
+                          Text(
+                              user.phoneNumber, //makes this a link so user can click and call someone
+                              style: TextStyle(
+                                fontSize: 14,
+
+                              )
+                          ),
+
+                          //SizedBox(height: 25),
+                        ], //children for row
+                      ),
+                      SizedBox(height:20),
+                      Row(
+                        children: [ //TODO: Why is there a difference between children <widget> ? seems pretty useless to use the widget one cause it just gives me errors
+                          Text(
+                              'Notes: ',
+                              style: TextStyle(
+                                fontSize: 14,
+                              )
+                          ),
+                          myBox(),
+                          //SizedBox(height:300),
+                        ],
+                      ),
+                      SizedBox(height:20),
+                      Row(
+                        children: [
+                          Text(
+                              'Past appointments ',
+                              style: TextStyle(
+                                fontSize: 14,
+                              )
+                          ),
+                        ],
+                      ),
+                      SizedBox(height:5),
+                      Container(
+                        padding: const EdgeInsets.all(16.0),
+                        width: MediaQuery.of(context).size.width*0.8,
+                        child: new Column (
+                          children: <Widget>[
+                            Text ("This is dummy text. Not live server info.", textAlign: TextAlign.left),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height:15),
+                      Row(
+                          children: [
+                            Text(
+                                'Past Haircuts',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                )
+                            ),
+                          ] //children
+                      ),
+                      SizedBox(height:15),
+                      Row(
+                          children: [
+                            Column(
+                                children: [
+                                  Container(
+                                      width: 150,
+                                      height: 150,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: NetworkImage(
+                                              'https://media.gq.com/photos/55958e822ca275951298731d/master/w_400,c_limit/tom-cruise-hair-08.jpg'),
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                            SizedBox(width:20),
+                            Column(
+                                children: [
+                                  Container(
+                                      width: 150,
+                                      height: 150,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: NetworkImage(
+                                              'https://qph.fs.quoracdn.net/main-qimg-6cdc39dfd08aa9fbfa58909a91f22b8e'),
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          ]
+                      )
+                    ]
+                ),
+              )
+          ]
+      )
     );
   }
 
@@ -274,4 +396,48 @@ Future<User> getUserFromPreferences() async {
     }
   );
   return user;
+}
+
+class getClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = new Path();
+
+    //sets the top background color behind profile img/name
+    path.lineTo(0.0, size.height / 3.5);
+    path.lineTo(size.width, size.height/3.5);
+    path.lineTo(size.width,0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    // TODO: implement shouldReclip
+    return true;
+  }
+}
+
+Widget myBox() {
+  return Container(
+    width:300,
+    //margin: const EdgeInsets.all(30.0),
+    padding: const EdgeInsets.all(5.0),
+    decoration: myBoxDecoration(), //             <--- BoxDecoration here
+    child: Text(
+      "These are where the notes go.",
+      style: TextStyle(fontSize: 14.0),
+    ),
+  );
+}
+
+BoxDecoration myBoxDecoration() { //line underneath the notes
+  return BoxDecoration(
+    border: Border(
+      bottom: BorderSide( //                   <--- left side
+        color: Colors.black,
+        width: 1.0,
+      ),
+    ),
+  );
 }

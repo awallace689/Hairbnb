@@ -46,7 +46,7 @@ class _UserPageState extends State<UserPage> {
     // than having to individually change instances of widgets.
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: Colors.green[400],
+        //primaryColor: Colors.green[400],
       ),
       home: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
