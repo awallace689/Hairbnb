@@ -20,12 +20,12 @@ class _AppointmentPageState extends State<AppointmentPage> {
       ),
       body: Container(
         color: Colors.green,
-        child: StreamBuilder<DocumentSnapshot>(
-          stream: Firestore.instance.collection('Admin').document('Appointments').snapshots(),
-          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+        child: StreamBuilder(
+          stream: Firestore.instance.collection('Appointment').snapshots(),
+          builder: (BuildContext context, AsyncSnapshot snapshot){
             if(snapshot != null){
               if(snapshot.data != null && snapshot.data != []){
-                return CreateListOfAppointments(snapshot.data['Appointments']);
+                return CreateListOfAppointments(snapshot.data.documents);
               }
               else{
                 return Text("No Appointments");
@@ -36,9 +36,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
             }
           },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: Add2Appointments,
       ),
     );
 
@@ -68,15 +65,19 @@ class _AppointmentPageState extends State<AppointmentPage> {
   }
 
   Future<Widget> CreateAppointmentCard(dynamic appointment) async{
-    final AppointmentID = appointment['AppointmentID'];
-    final UserID = appointment['UserID'];
-    final Notes = appointment['Notes'];
-    final Time = appointment['Time'];
+    final AppointmentID = appointment.documentID;
+    final UserID = appointment.data['UserID'];
+    final Notes = appointment.data['Note'];
+    final Time = appointment.data['Time'];
     final userMap = (await Firestore.instance.collection('users').document(UserID).get()).data;
-    User user = User.fromMap(userMap);
-    final image = await AppointmentImage(user);
-    final subTitle = Text(Notes.toString().substring(0, 30) + "...");
-    final name = Text(user.name['first'] + " " + user.name['last']);
+    //print(userMap["pastVisits"]);
+    //User user = User(userMap['email'], userMap['name'], userMap['phoneNumber'], userMap['birthday'], userMap['pastVisits'], userMap['userid']);
+    //User user = User.fromMap(userMap);
+    //print("!!!!!!!!!!!!!");
+    //print(user.toString());
+    final image = await AppointmentImage(userMap['userid']);
+    final subTitle = Text(Notes.substring(0, (Notes.toString().length >= 30) ? 30 : Notes.toString().length) + "...");
+    final name = Text(userMap['name']['first'] + " " + userMap['name']['last']);
 
     return MaterialButton(
       child: Card(
@@ -90,16 +91,18 @@ class _AppointmentPageState extends State<AppointmentPage> {
           subtitle: subTitle,
         ),
       ),
-      onPressed: () {ShowAppointmentInfo(user, AppointmentID);},
+      onPressed: () {ShowAppointmentInfo(userMap, appointment);},
     );
   }
 
-  Future ShowAppointmentInfo(User user, String AppointmentID) async{
-    final dialog = MyDialogContent(data: [user, await AppointmentImage(user)]);
+  Future ShowAppointmentInfo(Map user, dynamic appointment) async{
+    final dialog = MyDialogContent(data: [user, await AppointmentImage(user['userid']), appointment]);
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
-  Future<Widget> AppointmentImage(User user) async{
+  Future<Widget> AppointmentImage(String userID) async{
+    final profilePicUrl = await getImageURL('profilePicture', userID);
+    print(profilePicUrl);
     return Container(
         width: 70.0,
         height: 70.0,
@@ -107,20 +110,10 @@ class _AppointmentPageState extends State<AppointmentPage> {
             shape: BoxShape.circle,
             image: DecorationImage(
                 fit: BoxFit.fill,
-                image: NetworkImage(await user.getProfilePicUrl)
+                image: NetworkImage(profilePicUrl)
             )
         )
     );
-  }
-
-  void Add2Appointments() async{
-    final appointment1 = {'AppointmentID': '1234567890', 'UserID': '6YvLJuTZfIf5vgBHxZkA9BZ9Rkt1', 'Time': '2019-04-27 15:50:53.377', 'Notes': 'Nunc lacinia volutpat rhoncus. Praesent varius vitae lectus bibendum venenatis. Pellentesque vitae ipsum vitae ex porta ullamcorper. Donec et nibh fermentum, aliquet risus luctus, porttitor orci. Suspendisse potenti. Nam condimentum mi id orci faucibus imperdiet. Cras varius sapien eu pharetra efficitur. Pellentesque fringilla massa quis augue tristique eleifend. Vestibulum eros dolor, mollis in placerat ut, lacinia non nulla.'};
-    final appointment2 = {'AppointmentID': '1234567891', 'UserID': 'l8jj6JC66fgjQ1y3Q7abMxwiqxX2', 'Time': '2019-04-27 15:58:16.242', 'Notes': 'Nunc lacinia volutpat rhoncus. Praesent varius vitae lectus bibendum venenatis. Pellentesque vitae ipsum vitae ex porta ullamcorper. Donec et nibh fermentum, aliquet risus luctus, porttitor orci. Suspendisse potenti. Nam condimentum mi id orci faucibus imperdiet. Cras varius sapien eu pharetra efficitur. Pellentesque fringilla massa quis augue tristique eleifend. Vestibulum eros dolor, mollis in placerat ut, lacinia non nulla.'};
-    List<dynamic> CurrentAppointments = (await Firestore.instance.collection('Admin').document('Appointments').get()).data['Appointments'];
-    List<dynamic> NewAppointments = new List<dynamic>();
-    NewAppointments.addAll(CurrentAppointments);
-    NewAppointments.addAll([appointment1, appointment2]);
-    Firestore.instance.collection('Admin').document('Appointments').setData({'Appointments' : NewAppointments});
   }
 }
 
@@ -142,7 +135,7 @@ class _MyDialogContentState extends State<MyDialogContent> {
   }
 
 
-  Future<Widget> HaircutImage(User user) async{
+  Future<Widget> HaircutImage(String UserID, String appointmentID) async{
     return RawMaterialButton(
         onPressed: () {
           setState(() {
@@ -156,7 +149,7 @@ class _MyDialogContentState extends State<MyDialogContent> {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: NetworkImage(await user.getProfilePicUrl)
+                    image: NetworkImage(await getImageURL('profilePicture', UserID))
                 )
             )
         ),
@@ -169,9 +162,10 @@ class _MyDialogContentState extends State<MyDialogContent> {
 
   @override
   Widget build(BuildContext context) {
-    User user = widget.data[0];
+    Map user = widget.data[0];
+    dynamic appointment = widget.data[2];
     return FutureBuilder(
-      future: Future.wait([HaircutImage(user), user.getProfilePicUrl]),
+      future: Future.wait([HaircutImage(user['userid'], appointment.documentID), getImageURL('profilePicture', user['userid'])]),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if(snapshot.data == null){
           return Container();
@@ -193,9 +187,10 @@ class _MyDialogContentState extends State<MyDialogContent> {
               ),
             ),
           ):
-          Dialog(
+          AlertDialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
-            child: Container(
+            content: SingleChildScrollView(
+              child: Container(
               height: 600.0,
               width: 600.0,
               child: Padding(
@@ -204,7 +199,7 @@ class _MyDialogContentState extends State<MyDialogContent> {
                     children: <Widget>[
                       ListTile(
                         leading: widget.data[1],
-                        title: Text(widget.data[0].name['first'] + " " + widget.data[0].name['last'], style: TextStyle(fontSize: 25),),
+                        title: Text(widget.data[0]['name']['first'] + " " + widget.data[0]['name']['last'], style: TextStyle(fontSize: 25),),
                       ),
                       Container(height: 15,),
                       Container(height:2, color: Colors.green,),
@@ -212,18 +207,46 @@ class _MyDialogContentState extends State<MyDialogContent> {
                         child: snapshot.data[0],
                       ),
                       Text("Notes:", style: TextStyle(fontSize: 25),),
+                      Container(height: 15,),
                       Container(
-                        color: Colors.grey,
-                        child: Text("HERE ARE THE NOTES FOR THE HAIRCUT."),
-                      )
-                    ]
+                        child: Text(appointment.data['Note']),
+                      ),
+
+                    ],
                 ),
               ),
             ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                color: Colors.green,
+                child: Text('Complete Appointment', style: TextStyle(color: Colors.white),),
+                onPressed: (){CompleteAppointment(appointment.documentID);},
+              ),
+              FlatButton(
+                color: Colors.red,
+                child: Text('Close', style: TextStyle(color: Colors.white),),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
           );
           return Content;
         }
       },
     );
   }
+
+  Future<Null> CompleteAppointment(String appointmentID) async{
+    Firestore.instance.collection('Appointment').document(appointmentID).delete();
+    Navigator.of(context).pop();
+  }
+}
+
+Future<String> getImageURL(String imageName, String UserID) async{
+  StorageReference firebaseStorageRef = FirebaseStorage.instance.ref()
+      .child("/$UserID/$imageName.jpg");
+  final profilePicUrl = await firebaseStorageRef.getDownloadURL();
+  return profilePicUrl;
 }
