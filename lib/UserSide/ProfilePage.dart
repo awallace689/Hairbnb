@@ -389,19 +389,22 @@ class _ProfilePageState extends State<ProfilePage> {
             TextEditingController controllerTwo = TextEditingController();
             return AlertDialog(
               title: Text('Edit:'),
-              content: Column(
-                children: <Widget> [
-                  Text('First name'),
-                  TextField(
-                    controller: controller,
-                    decoration: InputDecoration(hintText: user.name['first']),
-                  ),
-                  Text('Last name'),
-                  TextField(
-                    controller: controllerTwo,
-                    decoration: InputDecoration(hintText: user.name['last']),
-                  ),
-                ]),
+              content: Container( 
+                height: 125,
+                child:Column(
+                  children: <Widget> [
+                    Text('First name'),
+                    TextField(
+                      controller: controller,
+                      decoration: InputDecoration(hintText: user.name['first']),
+                    ),
+                    Text('Last name'),
+                    TextField(
+                      controller: controllerTwo,
+                      decoration: InputDecoration(hintText: user.name['last']),
+                    ),
+                  ]),
+              ), 
               actions: <Widget>[
                 new FlatButton(
                   child: new Text('CANCEL'),

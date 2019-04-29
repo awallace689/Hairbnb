@@ -10,7 +10,7 @@ class User {
   Map<String, String> name; //Name as an object containing first and last name.
   String phoneNumber; //Phone as plaintext
   String birthday; //Birthday as MM/DD/YYYY
-  List<Map<String, String>> _pastVisits = []; //List of appointment IDs
+  List<dynamic> _pastVisits = []; //List of appointment IDs
   String userid;  //Firestore generated ID.
   String profilePicUrl; //URL of profile picture uploaded to firestore.
 
@@ -51,7 +51,7 @@ class User {
       'name': name,
       'phoneNumber': phoneNumber,
       'birthday': birthday,
-      'pastVisits': _pastVisits,
+      'pastVisits': visits,
       'userid' : userid
     };
 
@@ -63,7 +63,7 @@ class User {
     return profilePicUrl;
   }
 
-  List<Map<String, String>> get visits {
+  List<dynamic> get visits {
     if (this._pastVisits != null){
       return _pastVisits;
     }
