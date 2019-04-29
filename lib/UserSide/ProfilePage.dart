@@ -99,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         child: ListView(
                                             children: [
                                               _buildProfileImageStack(snapshot.data, context),
-                                              _buildUserInfoCard(snapshot.data)
+                                              _buildUserInfoCard(snapshot.data, context)
                                             ]
                                         )
                                     )
@@ -123,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
   /// 
   /// param user {User}: user to pull data from
   /// return: Widget (Card)
-  Widget _buildUserInfoCard(User user) {
+  Widget _buildUserInfoCard(User user, BuildContext context) {
     return Card(
         child: Container(
             margin: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
@@ -133,12 +133,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                     leading: Text('Name', style: _leadingStyle),
                     title: Text(user.name['first'] + ' ' + user.name['last']),
+                    trailing: IconButton(
+                      icon: Icon(Icons.edit,),
+                      tooltip: 'Edit name.',
+                      onPressed: () => editContent(user, context, user.name['first'] + ' ' + user.name['last'], 'name'),
+                      iconSize: 20,
+                    ),
                   ),
                   Divider(color: Colors.grey,),
                   ListTile(
                     contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                     leading: Text('ID', style: _leadingStyle),
-                    title: Text(user.userid), //TODO: Remove after testing
+                    title: Text(user.userid),
                   ),
                   Divider(color: Colors.grey,),
                   ListTile(
@@ -151,12 +157,24 @@ class _ProfilePageState extends State<ProfilePage> {
                     contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                     leading: Text('Phone', style: _leadingStyle),
                     title: Text(user.phoneNumber),
+                    trailing: IconButton(
+                      icon: Icon(Icons.edit,),
+                      tooltip: 'Edit phone.',
+                      onPressed: () => editContent(user, context, user.phoneNumber, 'phoneNumber'),
+                      iconSize: 20,
+                    ),
                   ),
                   Divider(color: Colors.grey,),
                   ListTile(
                     contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                     leading: Text('Birthday', style: _leadingStyle),
                     title: Text(user.birthday),
+                    trailing: IconButton(
+                      icon: Icon(Icons.edit,),
+                      tooltip: 'Edit birthday.',
+                      onPressed: () => editContent(user, context, user.birthday, 'birthday'),
+                      iconSize: 20,
+                    ),
                   ),
                   Divider(color: Colors.grey,),
                   ExpansionTile(
@@ -280,7 +298,135 @@ class _ProfilePageState extends State<ProfilePage> {
       )
     );
   }
+
+  Future editContent(User user, BuildContext context, String preview, String field) async {
+    TextEditingController controller = TextEditingController();
+    return showDialog(
+        context: context,
+        builder: (context) {
+        if(field == 'birthday') {
+            return AlertDialog(
+              title: Text('Edit'),
+              content: TextField(
+                controller: controller,
+                decoration: InputDecoration(hintText: preview),
+              ),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text('CANCEL'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text('SAVE'),
+                  onPressed: () {
+                    setState(() {
+                      user.birthday = controller.text;
+                    });
+                    Firestore.instance.collection("users").document(user.userid).setData(user.toJson());
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          }
+          else if(field == 'phoneNumber') {
+            return AlertDialog(
+              title: Text('Edit'),
+              content: TextField(
+                controller: controller,
+                decoration: InputDecoration(hintText: preview),
+              ),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text('CANCEL'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text('SAVE'),
+                  onPressed: () {
+                    setState(() {
+                      user.phoneNumber = controller.text;
+                    });
+                    Firestore.instance.collection("users").document(user.userid).setData(user.toJson());
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          }
+          else if(field == 'email') {
+            return AlertDialog(
+              title: Text('Edit'),
+              content: TextField(
+                controller: controller,
+                decoration: InputDecoration(hintText: preview),
+              ),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text('CANCEL'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text('SAVE'),
+                  onPressed: () {
+                    setState(() {
+                      user.email = controller.text;
+                    });
+                    Firestore.instance.collection("users").document(user.userid).setData(user.toJson());
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          }
+          else if(field == 'name') {
+            TextEditingController controllerTwo = TextEditingController();
+            return AlertDialog(
+              title: Text('Edit:'),
+              content: Column(
+                children: <Widget> [
+                  Text('First name'),
+                  TextField(
+                    controller: controller,
+                    decoration: InputDecoration(hintText: user.name['first']),
+                  ),
+                  Text('Last name'),
+                  TextField(
+                    controller: controllerTwo,
+                    decoration: InputDecoration(hintText: user.name['last']),
+                  ),
+                ]),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text('CANCEL'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text('SAVE'),
+                  onPressed: () {
+                    setState(() {
+                      user.name['first'] = controller.text; 
+                      user.name['last'] = controllerTwo.text;
+                    });
+                    Firestore.instance.collection("users").document(user.userid).setData(user.toJson());
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          }
+        });
+  }
 }
+
 
 /// [async]
 /// Return a Future<User> from http.get request for
