@@ -202,15 +202,17 @@ class _ProfilePageState extends State<ProfilePage> {
             children: <Widget>[
               Flexible(
                   child: Container(
-                      padding: EdgeInsets.all(4.0),
+                      padding: EdgeInsets.all(12.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Row(children: <Widget>[
-                            Text(user.visits[i]['timestamp'], style:_leadingStyle)
+                            Text(user.visits[i]['Time']['Time'], style:_leadingStyle)
                           ],),
-                          Wrap(children: <Widget>[
-                            Text(user.visits[i]['notes'])
+                          Wrap(
+                            alignment: WrapAlignment.start,
+                            children: <Widget>[
+                            Text((user.visits[i]['Notes'] != null) ? user.visits[i]['Notes'] : "No notes.\n")
                           ],)
                         ],
                       )
