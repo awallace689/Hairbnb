@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project4/UserSide/Home.dart';
 import 'package:project4/UserSide/Myshop.dart';
-import 'package:project4/AdminSide/Appointment.dart';
+import 'AppointmentPage.dart';
 import 'Contacts.dart';
 
 class AdminPage extends StatefulWidget {
@@ -24,7 +24,7 @@ class _AdminPageState extends State<AdminPage> {
   int _selectedIndex = 0;
 
   /// Holds all the constrcutors of different taps' widgets.
-  final _widgetOptions = [HomePage(), Myshop(), appointment(), ContactsPage()];
+  final _widgetOptions = [HomePage(), Myshop(), AppointmentPage(), ContactsPage()];
 
   /// Retruns a widget based on the current index of the navigation bar
   /// that belongs to a specific tap.
