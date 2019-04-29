@@ -67,31 +67,56 @@ class _ProfilePageState extends State<ProfilePage> {
               }
               else {
                 // Use snapshot data to populate user profile display
-                return Container(
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Flexible(
-                            fit: FlexFit.loose,
-                            child: Container(
-                              // margin: EdgeInsets.only(top: 8.0),
-                                child: ListView(
-                                    children: [
-                                      _buildProfileImageStack(snapshot.data, context),
-                                      _buildUserInfoCard(snapshot.data)
-                                    ]
+                return FutureBuilder(
+                  future: snapshot.data.getProfilePicUrl,
+                  builder: (BuildContext _context, AsyncSnapshot<String> _snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                        return Center(
+                          child: CircularProgressIndicator()
+                        );
+                      case ConnectionState.active:
+                      case ConnectionState.waiting:
+                        return Center(
+                          child: CircularProgressIndicator()
+                        );
+                      case ConnectionState.done:
+                      // Check for valid snapshot state
+                        if (snapshot.hasError){
+                          return Text('Error: ${snapshot.error}');
+                        }
+                        else {
+                          // Use snapshot data to populate user profile display
+                          return Container(
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                    fit: FlexFit.loose,
+                                    child: Container(
+                                      // margin: EdgeInsets.only(top: 8.0),
+                                        child: ListView(
+                                            children: [
+                                              _buildProfileImageStack(snapshot.data, context),
+                                              _buildUserInfoCard(snapshot.data)
+                                            ]
+                                        )
+                                    )
                                 )
+                              ],
                             )
-                        )
-                      ],
-                    )
-                );
-              }
+                        );
+                      }
+                    }
+                  }
+              );
+            }
           }
         }
     );
-  }
+  }    
+
 
   /// Returns Card containing divided ListTiles holding user info, as well
   /// as an ExpansionTile build by function _buildExpansionList.
@@ -224,7 +249,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.green[400],
                       image: DecorationImage(
                         image: NetworkImage(
-                          'https://firebasestorage.googleapis.com/v0/b/hairbnb-f0c2c.appspot.com/o/l8jj6JC66fgjQ1y3Q7abMxwiqxX2%2FprofilePicture.jpg?alt=media&token=c01dc283-e44b-4ae0-a5e8-4307bc6249b7'
+                          user.profilePicUrl
                         ),
                         fit: BoxFit.cover
                       ),
