@@ -41,9 +41,27 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   }
 
+  int CompareAppointments(DocumentSnapshot a, DocumentSnapshot b){
+    int aHour = int.parse(a['Time'].split(":")[0]);
+    if(a['Time'].indexOf('PM') != -1) aHour += 12;
+
+    int aMinute = int.parse(a['Time'].split(":")[1].substring(0, 2));
+
+    int bHour = int.parse(b['Time'].split(":")[0]);
+    if(b['Time'].indexOf('PM') != -1) bHour += 12;
+
+    int bMinute = int.parse(b['Time'].split(":")[1].substring(0, 2));
+
+    DateTime aDate = DateTime.parse(a['Date']).add(Duration(hours: aHour, minutes: aMinute));
+    DateTime bDate = DateTime.parse(b['Date']).add(Duration(hours: bHour, minutes: bMinute));
+    if(aDate.isBefore(bDate)) return -1;
+    else return 1;
+  }
+
   ListView CreateListOfAppointments(List<dynamic> AppointmentList)
   {
     List<Widget> AppList = List<Widget>();
+    AppointmentList.sort((a, b) => CompareAppointments(a, b));
     for(final appointment in AppointmentList){
       final app = FutureBuilder(
         future: CreateAppointmentCard(appointment),
@@ -70,11 +88,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
     final Notes = appointment.data['Note'];
     final Time = appointment.data['Time'];
     final userMap = (await Firestore.instance.collection('users').document(UserID).get()).data;
-    //print(userMap["pastVisits"]);
-    //User user = User(userMap['email'], userMap['name'], userMap['phoneNumber'], userMap['birthday'], userMap['pastVisits'], userMap['userid']);
-    //User user = User.fromMap(userMap);
-    //print("!!!!!!!!!!!!!");
-    //print(user.toString());
     final image = await AppointmentImage(userMap['userid']);
     final subTitle = Text(Notes.substring(0, (Notes.toString().length >= 30) ? 30 : Notes.toString().length) + "...");
     final name = Text(userMap['name']['first'] + " " + userMap['name']['last']);
@@ -102,7 +115,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   Future<Widget> AppointmentImage(String userID) async{
     final profilePicUrl = await getImageURL('profilePicture', userID);
-    print(profilePicUrl);
     return Container(
         width: 70.0,
         height: 70.0,
@@ -202,7 +214,10 @@ class _MyDialogContentState extends State<MyDialogContent> {
                         title: Text(widget.data[0]['name']['first'] + " " + widget.data[0]['name']['last'], style: TextStyle(fontSize: 25),),
                       ),
                       Container(height: 15,),
+                      Text(DateTime.parse(appointment['Date']).toIso8601String().substring(0, 10) + " " + appointment['Time']),
+                      Container(height: 15,),
                       Container(height:2, color: Colors.green,),
+                      Container(height: 15,),
                       Center(
                         child: snapshot.data[0],
                       ),
