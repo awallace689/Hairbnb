@@ -9,18 +9,33 @@ import 'package:image_cropper/image_cropper.dart';
 
 
 class DescriptionValidator{
+  //A class contains one static function, which is used to verify
+  //the user's input over the text field.
+
+  //Test user's input over the text field,
+  //and returns a designed string depend on the value passed in.
   static String validate(String note){
     return note==null ? "Description can not be empty!" : note;
   }
 }
 
 class DateValidator{
+  //A class contains one static function, which is used to verify
+  //whether the user has selected a date for appointment or not.
+
+  //Test whether the user has selected a date or not,
+  //and returns a designed string depend on the value passed in.
   static String validate(DateTime date){
     return date==null ? "Please select a date!" : null;
   }
 }
 
 class TimeValidator{
+  //A class contains one static function, which is used to verify
+  //whether the user has selected a time for appointment or not.
+
+  //Test whether the user has selected a time or not,
+  //and returns a designed string depend on the value passed in.
   static String validate(TimeOfDay time){
     return time==null ? "Please select a time!" : null;
   }
@@ -49,6 +64,10 @@ class CheckInPageState extends State<CheckInPage> {
                         '11:00 am', '11:15 am', '11:30 am', '11:45 am', '12:00 pm', '12:15 pm', '12:30 pm'];
   final DescriptCont = TextEditingController();
 
+
+  //Store a already mapped object to a designated Firestore's
+  //collection as a brand new document, and to store the created appointment's
+  //information to the user's document.
   Future<void> addData(appointment) async{
 
     DocumentReference ref = Firestore.instance.collection("Appointment").document();
@@ -82,12 +101,15 @@ class CheckInPageState extends State<CheckInPage> {
     Firestore.instance.collection("users").document(appointment["UserID"]).setData(UserData);
   }
 
+
+  //Open gallery of the user's smart phone.
    imgCapture() async
   {
      File img = await ImagePicker.pickImage(source: ImageSource.gallery);
      _cropImage(img);
   }
 
+  //Store the selected image by the user to variable user_image.
   Future<Null> _cropImage(File imageFile) async {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: imageFile.path,
@@ -101,6 +123,8 @@ class CheckInPageState extends State<CheckInPage> {
     });
   }
 
+  //Returns a Scaffold widget that contain a check in button,
+  //and once the button is clicked, re-build of the current page is triggered.
   Widget CheckInForm(BuildContext context){
     return Scaffold(backgroundColor: Theme.of(context).primaryColor,
         body:Center(
@@ -115,6 +139,10 @@ class CheckInPageState extends State<CheckInPage> {
     );
   }
 
+  //Returns a ListView widget that contains a container widget to show image
+  //user has selected from the gallery, contains a text field for the user to
+  //enter special request for his/her haircut, and contains two buttons that
+  //the users can click and select the date and time for their haircuts respectively.
   Widget allentest(BuildContext context){
     return ListView(children: <Widget>[ SizedBox(height:10.0),
       RawMaterialButton(
@@ -181,6 +209,8 @@ class CheckInPageState extends State<CheckInPage> {
                   ]);
   }
 
+  //Triggers the showDatePicker method, and stores the selected date to the
+  //variable selected_date.
   Future<Null> selectDate(BuildContext context) async{
     final DateTime picked = await showDatePicker(
         context: context,
@@ -196,6 +226,8 @@ class CheckInPageState extends State<CheckInPage> {
     }
   }
 
+  //Triggers the showTimePicker method, and stores the selected time to the
+  //variable selected_time.
   Future<Null> selectTime(BuildContext context) async{
     final TimeOfDay picked = await showTimePicker(
         context: context,
@@ -209,16 +241,16 @@ class CheckInPageState extends State<CheckInPage> {
     }
   }
 
-  Widget _handlefuture(BuildContext context){
-     if(isClicked)
-       {
-         return allentest(context);
-       }
-     else
-       {
-         return CheckInForm(context);
-       }
-  }
+//  Widget _handlefuture(BuildContext context){
+//     if(isClicked)
+//       {
+//         return allentest(context);
+//       }
+//     else
+//       {
+//         return CheckInForm(context);
+//       }
+//  }
   ///Builds the UI objects on the screen.
   ///
   ///This function is called anytime something on the screen
@@ -349,6 +381,9 @@ class CheckInPageState extends State<CheckInPage> {
     }
   }
 
+  //Return the user ID is currently logged in to the page.
+  //User ID is being stored in SharedPreferences beforehand when the user tries
+  //to log in.
   Future<String> getUserID() async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
