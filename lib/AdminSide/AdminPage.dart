@@ -24,7 +24,7 @@ class _AdminPageState extends State<AdminPage> {
   int _selectedIndex = 0;
 
   /// Holds all the constrcutors of different taps' widgets.
-  final _widgetOptions = [HomePage(), Myshop(), AppointmentPage(), ContactsPage()];
+  final _widgetOptions = [AppointmentPage(), Myshop(), ContactsPage()];
 
   /// Retruns a widget based on the current index of the navigation bar
   /// that belongs to a specific tap.
