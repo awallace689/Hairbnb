@@ -85,8 +85,7 @@ class _MyshopState extends State<Myshop> {
             image: DecorationImage(
                 image: NetworkImage(
                     "https://fastly.4sqi.net/img/general/600x600/790765_pGmlPfzRmKiqZv0erX_CnueWVY9koGaZJR0YVThBI4I.jpg"),
-                    fit: BoxFit.fitWidth
-                ),
+                fit: BoxFit.fitWidth),
           )),
       Card(
           child: Container(
