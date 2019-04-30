@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('Date of birth returns empty string or error', () {
-    string input = "";
+    String input = "";
     var result = LoginSignUpState().convertToDate(input);
     expect(result, "");
   }
