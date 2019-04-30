@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 ///Intialize a stateful widget
 class ContactsPage extends StatefulWidget
@@ -90,6 +91,7 @@ class _ContactsPageState extends State<ContactsPage>
                     ///Text will be provided within the list showing the name and email of the customer. 
                     title: Text(snapshot.data[index].name),
                     subtitle: Text(snapshot.data[index].email),
+                    onTap: () {showDialog(context: context, builder: (BuildContext context) => ContactDialog(snapshot.data[index], context));},
                   );
                 },
               );
@@ -100,6 +102,48 @@ class _ContactsPageState extends State<ContactsPage>
       ),
     );
   }
+}
+
+Widget ContactDialog(Customer customer, BuildContext context){
+  return AlertDialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+    content: Column(
+      children: <Widget>[
+        Container(
+            width: 250.0,
+            height: 250.0,
+            decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: NetworkImage(customer.pictureURL)
+                )
+            )
+        ),
+        Text(customer.name, style: TextStyle(fontSize: 25),),
+        Text(customer.phoneNum),
+        Text(customer.email)
+      ],
+    ),
+    actions: <Widget>[
+      FlatButton(
+        color: Colors.green,
+        child: Text('Call', style: TextStyle(color: Colors.white),),
+        onPressed: (){_launchcaller("tel: " + customer.phoneNum);},
+      ),
+      FlatButton(
+        color: Colors.red,
+        child: Text('Close', style: TextStyle(color: Colors.white),),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    ],
+  );
+}
+
+_launchcaller(String phone) {
+  launch(phone);
 }
 
 ///Customer class that intializes that values pertaining to a customer
