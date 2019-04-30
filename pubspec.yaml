@@ -36,7 +36,7 @@ dependencies:
   firebase_database:
   firebase_storage:
   intl:
-  test:
+  test: any
 
 dev_dependencies:
   flutter_test:
