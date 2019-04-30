@@ -320,6 +320,12 @@ class CheckInPageState extends State<CheckInPage> {
     String temp_date = DateValidator.validate(selected_date);
     String temp_time = TimeValidator.validate(selected_time);
 
+    if(user_image == null){
+      flag = true;
+      return showDialog(context: context, barrierDismissible: false, builder: (context){
+        return AlertDialog(title: Text("You must add a photo."), actions: <Widget>[FlatButton(child: Text('OK'), onPressed: () {Navigator.of(context).pop();} )]);
+      });
+    }
     if(temp_description == "Description can not be empty!")
       {
         flag = true;
