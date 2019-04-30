@@ -37,14 +37,6 @@ class User {
       _pastVisits = data['pastVisits'],
       userid = data['userid'];
 
-//  User fromID(String ID){
-//
-//  }
-//
-//  User.fromID(String ID) {
-//    final userMap = await Firestore.instance.collection('users').document(ID);
-//  }
-
   dynamic toJson() =>
     {
       'email': email,
@@ -55,6 +47,9 @@ class User {
       'userid' : userid
     };
 
+  /// Return Future<String> of profile picture download URL from Firestore.
+  /// 
+  /// return: Future<String>
   Future<String> get getProfilePicUrl async {
     String userID = this.userid;
     StorageReference firebaseStorageRef = FirebaseStorage.instance.ref()
@@ -63,6 +58,9 @@ class User {
     return profilePicUrl;
   }
 
+  /// Return Future<String> of picture uploaded with appointment at 'index'
+  /// 
+  /// return: Future<String>
   Future<String> getImageUrlFuture(int index) async {
     String userID = this.userid;
     String appID = this.visits[index]['AppointmentID'];

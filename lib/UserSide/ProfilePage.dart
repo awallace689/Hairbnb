@@ -35,9 +35,10 @@ class _ProfilePageState extends State<ProfilePage> {
   final _leadingStyle =
       const TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
 
-  /// Returns a FutureBuilder Widget responsible for displaying 'loading...'
-  /// while async call to JSON server is made, then upon completion builds
-  /// User 'Your Profile' page with the received information.
+  /// Returns a FutureBuilder Widget responsible for displaying loading icon
+  /// while async call to Firestore server is made, then upon completion builds
+  /// User Profile page with the received information. Includes list of future/past
+  /// appointments.
   ///
   /// param context {BuildContext}: BuildContext received from MaterialApp
   /// return: Widget (FutureBuilder)
@@ -74,7 +75,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           if (_snapshot.hasError) {
                             return Text('Error: ${_snapshot.error}');
                           } else {
-                            // Use snapshot data to populate user profile display
                             return Container(
                                 alignment: Alignment.center,
                                 child: Column(
@@ -83,7 +83,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Flexible(
                                         fit: FlexFit.loose,
                                         child: Container(
-                                            // margin: EdgeInsets.only(top: 8.0),
                                             child: ListView(children: [
                                           _buildProfileImageStack(
                                               snapshot.data, context),
@@ -109,6 +108,12 @@ class _ProfilePageState extends State<ProfilePage> {
         });
   }
 
+  /// This function clears the SharedPreferences for the device and sets the
+  /// Navigator to the login page, forcing the user to login or create a new
+  /// account.
+  /// 
+  /// return: None
+  /// post: User SharedPreferences cleared and forced to login/create acct.
   Future Logout() async
   {
     print("Logging out");
@@ -143,6 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
   /// as an ExpansionTile build by function _buildExpansionList.
   ///
   /// param user {User}: user to pull data from
+  /// param context {BuildContext}: MaterialApp BuildContext
   /// return: Widget (Card)
   Widget _buildUserInfoCard(User user, BuildContext context) {
     user.visits.sort((a, b) => CompareAppointments(a, b));
@@ -227,7 +233,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   /// Iterate though each visit stored within user and build a corresponding
-  /// Row with timestamp and text-wrap supporting notes section.
+  /// row with timestamp, text-wrap-supporting notes section, and image.
   ///
   /// param user {User}: User object to pull information from
   /// return: List<Widget>, a list of Rows
@@ -351,6 +357,16 @@ class _ProfilePageState extends State<ProfilePage> {
             ])));
   }
 
+
+  /// Create a dialog box that stores user input from text field
+  /// to the button's corresponding User property and updates
+  /// server document to reflect change.
+  /// 
+  /// param user {User}: user whose info is being displayed
+  /// param context {BuildContext}: MaterialApp BuildContext
+  /// param preview {String}: TextField preview string
+  /// param field {String}: Name of field being edited
+  /// return: Future
   Future editContent(
       User user, BuildContext context, String preview, String field) async {
     TextEditingController controller = TextEditingController();
@@ -491,12 +507,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-/// [async]
-/// Return a Future<User> from http.get request for
-/// user with FutureBuilder
-///
-/// param url {String}: url to make request to
-/// return: Future<User>
+/// Look up userid from SharedPreferences and get corresponding 'users'
+/// document from Firebase Firestore, from which a User is populated.
+/// 
+/// return: User
 Future<User> getUserFromPreferences() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   DocumentSnapshot document = await Firestore.instance
