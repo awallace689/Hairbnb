@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 void main() {
-  group("CheckInPage test", () {
+  group("User class unit tests:", () {
     test('User.toJSON has valid output.', () {
       User user = createUser();
       expect(user.toJson(), {
