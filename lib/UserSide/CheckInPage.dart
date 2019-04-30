@@ -59,6 +59,7 @@ class CheckInPageState extends State<CheckInPage> {
   TimeOfDay selected_time;
   DateTime Now = DateTime.now();
   String description;
+  Appointment myappointment;
   List<String> _date = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
   List<String> _time = ['9:15 am', '9:30 am', '9:45 am', '10:00 am', '10:15 am', '10:30 am', '10:45 am',
                         '11:00 am', '11:15 am', '11:30 am', '11:45 am', '12:00 pm', '12:15 pm', '12:30 pm'];
@@ -205,7 +206,8 @@ class CheckInPageState extends State<CheckInPage> {
                   RaisedButton(child: Text("Check In"),
                                color: Colors.white,
                                onPressed: (){
-                               setState(() {SubmitCheckIn(context);});},)
+                               setState(() {SubmitCheckIn(context);
+                                            CheckedIn = true;});},)
                   ]);
   }
 
@@ -257,31 +259,61 @@ class CheckInPageState extends State<CheckInPage> {
   ///affects these UI objects. Returns the UI objects to be displayed.
   @override
   Widget build(BuildContext context) {
+
     return Container(
-      child: FutureBuilder(
-          future: Future.wait([IsUserCheckedIn()]),
+      child: StreamBuilder(
+          stream: Firestore.instance.collection("Appointment").snapshots(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data != null) {
-               if(!CheckedIn) {
-                 if (isClicked == false) {
-                   return CheckInForm(context);
-                 }
-                 else {
-                   return allentest(context);
-                 }
-               }
-               else
-                 {
-                   return CheckedInPage(context);
-                 }
-              }
-              else {
-                return new CircularProgressIndicator();
-              }
+            if (snapshot.data != null) {
+              return (CheckedIn) ?
+              Card(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+                  color: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Upcoming Appointment\n", style: TextStyle(fontSize: 30),),
+                        Container(
+                            width: 250.0,
+                            height: 250.0,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: FileImage(user_image)
+                                )
+                            )
+                        ),
+                        Container(height: 10, width: 0,),
+                        Text(myappointment.date.substring(0, 10) + " " + myappointment.time, style: TextStyle(fontSize: 25),),
+                        Text("Notes:", style: TextStyle(fontSize: 20),),
+                        Text(myappointment.notes, style: TextStyle(fontSize: 18),)
+                      ],
+                    ),
+                  )
+              ):
+              FutureBuilder(
+                future: IsUserCheckedIn(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if(snapshot.data != null){
+                    CheckedIn = false;
+                    if(snapshot.data == false){
+                      return allentest(context);
+                    }
+                    else{
+                      return CheckedInPage(context, snapshot.data);
+                    }
+                  }
+                  else{
+                    return CircularProgressIndicator();
+                  }
+                },
+              );
             }
             else {
-              print("No data");
               return new CircularProgressIndicator();
             }
           }
@@ -289,18 +321,36 @@ class CheckInPageState extends State<CheckInPage> {
     );
   }
 
+  int CompareAppointments(DocumentSnapshot a, DocumentSnapshot b){
+    int aHour = int.parse(a['Time'].split(":")[0]);
+    if(a['Time'].indexOf('PM') != -1) aHour += 12;
+
+    int aMinute = int.parse(a['Time'].split(":")[1].substring(0, 2));
+
+    int bHour = int.parse(b['Time'].split(":")[0]);
+    if(b['Time'].indexOf('PM') != -1) bHour += 12;
+
+    int bMinute = int.parse(b['Time'].split(":")[1].substring(0, 2));
+
+    DateTime aDate = DateTime.parse(a['Date']).add(Duration(hours: aHour, minutes: aMinute));
+    DateTime bDate = DateTime.parse(b['Date']).add(Duration(hours: bHour, minutes: bMinute));
+    if(aDate.isBefore(bDate)) return -1;
+    else return 1;
+  }
+
   ///Checks if user is checked in.
   ///
   /// Gets the list of checkins from the url and checks that against
   /// the user's email. Returns true if the user has checked in and
   /// false if the user is not checked in.
-  Future<bool> IsUserCheckedIn() async{
-//    List<CheckIn> CheckInList = await widget.storage.HTTPToCheckInList("http://www.json-generator.com/api/json/get/ceqqYtrZfm?indent=2");
-//        for(CheckIn checkIn in CheckInList){
-//          if(checkIn.email == await GetPrefEmail()){
-//            return true;
-//          }
-//        }
+  Future IsUserCheckedIn() async{
+    List<DocumentSnapshot> Appointments = (await Firestore.instance.collection('Appointment').getDocuments()).documents;
+    Appointments.sort((a, b) => CompareAppointments(a, b));
+    for(DocumentSnapshot appointment in Appointments){
+      if(appointment.data['UserID'] == await getUserID()){
+        return appointment;
+      }
+    }
     return false;
   }
 
@@ -350,7 +400,7 @@ class CheckInPageState extends State<CheckInPage> {
 
     if(!flag)
     {
-      Appointment myappointment = Appointment(await getUserID(), selected_date.toIso8601String(), selected_time.format(context), description);
+      myappointment = Appointment(await getUserID(), selected_date.toIso8601String(), selected_time.format(context), description);
       addData({'UserID': myappointment.getUser_id(),
              'Date': myappointment.getDate(),
              'Time': myappointment.getTime(),
@@ -397,7 +447,54 @@ class CheckInPageState extends State<CheckInPage> {
   }
 
   ///Shows the user they are checked in.
-  Widget CheckedInPage(BuildContext context){
-    return Text("You are checked in.");
+  Widget CheckedInPage(BuildContext context, DocumentSnapshot appointment){
+    //return Text(appointment.toString());
+    return FutureBuilder(
+      future: getAppointmentPhotoURL(appointment),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if(snapshot.data != null){
+          return Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+              color: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Upcoming Appointment\n", style: TextStyle(fontSize: 30),),
+                  Container(
+                      width: 250.0,
+                      height: 250.0,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(snapshot.data)
+                          )
+                      )
+                  ),
+                  Container(height: 10, width: 0,),
+                  Text(appointment.data['Date'].toString().substring(0, 10) + " " + appointment.data['Time'], style: TextStyle(fontSize: 25),),
+                  Text("Notes:", style: TextStyle(fontSize: 20),),
+                  Text(appointment.data['Note'], style: TextStyle(fontSize: 18),)
+                ],
+              ),
+            )
+          );
+        }
+        else{
+          return CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Future<String> getAppointmentPhotoURL(DocumentSnapshot appointment) async{
+    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref()
+        .child("/${appointment.data['UserID']}/${appointment.documentID}.jpg");
+    final profilePicUrl = await firebaseStorageRef.getDownloadURL();
+    print(profilePicUrl);
+    return profilePicUrl;
   }
 }
