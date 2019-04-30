@@ -3,6 +3,8 @@ import 'Home.dart';
 import 'Myshop.dart';
 import 'ProfilePage.dart';
 import 'CheckInPage.dart';
+import '../TopSide/LoginSignUp.dart';
+
 
 class UserPage extends StatefulWidget {
   UserPage({Key key, this.title}) : super(key: key);
@@ -23,7 +25,7 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
   int _selectedIndex = 0;
-  final _widgetOptions = [HomePage(), Myshop(), CheckInPage(), ProfilePage()];
+  final _widgetOptions = [CheckInPage(), Myshop(), ProfilePage()];
 
   _handleTap(int index) {
 
@@ -54,16 +56,18 @@ class _UserPageState extends State<UserPage> {
         bottomNavigationBar : BottomNavigationBar(
           type:BottomNavigationBarType.fixed,
           items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
-            BottomNavigationBarItem(icon: Icon(Icons.info), title: Text('My shop')),
             BottomNavigationBarItem(icon: Icon(Icons.calendar_today), title: Text('Appointment')),
-            BottomNavigationBarItem(icon: Icon(Icons.perm_contact_calendar), title: Text('Contacts')),
+            BottomNavigationBarItem(icon: Icon(Icons.info), title: Text('My Shop')),
+            BottomNavigationBarItem(icon: Icon(Icons.perm_contact_calendar), title: Text('Profile')),
           ],
           currentIndex: _selectedIndex,
           fixedColor: Colors.red,
           onTap: _onItemTapped,
         ),
       ),
+      routes: {
+        '/BackToLogin': (context) => LoginSignUp(),
+      },
     );
   }
 }

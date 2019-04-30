@@ -63,6 +63,15 @@ class User {
     return profilePicUrl;
   }
 
+  Future<String> getImageUrlFuture(int index) async {
+    String userID = this.userid;
+    String appID = this.visits[index]['AppointmentID'];
+    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref()
+                                           .child("/$userID/$appID.jpg");
+    String url = await firebaseStorageRef.getDownloadURL();
+    return url;
+  }
+
   List<dynamic> get visits {
     if (this._pastVisits != null){
       return _pastVisits;

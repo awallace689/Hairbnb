@@ -24,7 +24,7 @@ class _AdminPageState extends State<AdminPage> {
   int _selectedIndex = 0;
 
   /// Holds all the constrcutors of different taps' widgets.
-  final _widgetOptions = [HomePage(), Myshop(), AppointmentPage(), ContactsPage()];
+  final _widgetOptions = [AppointmentPage(), Myshop(), ContactsPage()];
 
   /// Retruns a widget based on the current index of the navigation bar
   /// that belongs to a specific tap.
@@ -68,14 +68,11 @@ class _AdminPageState extends State<AdminPage> {
         type:BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
 
-          ///Displays a tap with a built in home icon with the text Home.
-          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
+          ///Displays a tap with a built in calendar icon with the text Appoinment.
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), title: Text('Appointment')),
 
           ///Displays a tap with a built in info icon with the text My shop.
           BottomNavigationBarItem(icon: Icon(Icons.info), title: Text('My shop')),
-
-          ///Displays a tap with a built in calendar icon with the text Appoinment.
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), title: Text('Appointment')),
 
           ///Displays a tap with a built in contact calendar icon with the text Contacts.
           BottomNavigationBarItem(icon: Icon(Icons.perm_contact_calendar), title: Text('Contacts')),
