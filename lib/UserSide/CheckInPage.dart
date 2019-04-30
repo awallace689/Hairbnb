@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'CheckIn.dart';
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -9,6 +7,24 @@ import 'admin_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_cropper/image_cropper.dart';
 
+
+class DescriptionValidator{
+  static String validate(String note){
+    return note==null ? "Description can not be empty!" : note;
+  }
+}
+
+class DateValidator{
+  static String validate(DateTime date){
+    return date==null ? "Please select a date!" : null;
+  }
+}
+
+class TimeValidator{
+  static String validate(TimeOfDay time){
+    return time==null ? "Please select a time!" : null;
+  }
+}
 
 ///Creates a page for the user to check in.
 class CheckInPage extends StatefulWidget {
@@ -39,8 +55,8 @@ class CheckInPageState extends State<CheckInPage> {
     print(ref.documentID);
 
     //Add appointment document to appointment collection with a new documentID
-    Firestore.instance.collection("Appointment").document(ref.documentID).setData(appointment);
-
+    //Firestore.instance.collection("Appointment").document(ref.documentID).setData(appointment);
+       ref.setData(appointment);
     //Add the image to the userid folder with the name of the documentID.
     final StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child("${appointment["UserID"]}/${ref.documentID}.jpg");
     if(user_image != null) firebaseStorageRef.putFile(user_image);
@@ -267,15 +283,44 @@ class CheckInPageState extends State<CheckInPage> {
   /// The user can then click continue to see that they are checked in.
   Future SubmitCheckIn(BuildContext context) async
   {
-    Appointment myappointment = Appointment(await getUserID(), selected_date.toIso8601String(), selected_time.format(context), description);
-    addData({'UserID': myappointment.getUser_id(),
+    bool flag = false;
+    String temp_description = DescriptionValidator.validate(description);
+    String temp_date = DateValidator.validate(selected_date);
+    String temp_time = TimeValidator.validate(selected_time);
+
+    if(temp_description == "Description can not be empty!")
+      {
+        flag = true;
+        return showDialog(context: context, barrierDismissible: false, builder: (context){
+          return AlertDialog(title: Text(temp_description), actions: <Widget>[FlatButton(child: Text('OK'), onPressed: () {Navigator.of(context).pop();} )]);
+        });
+      }
+    if(!flag && temp_date == "Please select a date!")
+      {
+        flag = true;
+        return showDialog(context: context, barrierDismissible: false, builder: (context){
+          return AlertDialog(title: Text(temp_date), actions: <Widget>[FlatButton(child: Text('OK'), onPressed: () {Navigator.of(context).pop();} )]);
+        });
+      }
+    if(!flag && temp_time == "Please select a time!")
+      {
+        flag = true;
+        return showDialog(context: context, barrierDismissible: false, builder: (context){
+          return AlertDialog(title: Text(temp_time), actions: <Widget>[FlatButton(child: Text('OK'), onPressed: () {Navigator.of(context).pop();} )]);
+        });
+      }
+
+    if(!flag)
+    {
+      Appointment myappointment = Appointment(await getUserID(), selected_date.toIso8601String(), selected_time.format(context), description);
+      addData({'UserID': myappointment.getUser_id(),
              'Date': myappointment.getDate(),
              'Time': myappointment.getTime(),
              'Note': myappointment.getNotes() });
 
-    setState(() {
-      CheckedIn = true;
-    });
+      setState(() {
+        CheckedIn = true;
+      });
 //    final NewCheckIn = new CheckIn(
 //        await GetPrefEmail(),
 //        DateTime.now().toUtc().toString(),
@@ -301,6 +346,7 @@ class CheckInPageState extends State<CheckInPage> {
 //        );
 //      },
 //    );
+    }
   }
 
   Future<String> getUserID() async
