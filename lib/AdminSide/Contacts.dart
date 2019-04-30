@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 ///Intialize a stateful widget
 class ContactsPage extends StatefulWidget
@@ -17,30 +20,40 @@ class ContactsPage extends StatefulWidget
 ///fill a list of customer object with their pertaining values.
 class _ContactsPageState extends State<ContactsPage>
 {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   ///create list of customer objects that will 
   ///import from async that contains future class
   ///http requests are handled through http package
   ///convert package handles data
   Future<List<Customer>> _fetchCustomers() async {
-   ///retrieve data through json generator provided by http.get request 
-    var data = await http.get("http://www.json-generator.com/api/json/get/cfwZmvEBbC?indent=2");
-    ///convert to json package
-    var myJson = json.decode(data.body);
-
-    ///intialize an empty list of customers
-    List<Customer> customers = [];
-
-    ///loop through json object and populate user list.
-    for (var  u in myJson)
+    _auth.signInAnonymously();
+    QuerySnapshot allUsers = await Firestore.instance.collection('users').getDocuments();
+    List<Customer> customers = List<Customer>();
+    for (var  u in allUsers.documents)
     {
-      Customer customer = Customer(u["index"],u["name"], u["picture"], u["haircutDetails"],u["age"],u["phone"],u["email"]);
+      print(u.data);
+      String photoURL = await getPictureURL(u.data['userid']);
+      Customer customer = Customer(
+          u.data['name']['first'] + " " + u.data['name']['last'],
+          u.data['email'],
+          photoURL,
+          u.data['phoneNumber'],
+          u.data['birthday']
+       );
       customers.add(customer);
 
-
     }
-
     return customers;
   }
+
+  Future<String> getPictureURL(String userid) async{
+    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref()
+        .child("/$userid/profilePicture.jpg");
+    String profilePicUrl = await firebaseStorageRef.getDownloadURL();
+    return profilePicUrl;
+  }
+
   @override
   ///In charge of building contact display list 
   Widget build(BuildContext context)
@@ -71,7 +84,7 @@ class _ContactsPageState extends State<ContactsPage>
                       ///Utilizes network image consturctor and picture data provided by json to insert a circle 
                       ///avatar of user 
                       backgroundImage: NetworkImage(
-                          snapshot.data[index].picture
+                          snapshot.data[index].pictureURL
                       ),
                     ),
                     ///Text will be provided within the list showing the name and email of the customer. 
@@ -91,18 +104,15 @@ class _ContactsPageState extends State<ContactsPage>
 
 ///Customer class that intializes that values pertaining to a customer
 class Customer{
-  final int index;
-  // final String about;
-  final String haircutDetails ;
   final String name;
   final String email;
-  final String picture;
-  final int phoneNum;
-  final int age;
+  final String pictureURL;
+  final String phoneNum;
+  final String DOB;
+
 ///Customer constructor that will be utilized by for loop to loop through json and insert specific 
 ///details about each customer. 
-  Customer(this.index, this.name, this.picture, this.haircutDetails,this.age, this.phoneNum,this.email);
-
+  Customer(this.name, this.email, this.pictureURL, this.phoneNum, this.DOB);
 }
 ///Class that outlines the on tap functionality. 
 class Details extends StatelessWidget{
