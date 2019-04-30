@@ -180,7 +180,7 @@ class _MyshopState extends State<Myshop> {
                   color: Colors.black,
                 ),
                 Row(
-                  children: <Widget>[Text("Social Media", style: header)],
+                  children: <Widget>[Text("Social Media:", style: header)],
                 ),
                 Row(children: <Widget>[
                   Container(
