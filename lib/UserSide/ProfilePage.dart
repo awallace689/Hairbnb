@@ -88,8 +88,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                           _buildProfileImageStack(
                                               snapshot.data, context),
                                           _buildUserInfoCard(
-                                              snapshot.data, context)
-                                        ])))
+                                              snapshot.data, context),
+                                          Container(
+                                            color: Colors.redAccent,
+                                            child: ListTile(
+                                              title: Text("Logout", style: TextStyle(color: Colors.white), textAlign: TextAlign.center,),
+                                              trailing: Icon(Icons.exit_to_app, color: Colors.white,),
+                                              onTap: Logout,
+                                            ),
+                                          )
+                                        ]))),
+
                                   ],
                                 ));
                           }
@@ -99,6 +108,19 @@ class _ProfilePageState extends State<ProfilePage> {
           }
         });
   }
+
+  Future Logout() async
+  {
+    print("Logging out");
+
+    //Clear saved preferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+
+    //Push to LoginSignUp route.
+    Navigator.pushReplacementNamed(context, "/BackToLogin");
+  }
+
 
   /// Returns Card containing divided ListTiles holding user info, as well
   /// as an ExpansionTile build by function _buildExpansionList.

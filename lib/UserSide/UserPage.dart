@@ -3,7 +3,8 @@ import 'Home.dart';
 import 'Myshop.dart';
 import 'ProfilePage.dart';
 import 'CheckInPage.dart';
-import '../Topside/LoginSignUp.dart';
+import '../TopSide/LoginSignUp.dart';
+
 
 class UserPage extends StatefulWidget {
   UserPage({Key key, this.title}) : super(key: key);
@@ -64,6 +65,9 @@ class _UserPageState extends State<UserPage> {
           onTap: _onItemTapped,
         ),
       ),
+      routes: {
+        '/BackToLogin': (context) => LoginSignUp(),
+      },
     );
   }
 }
