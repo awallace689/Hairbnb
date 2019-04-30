@@ -121,6 +121,23 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.pushReplacementNamed(context, "/BackToLogin");
   }
 
+  int CompareAppointments(dynamic a, dynamic b){
+    int aHour = int.parse(a['Time']["Time"].split(":")[0]);
+    if(a['Time']['Time'].indexOf('PM') != -1) aHour += 12;
+
+    int aMinute = int.parse(a['Time']['Time'].split(":")[1].substring(0, 2));
+
+    int bHour = int.parse(b['Time']['Time'].split(":")[0]);
+    if(b['Time']['Time'].indexOf('PM') != -1) bHour += 12;
+
+    int bMinute = int.parse(b['Time']['Time'].split(":")[1].substring(0, 2));
+
+    DateTime aDate = DateTime.parse(a['Time']['Date']).add(Duration(hours: aHour, minutes: aMinute));
+    DateTime bDate = DateTime.parse(b['Time']['Date']).add(Duration(hours: bHour, minutes: bMinute));
+    if(aDate.isBefore(bDate)) return 1;
+    else return -1;
+  }
+
 
   /// Returns Card containing divided ListTiles holding user info, as well
   /// as an ExpansionTile build by function _buildExpansionList.
@@ -128,6 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
   /// param user {User}: user to pull data from
   /// return: Widget (Card)
   Widget _buildUserInfoCard(User user, BuildContext context) {
+    user.visits.sort((a, b) => CompareAppointments(a, b));
     return Card(
         child: Container(
             margin: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
