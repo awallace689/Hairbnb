@@ -25,7 +25,7 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
   int _selectedIndex = 0;
-  final _widgetOptions = [CheckInPage(), Myshop(), ProfilePage()];
+  final _widgetOptions = [CheckInPage(testing: (){}), Myshop(), ProfilePage()];
 
   _handleTap(int index) {
 
