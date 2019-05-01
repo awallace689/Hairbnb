@@ -37,10 +37,12 @@ dependencies:
   firebase_storage:
   intl:
   test: any
+  image_test_utils:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mockito:
 
 
 # For information on the generic Dart part of this file, see the
