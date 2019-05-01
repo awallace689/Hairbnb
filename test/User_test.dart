@@ -29,8 +29,21 @@ void main() {
         'userid': '1234asdf',
         'profilePicUrl': 'myurl.com'
       });
-      expect([user.email, user.name, user.phoneNumber, user.birthday, user.visits, user.userid],
-      ['test@email.com', {'first': 'first', 'last': 'last'}, '5555555555', '02/22/90', [], '1234asdf']);
+      expect([
+        user.email,
+        user.name,
+        user.phoneNumber,
+        user.birthday,
+        user.visits,
+        user.userid
+      ], [
+        'test@email.com',
+        {'first': 'first', 'last': 'last'},
+        '5555555555',
+        '02/22/90',
+        [],
+        '1234asdf'
+      ]);
     });
   });
 }
