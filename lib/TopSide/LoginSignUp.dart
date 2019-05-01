@@ -172,13 +172,14 @@ class LoginSignUpState extends State<LoginSignUp> {
           )
           : null
       ),
-      validator: (value) => _isValidPassword(value) ? null : "Please enter a valid password.",
+      validator: (value) => isValidPassword(value) ? null : "Please enter a valid password.",
       onSaved: (value) => _password = value,
     );
   }
 
-  bool _isValidPassword(String input)
+  bool isValidPassword(String input)
   {
+    @visibleForTesting
     final RegExp regex = new RegExp(r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{4,8}$");
     return regex.hasMatch(input);
   }
@@ -353,12 +354,12 @@ class LoginSignUpState extends State<LoginSignUp> {
             color: Colors.grey,
           )
       ),
-      validator: (value) => _isValidPhone(value) ? null : "Please enter a valid phone number.",
+      validator: (value) => isValidPhone(value) ? null : "Please enter a valid phone number.",
       onSaved: (value) => _phone = value,
     );
   }
 
-  bool _isValidPhone(String input)
+  bool isValidPhone(String input)
   {
     final RegExp regex = new RegExp(r'^\d\d\d\d\d\d\d\d\d\d$');
     return regex.hasMatch(input);
