@@ -300,7 +300,7 @@ class CheckInPageState extends State<CheckInPage> {
                   if(snapshot.data != null){
                     CheckedIn = false;
                     if(snapshot.data == false){
-                      return allentest(context);
+                      return (isClicked) ? allentest(context) : CheckInForm(context);
                     }
                     else{
                       return CheckedInPage(context, snapshot.data);
