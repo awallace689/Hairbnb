@@ -206,8 +206,7 @@ class CheckInPageState extends State<CheckInPage> {
                   RaisedButton(child: Text("Check In"),
                                color: Colors.white,
                                onPressed: (){
-                               setState(() {SubmitCheckIn(context);
-                                            CheckedIn = true;});},)
+                               setState(() {SubmitCheckIn(context);});},)
                   ]);
   }
 
@@ -397,7 +396,7 @@ class CheckInPageState extends State<CheckInPage> {
           return AlertDialog(title: Text(temp_time), actions: <Widget>[FlatButton(child: Text('OK'), onPressed: () {Navigator.of(context).pop();} )]);
         });
       }
-
+    print(flag);
     if(!flag)
     {
       myappointment = Appointment(await getUserID(), selected_date.toIso8601String(), selected_time.format(context), description);
