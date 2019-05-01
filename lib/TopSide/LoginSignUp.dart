@@ -361,6 +361,7 @@ class LoginSignUpState extends State<LoginSignUp> {
 
   bool isValidPhone(String input)
   {
+    @visibleForTesting
     final RegExp regex = new RegExp(r'^\d\d\d\d\d\d\d\d\d\d$');
     return regex.hasMatch(input);
   }
@@ -434,8 +435,9 @@ class LoginSignUpState extends State<LoginSignUp> {
     );
   }
 
-  bool _isValidDOB(String dob)
+  bool isValidDOB(String dob)
   {
+    @visibleForTesting
     var d = convertToDate(dob);
     return d != null && d.isBefore(new DateTime.now());
   }
@@ -593,7 +595,7 @@ class LoginSignUpState extends State<LoginSignUp> {
         return false;
       }
       else{
-        if(!_isValidDOB(_DOB)){
+        if(!isValidDOB(_DOB)){
           setState(() {
             _errorMessage = "Please enter a valid date of birth.";
           });
