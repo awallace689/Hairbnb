@@ -44,6 +44,9 @@ class TimeValidator{
 ///Creates a page for the user to check in.
 class CheckInPage extends StatefulWidget {
 
+  const CheckInPage({this.testing});
+  final VoidCallback testing;
+
   CheckInPageState createState() => CheckInPageState();
 }
 
@@ -130,7 +133,8 @@ class CheckInPageState extends State<CheckInPage> {
     return Scaffold(backgroundColor: Theme.of(context).primaryColor,
         body:Center(
             child: SizedBox(width: 200.0, height: 200.0,
-                child: FloatingActionButton(backgroundColor: Colors.white,
+                child: FloatingActionButton(key: Key('CheckIn'),
+                    backgroundColor: Colors.white,
                     child:Text("Check in"),
                     foregroundColor: Colors.black ,
                     onPressed: () => {setState(() {
@@ -203,7 +207,8 @@ class CheckInPageState extends State<CheckInPage> {
                     onPressed: () {selectTime(context);},
                   ),
                   SizedBox(height: 100.0),
-                  RaisedButton(child: Text("Check In"),
+                  RaisedButton(key:   Key('submit'),
+                               child: Text("Check In"),
                                color: Colors.white,
                                onPressed: (){
                                setState(() {SubmitCheckIn(context);});},)
