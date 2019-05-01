@@ -6,10 +6,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class AppointmentPage extends StatefulWidget {
   @override
-  _AppointmentPageState createState() => _AppointmentPageState();
+  AppointmentPageState createState() => AppointmentPageState();
 }
 
-class _AppointmentPageState extends State<AppointmentPage> {
+class AppointmentPageState extends State<AppointmentPage> {
 
   @override
   Widget build(BuildContext context) {

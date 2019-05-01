@@ -15,7 +15,7 @@ class ProfilePage extends StatefulWidget {
   /// Returns State<StatefulWidget> from _BuildFromUserFutureState for
   /// displaying User 'Your Profile' page.
   @override
-  State<StatefulWidget> createState() => _ProfilePageState();
+  State<StatefulWidget> createState() => ProfilePageState();
 }
 
 /// Build returns FutureBuilder which returns 'loading...' if async call to
@@ -30,7 +30,7 @@ class ProfilePage extends StatefulWidget {
 ///     *List<Widget> _buildExpansionList(User user)
 ///     *Widget _buildProfileImageStack(User user, BuildContext context)
 ///
-class _ProfilePageState extends State<ProfilePage> {
+class ProfilePageState extends State<ProfilePage> {
   /// TextStyle object for formatting headers within 'Your Profile' page.
   final _leadingStyle =
       const TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
