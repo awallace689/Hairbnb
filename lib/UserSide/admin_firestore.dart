@@ -1,3 +1,6 @@
+/// Barber class for creating an 'admin'
+/// Shows a different version of the application vs a customer login
+/// Defines all properties listed below for what constitutes as a 'barber'
 class barber
 {
   String email;
@@ -10,6 +13,8 @@ class barber
 
 }
 
+/// Appointment class called when needing to create an appointment by
+/// the customer or to be viewed by a barber.
 class Appointment
 {
   String user_id;
