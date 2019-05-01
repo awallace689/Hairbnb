@@ -145,13 +145,14 @@ class LoginSignUpState extends State<LoginSignUp> {
           )
           : null
       ),
-      validator: (value) => _isValidEmail(value) ? null : "Please enter a valid email.",
+      validator: (value) => isValidEmail(value) ? null : "Please enter a valid email.",
       onSaved: (value) => _email = value,
     );
   }
 
-  bool _isValidEmail(String input)
+  bool isValidEmail(String input)
   {
+    @visibleForTesting
     final RegExp regex = new RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
     return regex.hasMatch(input);
   }
