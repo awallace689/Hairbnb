@@ -8,7 +8,7 @@ This is a barber shop management application. It allows a barber shop owner to s
 
 ## How to Run
 
-1. Download the app.apk file in the main directory.
+1. Download the app.apk file in the build/app/outputs/apk directory.
 2. Install app.apk on an android device.
 3. Open app.apk on the android device.
 
