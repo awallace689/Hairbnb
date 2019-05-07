@@ -24,3 +24,11 @@ This is a barber shop management application. It allows a barber shop owner to s
 2. Write-up, Class Diagram, Product Backlog, Sprint Backlog, State Diagram,
 	Gantt Chart, and Use Case Diagram image can be found within the 
 	Documentation folder.
+	
+## How to Run Tests
+
+1. Download the repository.
+2. Install flutter from here: https://flutter.dev/docs/get-started/install and add flutter to PATH
+3. Navigate to the repository from the command line.
+4. Run flutter test
+
