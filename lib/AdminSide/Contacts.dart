@@ -48,6 +48,10 @@ class _ContactsPageState extends State<ContactsPage>
     return customers;
   }
 
+  ///Retrieves the profile picture URL.
+  ///
+  /// Returns the profile picture url from the
+  /// firestore database.
   Future<String> getPictureURL(String userid) async{
     StorageReference firebaseStorageRef = FirebaseStorage.instance.ref()
         .child("/$userid/profilePicture.jpg");
@@ -55,8 +59,8 @@ class _ContactsPageState extends State<ContactsPage>
     return profilePicUrl;
   }
 
+  ///In charge of building contact display list
   @override
-  ///In charge of building contact display list 
   Widget build(BuildContext context)
   {
     return Container(
@@ -104,6 +108,10 @@ class _ContactsPageState extends State<ContactsPage>
   }
 }
 
+///Builds a dialog widget that appears when clicked on.
+///
+/// The widget contains information about the customer
+/// as well as a button to call the customer, and to dismiss the dialog.
 Widget ContactDialog(Customer customer, BuildContext context){
   return AlertDialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
@@ -142,6 +150,7 @@ Widget ContactDialog(Customer customer, BuildContext context){
   );
 }
 
+///Launches the phone app to call the customer.
 _launchcaller(String phone) {
   launch(phone);
 }

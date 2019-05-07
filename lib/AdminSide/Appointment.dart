@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Creates a stateful widget and a stateful element,
+/// and the stateful element will be mounted to the element tree.
 class appointment extends StatefulWidget {
-  /// Creates a stateful widget and a stateful element,
-  /// and the stateful element will be mounted to the element tree.
 
   /// Default constructor that takes no parameter.
   appointment();
@@ -14,10 +14,10 @@ class appointment extends StatefulWidget {
   _appointmentState createState() => _appointmentState();
 }
 
+/// Holds the properties that make of the appointment page,
+/// and trigger the builds the function which returns a ListView
+/// widget.
 class _appointmentState extends State<appointment> {
-  /// Holds the properties that make of the appointment page,
-  /// and trigger the builds the function which returns a ListView
-  /// widget.
 
   /// Holds a list of customer_appointment objects that have dummy properties
   /// for this prototype.
@@ -82,9 +82,8 @@ class _appointmentState extends State<appointment> {
   }
 }
 
-
+/// Holds all the properties of an customer_appointment object.
 class customer_appointment{
-  /// Holds all the properties of an customer_appointment object.
 
   /// Initialize the properties held by one customer_appointment object.
   customer_appointment(this.name, this.email, this.time, this.date,);//this.picURL);

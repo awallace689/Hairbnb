@@ -2,9 +2,7 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-//////////////////////////////////////////////////////////////////////////
-//                         BEGIN NEW USER CODE
-//////////////////////////////////////////////////////////////////////////
+///User class to hold all of the information of a user.
 class User {
   String email; //Email as plaintext
   Map<String, String> name; //Name as an object containing first and last name.
@@ -37,6 +35,7 @@ class User {
       _pastVisits = data['pastVisits'],
       userid = data['userid'];
 
+  ///Converts a user instance to a json object to be uploaded to firestore.
   dynamic toJson() =>
     {
       'email': email,
@@ -70,6 +69,7 @@ class User {
     return url;
   }
 
+  ///Returns the list of user's past visits.
   List<dynamic> get visits {
     if (this._pastVisits != null){
       return _pastVisits;
@@ -79,6 +79,7 @@ class User {
     }
   }
 
+  ///Sets the user's past visits.
   set visits (data) {
     this._pastVisits = data;
   }

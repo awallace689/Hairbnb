@@ -23,7 +23,7 @@ class LoadPageState extends State<LoadPage> {
   ///Directs the application to the correct page upon opening.
   ///
   /// If there is no user preferences stored, then load the login screen.
-  /// If there a user preference stored, then load either the user page,
+  /// If there is a user preference stored, then load either the user page,
   /// or the admin page depending on their status. While the data
   /// is being fetched, a loading circle will show.
   @override
@@ -55,15 +55,13 @@ class LoadPageState extends State<LoadPage> {
     );
   }
 
-  ///Loads the saved user if one.
-  ///
-  /// Requests the user from storage if there is one. After a 2 second
-  /// delay to show the splash screen.
+
+  ///Displayes a splash screen for 2 seconds.
   Future Splash() async {
     await Future.delayed(Duration(seconds: 2));
   }
 
-  ///Retrieves the email from application preferences.
+  ///Retrieves the userid from application preferences.
   Future<String> getUserID() async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();

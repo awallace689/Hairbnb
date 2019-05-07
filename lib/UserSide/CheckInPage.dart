@@ -7,35 +7,34 @@ import 'admin_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_cropper/image_cropper.dart';
 
-
+///A class contains one static function, which is used to verify
+///the user's input over the text field.
+///
+///Test user's input over the text field,
+///and returns a designed string depend on the value passed in.
 class DescriptionValidator{
-  //A class contains one static function, which is used to verify
-  //the user's input over the text field.
-
-  //Test user's input over the text field,
-  //and returns a designed string depend on the value passed in.
   static String validate(String note){
     return note==null ? "Description can not be empty!" : note;
   }
 }
 
+///A class contains one static function, which is used to verify
+///whether the user has selected a date for appointment or not.
+///
+///Test whether the user has selected a date or not,
+///and returns a designed string depend on the value passed in.
 class DateValidator{
-  //A class contains one static function, which is used to verify
-  //whether the user has selected a date for appointment or not.
-
-  //Test whether the user has selected a date or not,
-  //and returns a designed string depend on the value passed in.
   static String validate(DateTime date){
     return date==null ? "Please select a date!" : null;
   }
 }
 
+///A class contains one static function, which is used to verify
+///whether the user has selected a time for appointment or not.
+///
+///Test whether the user has selected a time or not,
+///and returns a designed string depend on the value passed in.
 class TimeValidator{
-  //A class contains one static function, which is used to verify
-  //whether the user has selected a time for appointment or not.
-
-  //Test whether the user has selected a time or not,
-  //and returns a designed string depend on the value passed in.
   static String validate(TimeOfDay time){
     return time==null ? "Please select a time!" : null;
   }
@@ -79,7 +78,7 @@ class CheckInPageState extends State<CheckInPage> {
 
     //Add appointment document to appointment collection with a new documentID
     //Firestore.instance.collection("Appointment").document(ref.documentID).setData(appointment);
-       ref.setData(appointment);
+    ref.setData(appointment);
     //Add the image to the userid folder with the name of the documentID.
     final StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child("${appointment["UserID"]}/${ref.documentID}.jpg");
     if(user_image != null) firebaseStorageRef.putFile(user_image);
@@ -106,14 +105,19 @@ class CheckInPageState extends State<CheckInPage> {
   }
 
 
-  //Open gallery of the user's smart phone.
+  ///Open gallery of the user's smart phone.
+  ///
+  /// Allows the user to select a photo from their device's gallery.
    imgCapture() async
   {
      File img = await ImagePicker.pickImage(source: ImageSource.gallery);
      _cropImage(img);
   }
 
-  //Store the selected image by the user to variable user_image.
+  ///Opens a screen where the user crops the image they selected.
+  ///
+  /// Crops the image to be a square.
+  /// Store the selected image by the user to variable user_image.
   Future<Null> _cropImage(File imageFile) async {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: imageFile.path,
@@ -127,8 +131,8 @@ class CheckInPageState extends State<CheckInPage> {
     });
   }
 
-  //Returns a Scaffold widget that contain a check in button,
-  //and once the button is clicked, re-build of the current page is triggered.
+  ///Returns a Scaffold widget that contain a check in button,
+  ///and once the button is clicked, re-build of the current page is triggered.
   Widget CheckInForm(BuildContext context){
     return Scaffold(backgroundColor: Theme.of(context).primaryColor,
         body:Center(
@@ -144,10 +148,10 @@ class CheckInPageState extends State<CheckInPage> {
     );
   }
 
-  //Returns a ListView widget that contains a container widget to show image
-  //user has selected from the gallery, contains a text field for the user to
-  //enter special request for his/her haircut, and contains two buttons that
-  //the users can click and select the date and time for their haircuts respectively.
+  ///Returns a ListView widget that contains a container widget to show image
+  ///user has selected from the gallery, contains a text field for the user to
+  ///enter special request for his/her haircut, and contains two buttons that
+  ///the users can click and select the date and time for their haircuts respectively.
   Widget allentest(BuildContext context){
     return ListView(children: <Widget>[ SizedBox(height:10.0),
       RawMaterialButton(
@@ -182,22 +186,6 @@ class CheckInPageState extends State<CheckInPage> {
                   hintText: "Description of your haircut."),  maxLines: 4)),
                   Row(children: <Widget>[Text("Schedule a time:", style: TextStyle(fontWeight: FontWeight.bold),
                                          textScaleFactor: 1.4,)],),
-//                  DropdownButton(hint: Text('Select a date'), value: selected_date,
-//                                 items: _date.map((date) {
-//                                      return DropdownMenuItem(child: Text(date), value: date);}).toList(),
-//                                 onChanged: (newValue) {
-//                                   setState(() {
-//                                     selected_date = newValue;
-//                                   });},
-//                                 isExpanded: true,
-//                                  ),
-//                  DropdownButton(hint: Text('Select a time'), value: selected_time,
-//                                 items: _time.map((time) {
-//                                      return DropdownMenuItem(child: Text(time), value: time);}).toList(),
-//                                  onChanged: (newValue) {
-//                                   setState(() {
-//                                    selected_time = newValue;});},
-//                                  isExpanded: true,),
                   RaisedButton(
                     child: (selected_date == null) ? Text("Select Date") : Text(selected_date.toString().substring(0, 10)),
                     onPressed: () {selectDate(context);},
@@ -215,8 +203,8 @@ class CheckInPageState extends State<CheckInPage> {
                   ]);
   }
 
-  //Triggers the showDatePicker method, and stores the selected date to the
-  //variable selected_date.
+  ///Triggers the showDatePicker method, and stores the selected date to the
+  ///variable selected_date.
   Future<Null> selectDate(BuildContext context) async{
     final DateTime picked = await showDatePicker(
         context: context,
@@ -232,8 +220,8 @@ class CheckInPageState extends State<CheckInPage> {
     }
   }
 
-  //Triggers the showTimePicker method, and stores the selected time to the
-  //variable selected_time.
+  ///Triggers the showTimePicker method, and stores the selected time to the
+  ///variable selected_time.
   Future<Null> selectTime(BuildContext context) async{
     final TimeOfDay picked = await showTimePicker(
         context: context,
@@ -247,16 +235,6 @@ class CheckInPageState extends State<CheckInPage> {
     }
   }
 
-//  Widget _handlefuture(BuildContext context){
-//     if(isClicked)
-//       {
-//         return allentest(context);
-//       }
-//     else
-//       {
-//         return CheckInForm(context);
-//       }
-//  }
   ///Builds the UI objects on the screen.
   ///
   ///This function is called anytime something on the screen
@@ -325,6 +303,9 @@ class CheckInPageState extends State<CheckInPage> {
     );
   }
 
+  ///Compare function for appointments to be passed into a sort.
+  ///
+  /// Compares two DocumentSnapshots and compares them based on the time and date.
   int CompareAppointments(DocumentSnapshot a, DocumentSnapshot b){
     int aHour = int.parse(a['Time'].split(":")[0]);
     if(a['Time'].indexOf('PM') != -1) aHour += 12;
@@ -345,7 +326,7 @@ class CheckInPageState extends State<CheckInPage> {
   ///Checks if user is checked in.
   ///
   /// Gets the list of checkins from the url and checks that against
-  /// the user's email. Returns true if the user has checked in and
+  /// the user's email. Returns the appointment data if the user has checked in and
   /// false if the user is not checked in.
   Future IsUserCheckedIn() async{
     List<DocumentSnapshot> Appointments = (await Firestore.instance.collection('Appointment').getDocuments()).documents;
@@ -357,11 +338,6 @@ class CheckInPageState extends State<CheckInPage> {
     }
     return false;
   }
-
-  ///Creates a form for the user to check in.
-  ///
-  /// Asks the user about special requests for this haircut.
-  /// Returns a widget with this form.
 
   ///Checks the user in and shows the information.
   ///
@@ -413,37 +389,12 @@ class CheckInPageState extends State<CheckInPage> {
       setState(() {
         CheckedIn = true;
       });
-//    final NewCheckIn = new CheckIn(
-//        await GetPrefEmail(),
-//        DateTime.now().toUtc().toString(),
-//        DescriptCont.text,
-//    );
-//    return showDialog(
-//      context: context,
-//      barrierDismissible: false,
-//      builder: (context) {
-//        return AlertDialog(
-//          //content: Text(jsonEncode(NewCheckIn.toJson())),
-//          actions: <Widget>[
-//            FlatButton(
-//              child: Text('Continue'),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//                setState(() {
-//                  CheckedIn = true;
-//                });
-//              },
-//            ),
-//          ],
-//        );
-//      },
-//    );
     }
   }
 
-  //Return the user ID is currently logged in to the page.
-  //User ID is being stored in SharedPreferences beforehand when the user tries
-  //to log in.
+  ///Return the user ID is currently logged in to the page.
+  ///User ID is being stored in SharedPreferences beforehand when the user tries
+  ///to log in.
   Future<String> getUserID() async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -494,6 +445,10 @@ class CheckInPageState extends State<CheckInPage> {
     );
   }
 
+  ///Retrieves the url of the photo uploaded for the appointment.
+  ///
+  /// Takes a DocumentSnapshot and uses the information to fetch the
+  /// url of the photo uploaded from the Firestore reference.
   Future<String> getAppointmentPhotoURL(DocumentSnapshot appointment) async{
     StorageReference firebaseStorageRef = FirebaseStorage.instance.ref()
         .child("/${appointment.data['UserID']}/${appointment.documentID}.jpg");

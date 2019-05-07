@@ -14,10 +14,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 enum FormMode { LOGIN, SIGNUP}
 
+///Creates a stateful widget for the login and sign up page.
 class LoginSignUp extends StatefulWidget {
   LoginSignUpState createState() => LoginSignUpState();
 }
 
+///Creates the state of the statefule widget for this page.
 class LoginSignUpState extends State<LoginSignUp> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase.instance.reference();
@@ -42,6 +44,7 @@ class LoginSignUpState extends State<LoginSignUp> {
 
   TextEditingController _DOBControl = TextEditingController();
 
+  ///Initializes the state of the login and sign up page.
   @override
   void initState() {
     super.initState();
@@ -49,6 +52,7 @@ class LoginSignUpState extends State<LoginSignUp> {
 
   final navigatorKey = GlobalKey<NavigatorState>();
 
+  ///Builds the main widget for the login and sign up page.
   @override
   Widget build(BuildContext context) {
     Context = context;
@@ -66,6 +70,9 @@ class LoginSignUpState extends State<LoginSignUp> {
     );
   }
 
+  ///Builds the widget for the Login page.
+  ///
+  /// This page will be build if the user already has an account.
   Widget _BuildLoginPage(BuildContext context)
   {
     double left = 16.0;
@@ -120,6 +127,9 @@ class LoginSignUpState extends State<LoginSignUp> {
     );
   }
 
+  ///Builds the loading indicator.
+  ///
+  /// If the page is loading, then show a progress indicator.
   Widget _ShowLoading()
   {
     if (_isLoading) {
@@ -130,6 +140,9 @@ class LoginSignUpState extends State<LoginSignUp> {
     }
   }
 
+  ///Builds the email input widget.
+  ///
+  /// Builds a text input for the user to input their email.
   Widget _ShowEmailInput({withIcon: true})
   {
     return TextFormField(
@@ -150,6 +163,9 @@ class LoginSignUpState extends State<LoginSignUp> {
     );
   }
 
+  ///Validates the email entered.
+  ///
+  /// Using regex, it validates the input email.
   bool isValidEmail(String input)
   {
     @visibleForTesting
@@ -157,6 +173,9 @@ class LoginSignUpState extends State<LoginSignUp> {
     return regex.hasMatch(input);
   }
 
+  ///Builds the password input widget.
+  ///
+  /// Builds a text input for the user to enter their password.
   Widget _ShowPasswordInput({withIcon: true})
   {
     return TextFormField(
@@ -177,6 +196,13 @@ class LoginSignUpState extends State<LoginSignUp> {
     );
   }
 
+  ///Validate the password given.
+  ///
+  /// Using regex, it validates the password give.
+  /// Length of 4-8.
+  /// Must include number.
+  /// Must include lowercase letter.
+  /// Must include uppercase letter.
   bool isValidPassword(String input)
   {
     @visibleForTesting
@@ -184,6 +210,9 @@ class LoginSignUpState extends State<LoginSignUp> {
     return regex.hasMatch(input);
   }
 
+  ///Builds the submit button widget.
+  ///
+  /// Builds a button that when clicked will validate and submit the form.
   Widget _ShowSubmitButton()
   {
     return Container(
@@ -203,6 +232,9 @@ class LoginSignUpState extends State<LoginSignUp> {
     );
   }
 
+  ///Builds the switch button widget.
+  ///
+  /// Builds the button that when clicked will switch the form to the other state.
   Widget _ShowSwitchButton()
   {
     return FlatButton(
@@ -218,6 +250,9 @@ class LoginSignUpState extends State<LoginSignUp> {
     );
   }
 
+  ///Switches the form state to signup.
+  ///
+  /// Changes which form is shown to the other form.
   void _ChangeFormToSignUp()
   {
     setState(() {
@@ -226,6 +261,9 @@ class LoginSignUpState extends State<LoginSignUp> {
     });
   }
 
+  ///Switches the form state to Login.
+  ///
+  /// Changes which form is shown to the other form.
   void _ChangeFormToLogin()
   {
     setState(() {
@@ -234,6 +272,7 @@ class LoginSignUpState extends State<LoginSignUp> {
     });
   }
 
+  ///Builds the sign up form page widget.
   Widget _BuildSignUpPage()
   {
     double left = 16.0;
@@ -294,6 +333,9 @@ class LoginSignUpState extends State<LoginSignUp> {
     );
   }
 
+  ///Builds the name input widget.
+  ///
+  /// Builds a text input field for the user to enter their name.
   Widget _ShowNameInput()
   {
     return Row(
@@ -341,6 +383,10 @@ class LoginSignUpState extends State<LoginSignUp> {
     );
   }
 
+  ///Builds the phone input widget.
+  ///
+  /// Builds a text input field that only accepts numbers.
+  /// Must be 10 numbers in length.
   Widget _ShowPhoneInput()
   {
     return TextFormField(
@@ -359,6 +405,10 @@ class LoginSignUpState extends State<LoginSignUp> {
     );
   }
 
+  ///Validates the given phone number.
+  ///
+  /// Using regex, it validates the phone number.
+  /// Must be 10 numbers in length.
   bool isValidPhone(String input)
   {
     @visibleForTesting
@@ -366,6 +416,10 @@ class LoginSignUpState extends State<LoginSignUp> {
     return regex.hasMatch(input);
   }
 
+  ///Builds the birthday input widget.
+  ///
+  /// Builds 3 text input fields, Month, Day, Year.
+  /// Each input can only be numbers and are limited on length, MM, DD, YYYY.
   Widget _ShowBirthdayInput()
   {
     return Row(
@@ -435,6 +489,9 @@ class LoginSignUpState extends State<LoginSignUp> {
     );
   }
 
+  ///Checks to see if the date of birth entered is valid.
+  ///
+  /// Converts [dob] to a DateTime and checks to see if it is before today.
   bool isValidDOB(String dob)
   {
     @visibleForTesting
@@ -442,6 +499,7 @@ class LoginSignUpState extends State<LoginSignUp> {
     return d != null && d.isBefore(new DateTime.now());
   }
 
+  ///Converts the raw date of birth input to a DateTime.
   DateTime convertToDate(String input) {
     try
     {
@@ -452,6 +510,11 @@ class LoginSignUpState extends State<LoginSignUp> {
     }
   }
 
+  ///Builds the Image input button widget.
+  ///
+  /// Builds a button that when pressed reveals two more buttons.
+  /// One of which allows the user to pick from their gallery, and
+  /// the other allows the user to take a photo from the camera.
   Widget _ShowImageInput()
   {
     Widget PhotoIcon = new RawMaterialButton(
@@ -555,12 +618,14 @@ class LoginSignUpState extends State<LoginSignUp> {
     });
   }
 
+  ///Validates the form and does the action determined by the formstate.
+  ///
+  /// Runs all of the input validation functions and
+  /// creates a new user if [FormMode] is Signup
+  /// or logs in if [FormMode] is login.
   _ValidateAndSubmit() async
   {
-    setState(() {
-      //_errorMessage = "";
-      //_isLoading = true;
-    });
+    setState(() { });
     if(_formMode == FormMode.SIGNUP){
       if(_ValidateAndSave()){
         Map<String, String> name = {
@@ -580,6 +645,11 @@ class LoginSignUpState extends State<LoginSignUp> {
     }
   }
 
+  ///Runs all input validators and saves the form.
+  ///
+  /// Runs each input validation method and checks
+  /// if a valid birthday was entered, then saves
+  /// the form into the designated variables.
   bool _ValidateAndSave()
   {
     final form = _formKey.currentState;
@@ -613,6 +683,11 @@ class LoginSignUpState extends State<LoginSignUp> {
     }
   }
 
+  ///Displays an error message on the form.
+  ///
+  /// If the error message is not an empty string,
+  /// then display the message in red text to the user.
+  /// Otherwise display an empty container.
   Widget _ShowErrorMessage()
   {
     if(_errorMessage != null){
@@ -639,6 +714,11 @@ class LoginSignUpState extends State<LoginSignUp> {
     }
   }
 
+  ///Creates a new user from the information given.
+  ///
+  /// Adds a document to the firestore database with the
+  /// information from the signup form. Saves userid to
+  /// the app preferences.
   _CreateUser(User newUser) async
   {
     String UserID = "";
@@ -673,6 +753,11 @@ class LoginSignUpState extends State<LoginSignUp> {
     }
   }
 
+  ///Logs the user in from email and password.
+  ///
+  /// Checks the email and password against the firestore database
+  /// and navigates to the user page if the combination is correct,
+  /// otherwise shows an error message.
   _Login() async
   {
     String UserID = "";
@@ -700,6 +785,7 @@ class LoginSignUpState extends State<LoginSignUp> {
     }
   }
 
+  ///Saves the userid to the app preferences.
   Future<bool> _SaveUserID(String ID) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("UserID", ID);

@@ -4,9 +4,10 @@ import 'package:project4/UserSide/Myshop.dart';
 import 'AppointmentPage.dart';
 import 'Contacts.dart';
 
+/// When user login page chooses to display admin page, this is the main stateful widget
+/// that is controlling all the activities in administration page.
 class AdminPage extends StatefulWidget {
-  /// When user login page chooses to display admin page, this is the main stateful widget
-  /// that is controlling all the activities in administration page.
+
   AdminPage({Key key, this.title}) : super(key: key);
 
 
@@ -18,6 +19,7 @@ class AdminPage extends StatefulWidget {
   _AdminPageState createState() => _AdminPageState();
 }
 
+///Contains the contents of the admin page.
 class _AdminPageState extends State<AdminPage> {
 
   /// The current tap of the navigation bar.
@@ -41,14 +43,14 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
+  /// This method is rerun every time setState is called, for instance as done
+  /// by the _incrementCounter method above.
+  ///
+  /// The Flutter framework has been optimized to make rerunning build methods
+  /// fast, so that you can just rebuild anything that needs updating rather
+  /// than having to individually change instances of widgets.
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
 
     /// Returns a scaffold widget that provides a layout structure for different
     /// pages.

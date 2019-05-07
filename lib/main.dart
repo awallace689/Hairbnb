@@ -4,8 +4,10 @@ import 'package:project4/TopSide/LoadPage.dart';
 import 'dart:async';
 import 'dart:io';
 
+
 void main() => runApp(MyApp());
 
+///Runs the main content of the application.
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

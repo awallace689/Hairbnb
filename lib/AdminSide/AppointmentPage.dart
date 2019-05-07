@@ -4,13 +4,16 @@ import '../UserSide/User.dart';
 import 'dart:convert';
 import 'package:firebase_storage/firebase_storage.dart';
 
+///Creates a stateful widget to hold the appointment page.
 class AppointmentPage extends StatefulWidget {
   @override
   AppointmentPageState createState() => AppointmentPageState();
 }
 
+///Appointment page contents.
 class AppointmentPageState extends State<AppointmentPage> {
 
+  ///Creates the scaffold to hold the list of appointments.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +44,10 @@ class AppointmentPageState extends State<AppointmentPage> {
 
   }
 
+  ///Compares two appointments.
+  ///
+  /// Passed into a sort method to sort a list of appointments.
+  /// If a is before b returns -1, else returns 1.
   int CompareAppointments(DocumentSnapshot a, DocumentSnapshot b){
     int aHour = int.parse(a['Time'].split(":")[0]);
     if(a['Time'].indexOf('PM') != -1) aHour += 12;
@@ -58,6 +65,10 @@ class AppointmentPageState extends State<AppointmentPage> {
     else return 1;
   }
 
+  ///Creates a list of appointment widgets.
+  ///
+  /// From a list of appointment data, creates a listview with
+  /// children as a list of cards created from the data.
   ListView CreateListOfAppointments(List<dynamic> AppointmentList)
   {
     List<Widget> AppList = List<Widget>();
@@ -82,6 +93,10 @@ class AppointmentPageState extends State<AppointmentPage> {
     );
   }
 
+  ///Creates a card with information about the appointment.
+  ///
+  /// This card contains the information about the appointment
+  /// and when clicked shows more information in a dialog.
   Future<Widget> CreateAppointmentCard(dynamic appointment) async{
     final AppointmentID = appointment.documentID;
     final UserID = appointment.data['UserID'];
@@ -108,11 +123,13 @@ class AppointmentPageState extends State<AppointmentPage> {
     );
   }
 
+  ///Displays a dialog with more appointment information.
   Future ShowAppointmentInfo(Map user, dynamic appointment) async{
     final dialog = MyDialogContent(data: [user, await AppointmentImage(user['userid']), appointment]);
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
+  ///Creates a widget that contains the profile picture image.
   Future<Widget> AppointmentImage(String userID) async{
     final profilePicUrl = await getImageURL('profilePicture', userID);
     return Container(
@@ -129,6 +146,7 @@ class AppointmentPageState extends State<AppointmentPage> {
   }
 }
 
+///Creates a dialog with the appointment information.
 class MyDialogContent extends StatefulWidget {
   MyDialogContent({Key key, this.data,}): super(key: key);
 
@@ -138,15 +156,18 @@ class MyDialogContent extends StatefulWidget {
   _MyDialogContentState createState() => new _MyDialogContentState();
 }
 
+///Creates the content of the appointment dialog.
 class _MyDialogContentState extends State<MyDialogContent> {
   bool ImageFullScreen = false;
 
+  ///Initializes the state of the dialog.
   @override
   void initState(){
     super.initState();
   }
 
 
+  ///Creates a widget of the image of the appointment.
   Future<Widget> HaircutImage(String UserID, String appointmentID) async{
     return RawMaterialButton(
         onPressed: () {
@@ -172,6 +193,11 @@ class _MyDialogContentState extends State<MyDialogContent> {
     );
   }
 
+  ///Builds the widget of the dialog.
+  ///
+  /// Creates a dialog with information about the appointment.
+  /// The dialog contains a button to dismiss the dialog and
+  /// a button to complete the appointment.
   @override
   Widget build(BuildContext context) {
     Map user = widget.data[0];
@@ -253,12 +279,17 @@ class _MyDialogContentState extends State<MyDialogContent> {
     );
   }
 
+  ///Removes the appointment form the appointment list in firestore.
   Future<Null> CompleteAppointment(String appointmentID) async{
     Firestore.instance.collection('Appointment').document(appointmentID).delete();
     Navigator.of(context).pop();
   }
 }
 
+///Retrieves the image from firestore.
+///
+/// Returns the download link of the image in firestore with path
+/// "/[UserID]/[imageName].jpg"
 Future<String> getImageURL(String imageName, String UserID) async{
   StorageReference firebaseStorageRef = FirebaseStorage.instance.ref()
       .child("/$UserID/$imageName.jpg");
